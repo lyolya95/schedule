@@ -4,35 +4,40 @@ import { Table, Tag, Space } from "antd";
 
 const columns = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: (text: string) => <a>{text}</a>,
+    title: "Дата(Date)",
+    dataIndex: "date",
+    key: "date",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "Время(Time)",
+    dataIndex: "time",
+    key: "time",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
+    title: "Срок на выполнение задачи(Time to complete) ",
+    dataIndex: "timeToComplete",
+    key: "timeToComplete",
   },
   {
-    title: "Tags",
+    title: "Неделя обучения(Week)",
+    dataIndex: "week",
+    key: "week",
+  },
+  {
+    title: "Курс обучения(Course)",
+    dataIndex: "course",
+    key: "course",
+  },
+  {
+    title: "Тип задания(Tags)",
     key: "tags",
     dataIndex: "tags",
     render: (tags: any) => (
       <>
         {tags.map((tag: any) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag color={tag.color} key={tag.text}>
+              {tag.text.toUpperCase()}
             </Tag>
           );
         })}
@@ -51,33 +56,66 @@ const columns = [
   },
 ];
 
-const data = [
+const dataSource = [
   {
     key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
+    date: "20.20.2020",
+    time: 32,
+    timeToComplete: "20 дней",
+    week: 2,
+    course: "React",
+    tags: [
+      {
+        color: "red",
+        text: "deadline",
+      },
+      {
+        color: "volcano",
+        text: "deadline",
+      },
+    ],
   },
   {
     key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
+    date: "Jim Green",
+    time: 42,
+    timeToComplete: "London No. 1 Lake Park",
+    week: 2,
+    course: "React",
+    tags: [
+      {
+        color: "red",
+        text: "deadline",
+      },
+      {
+        color: "lime",
+        text: "deadline",
+      },
+    ],
   },
   {
     key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
+    date: "Joe Black",
+    time: 32,
+    timeToComplete: "Sidney No. 1 Lake Park",
+    week: 2,
+    course: "React",
+    tags: [
+      {
+        color: "red",
+        text: "deadline",
+      },
+      {
+        color: "lime",
+        text: "deadline",
+      },
+    ],
   },
 ];
 export const Tables: React.FC<TablesProps> = () => {
   return (
     <div>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={dataSource} />
     </div>
   );
 };
