@@ -1,5 +1,6 @@
-import React from "react";
-import {DatePicker, Space, Select, Radio} from 'antd';
+import React, {useState} from "react";
+import {DatePicker, Space, Select, Menu, Dropdown} from 'antd';
+import {FilterOutlined} from '@ant-design/icons';
 
 import './MentorFilters.scss';
 import 'antd/dist/antd.css';
@@ -9,20 +10,17 @@ const {RangePicker} = DatePicker;
 
 export const MentorFilters: React.FC = () => {
 
+    const [visible, setVisible] = useState(false);
+
+    const changeVisible = () => setVisible((visible) => !visible);
+
     function handleChange(value: any) {
         console.log(`selected ${value}`);
     }
 
-    return (
-        <div className="test-filters">
-            <div className="view-type">
-                <Radio.Group defaultValue="Table" buttonStyle="solid">
-                    <Radio.Button value="Table">Table</Radio.Button>
-                    <Radio.Button value="List">List</Radio.Button>
-                    <Radio.Button value="Calendar">Calendar</Radio.Button>
-                </Radio.Group>
-            </div>
-            <div className="filters filters-row">
+    const filters = (
+        <Menu>
+            <Menu.Item key="0">
                 <Select
                     className="filters_item"
                     mode="multiple"
@@ -32,6 +30,8 @@ export const MentorFilters: React.FC = () => {
                     <Option value="lucy">Lucy</Option>
                     <Option value="Vadim">Vadim</Option>
                 </Select>
+            </Menu.Item>
+            <Menu.Item key="1">
                 <Select
                     className="filters_item"
                     mode="multiple"
@@ -42,58 +42,43 @@ export const MentorFilters: React.FC = () => {
                     <Option value="Lecture">Lecture</Option>
                     <Option value="Meetup">Meetup</Option>
                 </Select>
-                <Select className="filters_item" placeholder="Course" onChange={handleChange}
-                        allowClear>
+            </Menu.Item>
+            <Menu.Item key="2">
+                <Select
+                    className="filters_item"
+                    placeholder="Course"
+                    mode="multiple"
+                    onChange={handleChange}>
                     <Option value="React">React</Option>
                     <Option value="Angular">Angular</Option>
                     <Option value="Node">Node</Option>
                 </Select>
-                <Select className="filters_item" placeholder="Location" onChange={handleChange} allowClear>
+            </Menu.Item>
+            <Menu.Item key="3">
+                <Select
+                    className="filters_item"
+                    mode="multiple"
+                    placeholder="Location"
+                    onChange={handleChange}>
                     <Option value="Online">Online</Option>
                     <Option value="Moscow">Moscow</Option>
                     <Option value="Minsk">Minsk</Option>
                     <Option value="Warshaw">Warshaw</Option>
                 </Select>
+            </Menu.Item>
+            <Menu.Item key="4">
                 <Space direction="vertical" size={12}>
                     <RangePicker/>
                 </Space>
-            </div>
-            <div className="filters filters-column">
-                <Select
-                    className="filters_item"
-                    mode="multiple"
-                    placeholder="Mentor"
-                    onChange={handleChange}>
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="Vadim">Vadim</Option>
-                </Select>
-                <Select
-                    className="filters_item"
-                    mode="multiple"
-                    placeholder="Event"
-                    onChange={handleChange}>
-                    <Option value="Task">Task</Option>
-                    <Option value="Deadline">Deadline</Option>
-                    <Option value="Lecture">Lecture</Option>
-                    <Option value="Meetup">Meetup</Option>
-                </Select>
-                <Select className="filters_item" placeholder="Course" onChange={handleChange}
-                        allowClear>
-                    <Option value="React">React</Option>
-                    <Option value="Angular">Angular</Option>
-                    <Option value="Node">Node</Option>
-                </Select>
-                <Select className="filters_item" placeholder="Location" onChange={handleChange} allowClear>
-                    <Option value="Online">Online</Option>
-                    <Option value="Moscow">Moscow</Option>
-                    <Option value="Minsk">Minsk</Option>
-                    <Option value="Warshaw">Warshaw</Option>
-                </Select>
-                <Space direction="horizontal" size={12}>
-                    <RangePicker/>
-                </Space>
-            </div>
-        </div>
+            </Menu.Item>
+        </Menu>
+    )
+
+    return (
+        <Dropdown overlay={filters} trigger={['click']} onVisibleChange={changeVisible} visible={visible}>
+            <a className="ant-dropdown-link">
+                <FilterOutlined style={{fontSize: '25px', color: 'grey'}}/>
+            </a>
+        </Dropdown>
     )
 };
