@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Tables } from "./components/Tables";
-import "antd/dist/antd.css";
+import EditableTable from "./components/EditableTable";
 ReactDOM.render(
   <React.StrictMode>
-    <Tables />
+    <EditableTable />
   </React.StrictMode>,
   document.getElementById("root")
 );
