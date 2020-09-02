@@ -5,7 +5,7 @@ import { Table, Input, Button, Popconfirm, Form, Tag } from "antd";
 
 const EditableContext = React.createContext();
 
-const EditableRow = ({ index, ...props }) => {
+const EditableRow = ({ ...props }) => {
   const [form] = Form.useForm();
   return (
     <Form form={form} component={false}>
@@ -200,7 +200,7 @@ class EditableTable extends React.Component {
               title="Sure to delete?"
               onConfirm={() => this.handleDelete(record.key)}
             >
-              <a>Delete</a>
+              <button>Delete</button>
             </Popconfirm>
           ) : null,
       },
