@@ -1,0 +1,23 @@
+.ant-picker-calendar-header {
+  display: none;
+}
+
+.ant-picker-calendar {
+  margin: 0 30px;
+
+  .events {
+    list-style: none;
+    padding: 0 5px;
+  }
+}
+
+.calendar-title {
+  margin: 10px 0;
+  text-align: center;
+  font-size: 16px;
+
+  span:first-child {
+    font-weight: 600;
+    margin-right: 2px;
+  }
+}
