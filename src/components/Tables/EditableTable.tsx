@@ -3,7 +3,16 @@ import "antd/dist/antd.css";
 import "./Tables.scss";
 import { Table, Input, Button, Popconfirm, Form, Tag } from "antd";
 
-const EditableContext = React.createContext();
+interface IEditableCell {
+  title?: any;
+  editable?: number;
+  children?: number;
+  dataIndex?: number;
+  record?: number;
+  handleSave?: number;
+}
+
+const EditableContext = React.createContext({});
 
 const EditableRow = ({ ...props }) => {
   const [form] = Form.useForm();
@@ -24,10 +33,18 @@ const EditableCell = ({
   record,
   handleSave,
   ...restProps
+}: {
+  [x: string]: any;
+  title: any;
+  editable: any;
+  children: any;
+  dataIndex: any;
+  record: any;
+  handleSave: any;
 }) => {
   const [editing, setEditing] = useState(false);
-  const inputRef = useRef();
-  const form = useContext(EditableContext);
+  const inputRef: any = useRef();
+  const form: any = useContext(EditableContext);
   useEffect(() => {
     if (editing) {
       inputRef.current.focus();
@@ -41,7 +58,7 @@ const EditableCell = ({
     });
   };
 
-  const save = async (e) => {
+  const save = async (event: MouseEvent) => {
     try {
       const values = await form.validateFields();
       toggleEdit();
@@ -196,10 +213,7 @@ class EditableTable extends React.Component {
         dataIndex: "operation",
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record.key)}
-            >
+            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
               <button>Delete</button>
             </Popconfirm>
           ) : null,
@@ -319,13 +333,7 @@ class EditableTable extends React.Component {
         >
           Add a row
         </Button>
-        <Table
-          components={components}
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={dataSource}
-          columns={columns}
-        />
+        <Table components={components} rowClassName={() => "editable-row"} bordered dataSource={dataSource} columns={columns} />
       </div>
     );
   }
