@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import EditableTable from "./components/Tables";
+import TableRSchool from "./components/TableRSchool";
 ReactDOM.render(
   <React.StrictMode>
-    <EditableTable />
+    <TableRSchool />
   </React.StrictMode>,
   document.getElementById("root")
 );
