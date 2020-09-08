@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import TableRSchool from "./components/TableRSchool";
+import TableSchedule from "./components/TableSchedule";
 ReactDOM.render(
   <React.StrictMode>
-    <TableRSchool />
+    <TableSchedule />
   </React.StrictMode>,
   document.getElementById("root")
 );

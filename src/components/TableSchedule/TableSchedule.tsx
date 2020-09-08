@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Table, Popconfirm, Form } from "antd";
 import "antd/dist/antd.css";
 import "./Tables.scss";
-import { Item, IAgeMap } from "./TablesProps.model";
-import { originData } from "./originData";
-import { columnsName } from "./columnsName";
+import { Item, IAgeMap } from "./TableSchedule.model";
+import { originData } from "./data/originData";
+import { columnsName } from "./data/columnsName";
 import EditableCell from "./EditableCell";
 
-const TableRSchool = () => {
+const TableSchedule = () => {
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(originData); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(""); // храним какое поле(строку таблыцы) сейчас редактируем
@@ -117,4 +117,4 @@ const TableRSchool = () => {
   );
 };
 
-export default TableRSchool;
+export default TableSchedule;

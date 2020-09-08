@@ -1,31 +1,27 @@
-import { IAgeMap } from "./TablesProps.model";
+import { IAgeMap } from "../TableSchedule.model";
 
 export const columnsName: IAgeMap[] = [
-  {
-    title: "Время",
-    dataIndex: "time",
-    editable: true,
-  },
-  {
-    title: "Время окончания",
-    dataIndex: "timeToComplete",
-    editable: true,
-  },
   {
     title: "Дата",
     dataIndex: "date",
     editable: true,
   },
   {
-    title: "Неделя",
-    dataIndex: "week",
+    title: "Время",
+    dataIndex: "time",
     editable: true,
   },
-  {
-    title: "Курс",
-    dataIndex: "course",
-    editable: true,
-  },
+
+  // {
+  //   title: "Неделя",
+  //   dataIndex: "week",
+  //   editable: true,
+  // },
+  // {
+  //   title: "Курс",
+  //   dataIndex: "course",
+  //   editable: true,
+  // },
   {
     title: "Место",
     dataIndex: "place",
@@ -85,6 +81,11 @@ export const columnsName: IAgeMap[] = [
     title: "Теги",
     dataIndex: "tags",
     width: "5%",
+    editable: true,
+  },
+  {
+    title: "Время окончания",
+    dataIndex: "timeToComplete",
     editable: true,
   },
 ];

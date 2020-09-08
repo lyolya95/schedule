@@ -1,4 +1,4 @@
-import { Item } from "./TablesProps.model";
+import { Item } from "../TableSchedule.model";
 
 export const originData: Item[] = [];
 for (let i = 0; i < 3; i++) {

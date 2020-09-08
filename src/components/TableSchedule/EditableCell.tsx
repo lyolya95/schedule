@@ -2,7 +2,7 @@ import React from "react";
 import { Input, InputNumber, Form } from "antd";
 import "antd/dist/antd.css";
 import "./Tables.scss";
-import { EditableCellProps } from "./TablesProps.model";
+import { EditableCellProps } from "./TableSchedule.model";
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
