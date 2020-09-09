@@ -12,8 +12,6 @@
 }
 
 .calendar {
-  margin: 20px;
-
   .calendar-title {
     text-align: center;
     font-size: 16px;
@@ -21,17 +19,6 @@
     span:first-child {
       font-weight: 600;
       margin-right: 2px;
-    }
-  }
-
-  .events-title {
-    list-style: none;
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 20px;
-
-    li {
-      margin-right: 20px;
     }
   }
 }
