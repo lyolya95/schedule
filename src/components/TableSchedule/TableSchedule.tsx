@@ -7,7 +7,7 @@ import { originData } from "./data/originData";
 import { columnsName } from "./data/columnsName";
 import EditableCell from "./EditableCell";
 
-const TableSchedule = () => {
+export const TableSchedule = () => {
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(originData); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(""); // храним какое поле(строку таблыцы) сейчас редактируем
@@ -116,5 +116,3 @@ const TableSchedule = () => {
     </Form>
   );
 };
-
-export default TableSchedule;
