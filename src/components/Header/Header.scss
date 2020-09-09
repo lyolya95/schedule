@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .events-title {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+
+    li {
+      margin-right: 20px;
+    }
+  }
+
+  .btn-header {
+    display: flex;
+    align-items: center;
+    button {
+      margin-right: 10px;
+    }
+  }
+}
