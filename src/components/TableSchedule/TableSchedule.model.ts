@@ -3,8 +3,6 @@ export interface Item {
   time: string;
   timeToComplete: string;
   date: string;
-  week: number;
-  course: string;
   place: string;
   name: string;
   organizer: string;

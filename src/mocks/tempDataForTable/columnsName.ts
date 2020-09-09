@@ -1,4 +1,4 @@
-import { IAgeMap } from "../TableSchedule.model";
+import { IAgeMap } from "../../components/TableSchedule/TableSchedule.model";
 
 export const columnsName: IAgeMap[] = [
   {
@@ -11,17 +11,6 @@ export const columnsName: IAgeMap[] = [
     dataIndex: "time",
     editable: true,
   },
-
-  // {
-  //   title: "Неделя",
-  //   dataIndex: "week",
-  //   editable: true,
-  // },
-  // {
-  //   title: "Курс",
-  //   dataIndex: "course",
-  //   editable: true,
-  // },
   {
     title: "Место",
     dataIndex: "place",
@@ -37,11 +26,11 @@ export const columnsName: IAgeMap[] = [
     dataIndex: "organizer",
     editable: true,
   },
-  {
-    title: "URL",
-    dataIndex: "url",
-    editable: true,
-  },
+  // {
+  //   title: "URL",
+  //   dataIndex: "url",
+  //   editable: true,
+  // },
   {
     title: "Задание",
     dataIndex: "task",
@@ -62,27 +51,27 @@ export const columnsName: IAgeMap[] = [
     dataIndex: "comment",
     editable: true,
   },
-  {
-    title: "Важность",
-    dataIndex: "importance",
-    editable: true,
-  },
-  {
-    title: "Сделано",
-    dataIndex: "done",
-    editable: true,
-  },
+  // {
+  //   title: "Важность",
+  //   dataIndex: "importance",
+  //   editable: true,
+  // },
+  // {
+  //   title: "Сделано",
+  //   dataIndex: "done",
+  //   editable: true,
+  // },
   {
     title: "Баллы",
     dataIndex: "score",
     editable: true,
   },
-  {
-    title: "Теги",
-    dataIndex: "tags",
-    width: "5%",
-    editable: true,
-  },
+  // {
+  //   title: "Теги",
+  //   dataIndex: "tags",
+  //   width: "5%",
+  //   editable: true,
+  // },
   {
     title: "Время окончания",
     dataIndex: "timeToComplete",

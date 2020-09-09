@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Table, Popconfirm, Form } from "antd";
+import { Table, Popconfirm, Form, Button, Tag } from "antd";
 import "antd/dist/antd.css";
 import "./Tables.scss";
 import { Item, IAgeMap } from "./TableSchedule.model";
-import { originData } from "./data/originData";
-import { columnsName } from "./data/columnsName";
+import { originData } from "../../mocks/tempDataForTable/originData";
+import { columnsName } from "../../mocks/tempDataForTable/columnsName";
 import EditableCell from "./EditableCell";
+import { EditTwoTone } from "@ant-design/icons";
 
 export const TableSchedule = () => {
   const [form] = Form.useForm(); // хранится общий объект для формы ant
@@ -54,7 +55,28 @@ export const TableSchedule = () => {
     // Хронятся данные названия столбцов (title, dataIndex) и то можно ли их редактировать,
     ...columnsName, // Данные с названием столбцов импортируется из columnsName.tsx
     {
-      title: "Редактирование",
+      title: "Тэг",
+      dataIndex: "tags",
+      editable: true,
+      render: (_: any, record: Item) => {
+        let colorTag: string = "cyan";
+        switch (record.tags) {
+          case "nice":
+            colorTag = "blue";
+            break;
+          case "good":
+            colorTag = "green";
+            break;
+        }
+        return (
+          <Tag key={record.tags} color={colorTag}>
+            {record.tags}
+          </Tag>
+        );
+      },
+    },
+    {
+      title: "",
       dataIndex: "operation",
       render: (_: any, record: Item) => {
         // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
@@ -69,9 +91,7 @@ export const TableSchedule = () => {
             </Popconfirm>
           </span>
         ) : (
-          <button type="button" disabled={editingKey !== ""} onClick={() => edit(record)}>
-            Edit
-          </button>
+          <Button disabled={editingKey !== ""} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
         );
         //save отправим колбэк с ключем текущей строки что бы сохранить
         //cancel отправим колбэк с ключем текущей строки что бы отменить
@@ -89,7 +109,7 @@ export const TableSchedule = () => {
       ...col,
       onCell: (record: Item) => ({
         record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
+        inputType: col.dataIndex === "score" ? "number" : "text",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
