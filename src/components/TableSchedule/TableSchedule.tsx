@@ -134,7 +134,6 @@ export const TableSchedule = () => {
   });
   
   const handleRow = (record:any,rowIndex:number|undefined,event:React.MouseEvent) =>{
-    console.log(record+' '+rowIndex+' '+event);
     setClickingRow(record);
     setVisibleModal(true);
   }
@@ -180,6 +179,7 @@ export const TableSchedule = () => {
             type={clickingRow.type} 
             organizer={clickingRow.organizer}
             taskContent={clickingRow.taskContent}
+            isShowFeedback={clickingRow.isShowFeedback}
         />
     </Modal>
     : null

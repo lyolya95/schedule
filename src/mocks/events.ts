@@ -75,7 +75,7 @@ export const events = [
         date: '19-09-2020',
         type: 'live',
         place: 'online',
-        name: 'React. Webpack',
+        name: 'React. Webpack1',
         organizer: 'Yuliya Haluza',
         key: '0',
         time: new Date().toISOString().slice(11, 16),
@@ -90,6 +90,7 @@ export const events = [
         score: 131,
         tags: 'task',
         taskContent: 'big description React. Webpack',
+        isShowFeedback:true,
       },
       {
         date: '20-09-2020',
@@ -110,6 +111,7 @@ export const events = [
         score: 131,
         tags: 'deadline',
         taskContent: 'big description Songbird',
+        isShowFeedback:false,
       },
       {
         date: '21-09-2020',
@@ -130,6 +132,7 @@ export const events = [
         score: 131,
         tags: 'deadline',
         taskContent: 'big description React. Base',
+        isShowFeedback:false,
       },
       {
         date: '21-09-2020',
@@ -148,6 +151,7 @@ export const events = [
         score: 131,
         tags: 'deadline',
         taskContent: 'big description Songbird deadline',
+        isShowFeedback:false,
       },
     ],
   },
@@ -173,6 +177,7 @@ export const events = [
         score: 131,
         tags: 'deadline',
         taskContent: 'big description Node',
+        isShowFeedback:false,
       },
       {
         date: '22-09-2020',
@@ -193,6 +198,7 @@ export const events = [
         score: 131,
         tags: 'deadline',
         taskContent: 'big description Node',
+        isShowFeedback:false,
       },
       {
         date: '23-09-2020',
@@ -213,6 +219,7 @@ export const events = [
         score: 131,
         tags: 'deadline',
         taskContent: 'big description Node',
+        isShowFeedback:false,
       },
       {
         date: '23-09-2020',
@@ -231,6 +238,7 @@ export const events = [
         score: 131,
         tags: 'deadline',
         taskContent: 'big description Node',
+        isShowFeedback:false,
       },
     ],
   },
