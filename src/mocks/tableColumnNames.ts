@@ -1,28 +1,28 @@
-import { IAgeMap } from "../../components/TableSchedule/TableSchedule.model";
+import { IAgeMap } from "../components/TableSchedule/TableSchedule.model";
 
 export const columnsName: IAgeMap[] = [
   {
-    title: "Дата",
+    title: "Date",
     dataIndex: "date",
     editable: true,
   },
   {
-    title: "Время",
+    title: "Time",
     dataIndex: "time",
     editable: true,
   },
   {
-    title: "Место",
+    title: "Place",
     dataIndex: "place",
     editable: true,
   },
   {
-    title: "Название",
+    title: "Name",
     dataIndex: "name",
     editable: true,
   },
   {
-    title: "Организатор",
+    title: "Organizer",
     dataIndex: "organizer",
     editable: true,
   },
@@ -32,22 +32,22 @@ export const columnsName: IAgeMap[] = [
   //   editable: true,
   // },
   {
-    title: "Задание",
+    title: "Task",
     dataIndex: "task",
     editable: true,
   },
   {
-    title: "Материалы",
+    title: "Materials",
     dataIndex: "materials",
     editable: true,
   },
   {
-    title: "Ожидания",
+    title: "Result",
     dataIndex: "result",
     editable: true,
   },
   {
-    title: "Комментарий",
+    title: "Comment",
     dataIndex: "comment",
     editable: true,
   },
@@ -62,7 +62,7 @@ export const columnsName: IAgeMap[] = [
   //   editable: true,
   // },
   {
-    title: "Баллы",
+    title: "Score",
     dataIndex: "score",
     editable: true,
   },
@@ -73,7 +73,7 @@ export const columnsName: IAgeMap[] = [
   //   editable: true,
   // },
   {
-    title: "Время окончания",
+    title: "Time To Complete",
     dataIndex: "timeToComplete",
     editable: true,
   },

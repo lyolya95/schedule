@@ -1,17 +1,17 @@
-import { Badge, Calendar } from 'antd';
-import 'antd/dist/antd.css';
-import moment from 'moment';
-import React, { FC, useCallback } from 'react';
-import { events } from '../../mocks/events';
-import './Calendar.scss';
-import { CalendarItemProps } from './CalendarItem.model';
+import { Badge, Calendar } from "antd";
+import "antd/dist/antd.css";
+import moment from "moment";
+import React, { FC, useCallback } from "react";
+import { events } from "../../mocks/events";
+import "./Calendar.scss";
+import { CalendarItemProps } from "./CalendarItem.model";
 
 export const CalendarItem: FC<CalendarItemProps> = React.memo(({ isShowCalendarOrTable }) => {
   const getListData = useCallback((value: moment.Moment) => {
     let listData: { type: string; content: string }[] = [];
     events.map((i) =>
       i.events.map((i) => {
-        const type = i.type === 'deadline' ? 'error' : i.type === 'task' ? 'success' : i.type === 'live' && 'warning';
+        const type = i.type === "deadline" ? "error" : i.type === "task" ? "success" : i.type === "live" && "warning";
         switch (value.date()) {
           case +i.date.slice(0, 2):
             listData.push({

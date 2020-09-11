@@ -3,8 +3,8 @@ import { Table, Popconfirm, Form, Button, Tag } from "antd";
 import "antd/dist/antd.css";
 import "./Tables.scss";
 import { IAgeMap } from "./TableSchedule.model";
-import { events } from "../../mocks/tempDataForTable/originData";
-import { columnsName } from "../../mocks/tempDataForTable/columnsName";
+import { events } from "../../mocks/events";
+import { columnsName } from "../../mocks/tableColumnNames";
 import EditableCell from "./EditableCell";
 import { EditTwoTone } from "@ant-design/icons";
 
@@ -59,16 +59,16 @@ export const TableSchedule = () => {
     // Хронятся данные названия столбцов (title, dataIndex) и то можно ли их редактировать,
     ...columnsName, // Данные с названием столбцов импортируется из columnsName.tsx
     {
-      title: "Тэг",
+      title: "Tags",
       dataIndex: "tags",
       editable: true,
       render: (_: any, record: any) => {
         let colorTag: string = "cyan";
         switch (record.tags) {
-          case "nice":
-            colorTag = "blue";
+          case "deadline":
+            colorTag = "red";
             break;
-          case "good":
+          case "task":
             colorTag = "green";
             break;
         }
@@ -87,11 +87,11 @@ export const TableSchedule = () => {
         const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
         return editable ? (
           <span>
-            <button type="button" onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+            <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
               Save
-            </button>
+            </Button>
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <button>Cancel</button>
+              <Button>Cancel</Button>
             </Popconfirm>
           </span>
         ) : (
