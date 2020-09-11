@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Popconfirm, Form, Button, Tag } from "antd";
+import { Table, Popconfirm, Form, Button, Tag, Modal } from "antd";
 import "antd/dist/antd.css";
 import "./Tables.scss";
 import { IAgeMap } from "./TableSchedule.model";
@@ -7,13 +7,16 @@ import { events } from "../../mocks/events";
 import { columnsName } from "../../mocks/tableColumnNames";
 import EditableCell from "./EditableCell";
 import { EditTwoTone } from "@ant-design/icons";
+import TaskPage from '../TaskPage';
 
 export const TableSchedule = () => {
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(""); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
-
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [clickingRow, setClickingRow] = useState<any|null>(); 
+ 
   const edit = (record: any) => {
     //при нажатии на кнопку edit
     form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
@@ -129,6 +132,11 @@ export const TableSchedule = () => {
       }),
     };
   });
+  
+  const handleRow = (record:any,rowIndex:number|undefined,event:React.MouseEvent) =>{
+    setClickingRow(record);
+    setVisibleModal(true);
+  }
 
   return (
     <Form form={form} component={false}>
@@ -145,7 +153,37 @@ export const TableSchedule = () => {
         pagination={{
           onChange: cancel,
         }}
+        onRow={(record, rowIndex) => {
+          return {
+                onDoubleClick: (event) => {handleRow(record,rowIndex,event)}// double click row
+          }
+        }}
       />
+      {clickingRow
+      ?<Modal
+        title={clickingRow.course}
+        centered
+        visible={visibleModal}
+        footer={[
+            <Button key="back" onClick={() => setVisibleModal(false)} >
+              Return
+            </Button>,
+            
+          ]}
+        onCancel={() => setVisibleModal(false)}
+        width={1000}
+    >
+        <TaskPage 
+            name={clickingRow.name}
+            date={clickingRow.date}
+            type={clickingRow.type} 
+            organizer={clickingRow.organizer}
+            taskContent={clickingRow.taskContent}
+            isShowFeedback={clickingRow.isShowFeedback}
+        />
+    </Modal>
+    : null
+    }
     </Form>
   );
 };
