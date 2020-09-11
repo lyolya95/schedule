@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, InputNumber, Form } from "antd";
+import { Input, InputNumber, Form, DatePicker } from "antd";
 import "antd/dist/antd.css";
 import "./Tables.scss";
 import { EditableCellProps } from "./TableSchedule.model";
@@ -14,13 +14,23 @@ const EditableCell: React.FC<EditableCellProps> = ({
   children,
   ...restProps
 }) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-
+  let inputNode;
+  switch (inputType) {
+    case "number":
+      inputNode = <InputNumber />;
+      break;
+    case "date":
+      inputNode = <DatePicker />;
+      break;
+    default:
+      inputNode = <Input />;
+      break;
+  }
   return (
     <td {...restProps}>
       {editing ? (
         <Form.Item
-          name={dataIndex}
+          name={inputType === "date" ? "date-picker" : dataIndex}
           style={{ margin: 0 }}
           rules={[
             {
