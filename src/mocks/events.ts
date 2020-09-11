@@ -89,6 +89,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'task',
+        taskContent: 'big description React. Webpack',
       },
       {
         date: '20-09-2020',
@@ -108,6 +109,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'deadline',
+        taskContent: 'big description Songbird',
       },
       {
         date: '21-09-2020',
@@ -127,6 +129,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'deadline',
+        taskContent: 'big description React. Base',
       },
       {
         date: '21-09-2020',
@@ -144,6 +147,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'deadline',
+        taskContent: 'big description Songbird deadline',
       },
     ],
   },
@@ -168,6 +172,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'deadline',
+        taskContent: 'big description Node',
       },
       {
         date: '22-09-2020',
@@ -187,6 +192,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'deadline',
+        taskContent: 'big description Node',
       },
       {
         date: '23-09-2020',
@@ -206,6 +212,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'deadline',
+        taskContent: 'big description Node',
       },
       {
         date: '23-09-2020',
@@ -223,6 +230,7 @@ export const events = [
         done: false,
         score: 131,
         tags: 'deadline',
+        taskContent: 'big description Node',
       },
     ],
   },
