@@ -1,29 +1,29 @@
-import { IAgeMap } from "../components/TableSchedule/TableSchedule.model";
+import { IAgeMap } from '../components/TableSchedule/TableSchedule.model';
 
 export const columnsName: IAgeMap[] = [
   {
-    title: "Date",
-    dataIndex: "date",
+    title: 'Date',
+    dataIndex: 'date',
     editable: true,
   },
   {
-    title: "Time",
-    dataIndex: "time",
+    title: 'Time',
+    dataIndex: 'time',
     editable: true,
   },
   {
-    title: "Place",
-    dataIndex: "place",
+    title: 'Place',
+    dataIndex: 'place',
     editable: true,
   },
   {
-    title: "Name",
-    dataIndex: "name",
+    title: 'Name',
+    dataIndex: 'name',
     editable: true,
   },
   {
-    title: "Organizer",
-    dataIndex: "organizer",
+    title: 'Organizer',
+    dataIndex: 'organizer',
     editable: true,
   },
   // {
@@ -32,23 +32,23 @@ export const columnsName: IAgeMap[] = [
   //   editable: true,
   // },
   {
-    title: "Task",
-    dataIndex: "task",
+    title: 'Task',
+    dataIndex: 'task',
     editable: true,
   },
   {
-    title: "Materials",
-    dataIndex: "materials",
+    title: 'Materials',
+    dataIndex: 'materials',
     editable: true,
   },
   {
-    title: "Result",
-    dataIndex: "result",
+    title: 'Result',
+    dataIndex: 'result',
     editable: true,
   },
   {
-    title: "Comment",
-    dataIndex: "comment",
+    title: 'Comment',
+    dataIndex: 'comment',
     editable: true,
   },
   // {
@@ -62,8 +62,8 @@ export const columnsName: IAgeMap[] = [
   //   editable: true,
   // },
   {
-    title: "Score",
-    dataIndex: "score",
+    title: 'Score',
+    dataIndex: 'score',
     editable: true,
   },
   // {
@@ -73,8 +73,8 @@ export const columnsName: IAgeMap[] = [
   //   editable: true,
   // },
   {
-    title: "Time To Complete",
-    dataIndex: "timeToComplete",
+    title: 'Time To Complete',
+    dataIndex: 'timeToComplete',
     editable: true,
   },
 ];

@@ -1,27 +1,31 @@
-import React, { useState } from "react";
-import { Table, Popconfirm, Form, Button, Tag } from "antd";
-import "antd/dist/antd.css";
-import "./Tables.scss";
-import { IAgeMap } from "./TableSchedule.model";
-import { events } from "../../mocks/events";
-import { columnsName } from "../../mocks/tableColumnNames";
-import EditableCell from "./EditableCell";
-import { EditTwoTone } from "@ant-design/icons";
+import React, { useEffect, useState } from 'react';
+import { Table, Popconfirm, Form, Button, Tag, Select } from 'antd';
+import 'antd/dist/antd.css';
+import './Tables.scss';
+import { IAgeMap } from './TableSchedule.model';
+import { events } from '../../mocks/events';
+import { columnsName } from '../../mocks/tableColumnNames';
+import EditableCell from './EditableCell';
+import { EditTwoTone } from '@ant-design/icons';
+import { tagRender, options } from './SelectColumn';
 
 export const TableSchedule = () => {
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
-  const [editingKey, setEditingKey] = useState(""); // храним какое поле(строку таблыцы) сейчас редактируем
+  const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
 
   const edit = (record: any) => {
     //при нажатии на кнопку edit
+    console.log('edit=' + record.key);
     form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
     setEditingKey(record.key); // указывает какая из строк сейчас редактируется
+
+    console.log('edit2+' + editingKey + isEditing(record.key));
   };
   const cancel = () => {
     //при нажатии на кнопку edit
-    setEditingKey(""); // отменяет редактирование
+    setEditingKey(''); // отменяет редактирование
   };
 
   const save = async (key: React.Key) => {
@@ -32,9 +36,9 @@ export const TableSchedule = () => {
       const index = newData.findIndex((item) => key === item.key); // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
       if (index > -1) {
         const item = newData[index]; // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
-        if (row["date-picker"]._d) {
+        if (row['date-picker']._d) {
           // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
-          item.date = row["date-picker"]._d.toISOString().slice(0, 10);
+          item.date = row['date-picker']._d.toISOString().slice(0, 10);
         }
         newData.splice(index, 1, {
           //заменяем в массиве элемент под номером index (точнее его сначала удаляем потом добавляем ...item, ...row) который пришел с данными (всеми данными таблицы всех строк проиндексированные)
@@ -42,16 +46,16 @@ export const TableSchedule = () => {
           ...row, // если что то поменялось то тут мы перезатрем что было в ...item,
         });
         setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        setEditingKey(""); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
+        setEditingKey(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
       } else {
         // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
         newData.push(row);
         setData(newData);
-        setEditingKey("");
+        setEditingKey('');
       }
     } catch (errInfo) {
       // обработка ошибки если нажали на кнопку Save, что то пошло не так, то смотреть, что именно в консоль
-      console.log("Validate Failed:", errInfo); // вывод ошибки в консоль при сохранении
+      console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
     }
   };
 
@@ -59,17 +63,17 @@ export const TableSchedule = () => {
     // Хронятся данные названия столбцов (title, dataIndex) и то можно ли их редактировать,
     ...columnsName, // Данные с названием столбцов импортируется из columnsName.tsx
     {
-      title: "Tags",
-      dataIndex: "tags",
+      title: 'Tags',
+      dataIndex: 'tags',
       editable: true,
       render: (_: any, record: any) => {
-        let colorTag: string = "cyan";
+        let colorTag: string = 'cyan';
         switch (record.tags) {
-          case "deadline":
-            colorTag = "red";
+          case 'deadline':
+            colorTag = 'red';
             break;
-          case "task":
-            colorTag = "green";
+          case 'task':
+            colorTag = 'green';
             break;
         }
         return (
@@ -80,8 +84,8 @@ export const TableSchedule = () => {
       },
     },
     {
-      title: "",
-      dataIndex: "operation",
+      title: '',
+      dataIndex: 'operation',
       render: (_: any, record: any) => {
         // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
         const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
@@ -95,7 +99,7 @@ export const TableSchedule = () => {
             </Popconfirm>
           </span>
         ) : (
-          <Button disabled={editingKey !== ""} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
+          <Button disabled={editingKey !== ''} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
         );
         //save отправим колбэк с ключем текущей строки что бы сохранить
         //cancel отправим колбэк с ключем текущей строки что бы отменить
@@ -112,11 +116,11 @@ export const TableSchedule = () => {
 
     let lineFormat: string;
     switch (col.dataIndex) {
-      case "score":
-        lineFormat = "number";
+      case 'score':
+        lineFormat = 'number';
         break;
-      case "date":
-        lineFormat = "date";
+      case 'date':
+        lineFormat = 'date';
     }
     return {
       ...col,
@@ -132,6 +136,14 @@ export const TableSchedule = () => {
 
   return (
     <Form form={form} component={false}>
+      {/* <Select
+        mode="multiple"
+        showArrow
+        tagRender={tagRender}
+        defaultValue={['gold', 'cyan']}
+        style={{ width: '20%', margin: '0 0 10px 80%' }}
+        options={options}
+      /> */}
       <Table
         components={{
           body: {

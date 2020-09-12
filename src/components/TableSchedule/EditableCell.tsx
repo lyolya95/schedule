@@ -1,8 +1,8 @@
-import React from "react";
-import { Input, InputNumber, Form, DatePicker } from "antd";
-import "antd/dist/antd.css";
-import "./Tables.scss";
-import { EditableCellProps } from "./TableSchedule.model";
+import React from 'react';
+import { Input, InputNumber, Form, DatePicker } from 'antd';
+import 'antd/dist/antd.css';
+import './Tables.scss';
+import { EditableCellProps } from './TableSchedule.model';
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -16,10 +16,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
 }) => {
   let inputNode;
   switch (inputType) {
-    case "number":
+    case 'number':
       inputNode = <InputNumber />;
       break;
-    case "date":
+    case 'date':
       inputNode = <DatePicker />;
       break;
     default:
@@ -30,7 +30,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     <td {...restProps}>
       {editing ? (
         <Form.Item
-          name={inputType === "date" ? "date-picker" : dataIndex}
+          name={inputType === 'date' ? 'date-picker' : dataIndex}
           style={{ margin: 0 }}
           rules={[
             {
