@@ -10,6 +10,7 @@ import { EditTwoTone } from "@ant-design/icons";
 import TaskPage from '../TaskPage';
 
 export const TableSchedule = () => {
+  const isMentor = false;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(""); // храним какое поле(строку таблыцы) сейчас редактируем
@@ -215,6 +216,7 @@ export const TableSchedule = () => {
             organizer={clickingRow.organizer}
             taskContent={clickingRow.taskContent}
             isShowFeedback={clickingRow.isShowFeedback}
+            isMentor={isMentor}
         />
     </Modal>
     : null
