@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Table, Popconfirm, Form, Button, Tag, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import './Tables.scss';
 import { IAgeMap } from './TableSchedule.model';
 import { events } from '../../mocks/events';
-import { columnsName } from '../../mocks/tableColumnNames';
 import EditableCell from './EditableCell';
 import { EditTwoTone } from '@ant-design/icons';
 import TaskPage from '../TaskPage';
 import { switchTypeToColor } from '../utilities/switcher';
-import { columnsQwes, SelectColumnsInput } from './SelectColumnsInput';
 
-export const TableSchedule = () => {
+export const TableSchedule = (props: any) => {
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
@@ -63,20 +61,11 @@ export const TableSchedule = () => {
       console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
     }
   };
-  /////////////////////////////////////////////////////////////////
-  let columnsNameNew: any[] = [];
-  const goToColumn = async () => {
-    columnsNameNew = await columnsQwes;
-  };
-  useEffect(() => {
-    goToColumn();
-    console.log(columnsNameNew);
-  }, [goToColumn]);
-  /////////////////////////////////////////////////////////////////
+
   const columns: IAgeMap[] = [
     // Хронятся данные названия столбцов (title, dataIndex) и то можно ли их редактировать,
     // Данные с названием столбцов импортируется из columnsName.tsx
-    ...columnsNameNew,
+    ...props.columnsName,
     //...columnsName,
     {
       title: 'Type',
@@ -139,7 +128,6 @@ export const TableSchedule = () => {
   };
   return (
     <Form form={form} component={false}>
-      <SelectColumnsInput />
       <Table
         components={{
           body: {
