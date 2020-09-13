@@ -10,6 +10,7 @@ import { EditTwoTone } from "@ant-design/icons";
 import TaskPage from '../TaskPage';
 
 export const TableSchedule = () => {
+  //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
   const isMentor = false;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят

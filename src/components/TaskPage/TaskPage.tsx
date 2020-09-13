@@ -1,6 +1,7 @@
 import React, { FC} from 'react';
 import MentorTaskForm from '../MentorTaskForm';
 import ReactMarkdown from 'react-markdown';
+import FeedbackForm from '../FeedbackForm';
 import './TaskPage.scss';
 
 type PropsType = {
@@ -44,7 +45,10 @@ type PropsType = {
                 taskContent={taskContent}
                 isShowFeedback={isShowFeedback}
                 />
-              : <div>{taskContentHtml}</div>
+              : <div>
+                  {taskContentHtml}
+                  <FeedbackForm />
+                </div>
             }
               
           </div>
