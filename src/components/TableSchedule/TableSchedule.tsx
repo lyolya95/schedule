@@ -133,18 +133,28 @@ export const TableSchedule = () => {
     };
   });
   
-  const handleDoubleClickRow = (record:any,rowIndex:number|undefined) =>{
-    setClickingRow(record);
-    setVisibleModal(true);
-  }
-
-  const handleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+  const isНandlingClickOnRow = (event:React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-     let tagClassName = target.className !== '' &&  typeof(target.className)==='string' 
+    let tagClassName = target.className !== '' &&  typeof(target.className)==='string' 
                         ? target.className.split(' ')[0] 
                         : '';
      if(target.tagName === 'TD' 
-                      || (target.tagName === 'SPAN' && tagClassName === 'ant-tag'))
+                      || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')){
+      return true;
+    }
+    return false;
+  }
+
+
+  const handleDoubleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+    if(isНandlingClickOnRow(event)){
+      setClickingRow(record);
+      setVisibleModal(true);
+    }
+   }
+
+  const handleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+    if(isНandlingClickOnRow(event))
     {
       const ind = rowIndex ? rowIndex : 0;
       const selRow= document.getElementsByClassName('ant-table-tbody')[0].children[ind];
@@ -180,7 +190,7 @@ export const TableSchedule = () => {
         onRow={(record, rowIndex) => {
           return {
               onClick: (event) => {handleClickRow(record,rowIndex,event)},
-              onDoubleClick: (event) => { handleDoubleClickRow(record,rowIndex)}// double click row
+              onDoubleClick: (event) => { handleDoubleClickRow(record,rowIndex,event)}// double click row
           }
         }}
       />
