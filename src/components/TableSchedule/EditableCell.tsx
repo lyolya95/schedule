@@ -88,5 +88,4 @@ const EditableCell: React.FC<EditableCellProps> = ({
     </td>
   );
 };
-
 export default EditableCell;

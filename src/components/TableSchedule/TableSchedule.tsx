@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Table, Popconfirm, Form, Button, Tag, Modal } from 'antd';
+import { Table, Popconfirm, Form, Button, Tag, Modal, Select } from 'antd';
 import 'antd/dist/antd.css';
-import './Tables.scss';
 import { IAgeMap } from './TableSchedule.model';
 import { events } from '../../mocks/events';
 import EditableCell from './EditableCell';
-import { EditTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 import TaskPage from '../TaskPage';
 import { switchTypeToColor } from '../utilities/switcher';
 
@@ -21,6 +20,21 @@ export const TableSchedule = (props: any) => {
     //при нажатии на кнопку edit
     form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
     setEditingKey(record.key); // указывает какая из строк сейчас редактируется
+  };
+  const add = () => {
+    //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
+    const addData = { ...data[0] }; // создаем копию! данных одной строчки
+    addData.key = String(data.length + 1); // временное решение создания нового уникального ключа
+    const newData = [...data, addData]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание) и наша новая строчка добавляется в конце
+    setData(newData); // все сохранения изменения что мы сделали
+    edit(addData); // запускаем редактирование
+  };
+  const remove = (key: React.Key) => {
+    // при нажатии кнопки remove
+    const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
+    const index = newData.findIndex((item) => key === item.key); // Указывает индекс массива пришедших данных
+    newData.splice(index, 1); // удаляем строку под индексем index одну строку 1
+    setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
   };
   const cancel = () => {
     //при нажатии на кнопку edit
@@ -95,7 +109,15 @@ export const TableSchedule = (props: any) => {
             </Popconfirm>
           </span>
         ) : (
-          <Button disabled={editingKey !== ''} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
+          <>
+            <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
+            <Button
+              ghost={true}
+              className="tableSchedule__button_remove"
+              onClick={() => remove(record.key)}
+              icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
+            ></Button>
+          </>
         );
         //save отправим колбэк с ключем текущей строки что бы сохранить
         //cancel отправим колбэк с ключем текущей строки что бы отменить
@@ -128,6 +150,27 @@ export const TableSchedule = (props: any) => {
   };
   return (
     <Form form={form} component={false}>
+      <Button
+        className="tableSchedule__button_add"
+        ghost={true}
+        disabled={editingKey !== ''}
+        onClick={() => add()}
+        icon={<PlusCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '30px' }} />}
+      ></Button>
+      <Select
+        mode="multiple"
+        listItemHeight={10}
+        size="small"
+        showArrow
+        bordered={false}
+        maxTagCount={6}
+        maxTagTextLength={6}
+        tagRender={props.tagRender}
+        defaultValue={props.defaultColumns}
+        options={props.optionsKeyOfEvents}
+        onChange={props.changeColumnsSelect}
+        className="select-dropdown-columns"
+      />
       <Table
         components={{
           body: {

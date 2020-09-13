@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
-import { Select, Tag } from 'antd';
+import { Tag } from 'antd';
 import { TableSchedule } from './TableSchedule';
 import { events } from '../../mocks/events';
+import './Tables.scss';
 
 const optionsKeyOfEvents = Object.keys(events[0].events[0]).map((n) => ({
   // вытаскивает все ключи для записи их в заголовок колонок и для функции скрытия и отображения колонок
@@ -38,22 +40,12 @@ export const TableScheduleContainer = () => {
   }, []);
 
   return (
-    <>
-      <Select
-        mode="multiple"
-        listItemHeight={10}
-        size="small"
-        showArrow
-        bordered={false}
-        maxTagCount={6}
-        maxTagTextLength={6}
-        tagRender={tagRender}
-        defaultValue={defaultColumns}
-        options={optionsKeyOfEvents}
-        onChange={changeColumnsSelect}
-        className="select-dropdown-columns"
-      />
-      <TableSchedule columnsName={columnsName} />
-    </>
+    <TableSchedule
+      columnsName={columnsName}
+      tagRender={tagRender}
+      defaultColumns={defaultColumns}
+      optionsKeyOfEvents={optionsKeyOfEvents}
+      changeColumnsSelect={changeColumnsSelect}
+    />
   );
 };
