@@ -16,7 +16,7 @@ export const TableSchedule = () => {
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any|null>(); 
- 
+
   const edit = (record: any) => {
     //при нажатии на кнопку edit
     form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
@@ -133,10 +133,34 @@ export const TableSchedule = () => {
     };
   });
   
-  const handleRow = (record:any,rowIndex:number|undefined,event:React.MouseEvent) =>{
+  const handleDoubleClickRow = (record:any,rowIndex:number|undefined) =>{
     setClickingRow(record);
     setVisibleModal(true);
   }
+
+  const handleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+    let target = event.target as HTMLInputElement;
+     let tagClassName = target.className !== '' &&  typeof(target.className)==='string' 
+                        ? target.className.split(' ')[0] 
+                        : '';
+     if(target.tagName === 'TD' 
+                      || (target.tagName === 'SPAN' && tagClassName === 'ant-tag'))
+    {
+      const ind = rowIndex ? rowIndex : 0;
+      const selRow= document.getElementsByClassName('ant-table-tbody')[0].children[ind];
+      const rowClassName = selRow.className;
+      let newRowClassName;
+      const classSel  =  ' ant-table-row-selected';
+      if(rowClassName.indexOf(classSel)!==-1){
+        newRowClassName = rowClassName.replace(classSel, '');
+      }else{
+        newRowClassName = rowClassName+classSel;
+      }
+     selRow.className = newRowClassName;
+     }
+      
+  }
+
 
   return (
     <Form form={form} component={false}>
@@ -155,7 +179,8 @@ export const TableSchedule = () => {
         }}
         onRow={(record, rowIndex) => {
           return {
-                onDoubleClick: (event) => {handleRow(record,rowIndex,event)}// double click row
+              onClick: (event) => {handleClickRow(record,rowIndex,event)},
+              onDoubleClick: (event) => { handleDoubleClickRow(record,rowIndex)}// double click row
           }
         }}
       />
