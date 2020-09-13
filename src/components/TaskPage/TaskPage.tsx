@@ -37,6 +37,10 @@ type PropsType = {
       setEditStatus(false);
     }
 
+    const handleCancel = () => {
+      setEditStatus(false);
+    }
+
     const onChangeShowFeedback = (e:CheckboxChangeEvent) =>{
        setShowFeedback(e.target.checked);
     }
@@ -58,6 +62,7 @@ type PropsType = {
                     <TaskEditor 
                       currTaskContent={saveTaskContent}
                       handleSave={handleSave}
+                      handleCancel={handleCancel}
                     />
                   </div>
                 : <div className="task-description">
