@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { Table, Popconfirm, Form, Button, Tag, Modal, Select } from 'antd';
 import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
-import { events } from '../../mocks/events';
 import EditableCell from './EditableCell';
 import { DeleteTwoTone, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 import TaskPage from '../TaskPage';
 import { switchTypeToColor } from '../utilities/switcher';
 
 export const TableSchedule = (props: any) => {
+  debugger;
   //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
   const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
-  const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
+  const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [visibleModal, setVisibleModal] = useState(false);
@@ -55,7 +55,7 @@ export const TableSchedule = (props: any) => {
         if (row['date-picker']) {
           // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
           const selectDate = row['date-picker']._d.toISOString();
-          item.date = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)}`;
+          item.dateTime = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)}`;
 
           //('2020-09-11T19:24:01.734Z');
         }
@@ -145,42 +145,38 @@ export const TableSchedule = (props: any) => {
       }),
     };
   });
-  
-  const isНandlingClickOnRow = (event:React.FormEvent<EventTarget>) => {
+
+  const isНandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName = target.className !== '' &&  typeof(target.className)==='string' 
-                        ? target.className.split(' ')[0] 
-                        : '';
-     if(target.tagName === 'TD' 
-                      || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')){
+    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
     return false;
-  }
+  };
 
-  const handleDoubleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
-    if(isНandlingClickOnRow(event)){
+  const handleDoubleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
+    if (isНandlingClickOnRow(event)) {
       setClickingRow(record);
       setVisibleModal(true);
     }
-   }
+  };
 
-  const handleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
-    if(isНandlingClickOnRow(event))
-    {
+  const handleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
+    if (isНandlingClickOnRow(event)) {
       const ind = rowIndex ? rowIndex : 0;
-      const selRow= document.getElementsByClassName('ant-table-tbody')[0].children[ind];
+      const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
       const rowClassName = selRow.className;
       let newRowClassName;
-      const classSel  =  ' ant-table-row-selected';
-      if(rowClassName.indexOf(classSel)!==-1){
+      const classSel = ' ant-table-row-selected';
+      if (rowClassName.indexOf(classSel) !== -1) {
         newRowClassName = rowClassName.replace(classSel, '');
-      }else{
-        newRowClassName = rowClassName+classSel;
+      } else {
+        newRowClassName = rowClassName + classSel;
       }
-     selRow.className = newRowClassName;
-     }
-  }
+      selRow.className = newRowClassName;
+    }
+  };
 
   return (
     <Form form={form} component={false}>
@@ -220,12 +216,16 @@ export const TableSchedule = (props: any) => {
         }}
         onRow={(record, rowIndex) => {
           return {
-              onClick: (event) => {handleClickRow(record,rowIndex,event)},
-              onDoubleClick: (event) => { handleDoubleClickRow(record,rowIndex,event)}// double click row
-          }
+            onClick: (event) => {
+              handleClickRow(record, rowIndex, event);
+            },
+            onDoubleClick: (event) => {
+              handleDoubleClickRow(record, rowIndex, event);
+            }, // double click row
+          };
         }}
       />
-      {clickingRow ? 
+      {clickingRow ? (
         <Modal
           title={clickingRow.course}
           centered
@@ -240,16 +240,15 @@ export const TableSchedule = (props: any) => {
         >
           <TaskPage
             name={clickingRow.name}
-            date={clickingRow.date}
+            date={clickingRow.dateTime}
             type={clickingRow.type}
             organizer={clickingRow.organizer}
             taskContent={clickingRow.taskContent}
             isShowFeedback={clickingRow.isShowFeedback}
             isMentor={isMentor}
-        />
-      </Modal>
-    : null
-    }
+          />
+        </Modal>
+      ) : null}
     </Form>
   );
 };

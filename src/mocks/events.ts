@@ -1,4 +1,4 @@
-export const events = [
+export let events = [
   // {
   //   course: 'JS/FE 2020 Q4',
   //   weeks: [
@@ -72,27 +72,31 @@ export const events = [
     course: 'React 2020 Q3',
     events: [
       {
-        date: '19-09-2020',
-        type: 'live',
-        place: 'online',
-        name: 'React. Webpack1',
-        organizer: 'Yuliya Haluza',
-        key: '0',
-        time: new Date().toISOString().slice(11, 16),
-        timeToComplete: '20 дней',
-        url: 'youtube.com/c/RollingScopesSchool/',
-        task: 'Создать первый коммит',
-        materials: 'Изучение веток github',
-        result: 'что студент должен уметь',
-        comment: 'Тут будет комментарий',
-        importance: true,
-        done: false,
-        score: 131,
-        taskContent: 'big description React. Webpack',
-        isShowFeedback: true,
+        name: 'Итоговый тест по Angular',
+        timeToComplete: '6 hour',
+        place: 'RS APP. Autotest',
+        type: 'test',
+        descriptionUrl: 'https://app.rs.school/',
+        organizer: 'rwyHQSVIqEhGxmXUXIIm',
+        course: 'Angular 2020 Q3',
+        dateTime: '1601910000',
+        timeZone: '+0',
+        id: '5TGVLTlMFVIZNF81r3GD',
       },
       {
-        date: '20-09-2020',
+        name: 'Итоговый тест по Angular',
+        timeToComplete: '6 hour',
+        place: 'RS APP. Autotest',
+        type: 'test',
+        descriptionUrl: 'https://app.rs.school/',
+        organizer: 'rwyHQSVIqEhGxmXUXIIm',
+        course: 'Angular 2020 Q3',
+        dateTime: '1601910000',
+        timeZone: '+0',
+        id: '5TGVLTlMFVIZNF81r3GD',
+      },
+      {
+        dateTime: '20-09-2020',
         type: 'task',
         place: 'online',
         name: 'Songbird',
@@ -112,7 +116,7 @@ export const events = [
         isShowFeedback: false,
       },
       {
-        date: '21-09-2020',
+        dateTime: '21-09-2020',
         type: 'live',
         place: 'online',
         name: 'React. Base',
@@ -132,7 +136,7 @@ export const events = [
         isShowFeedback: false,
       },
       {
-        date: '21-09-2020',
+        dateTime: '21-09-2020',
         type: 'deadline',
         name: 'Songbird',
         key: '3',
@@ -155,7 +159,7 @@ export const events = [
     course: 'NodeJS 2020 Q1',
     events: [
       {
-        date: '22-09-2020',
+        dateTime: '22-09-2020',
         type: 'live',
         place: 'online',
         name: 'Lecture Introduction + Modules. NPM + Debugging',
@@ -175,7 +179,7 @@ export const events = [
         isShowFeedback: false,
       },
       {
-        date: '22-09-2020',
+        dateTime: '22-09-2020',
         type: 'task',
         place: 'online',
         name: 'Caesar cipher CLI tool',
@@ -195,7 +199,7 @@ export const events = [
         isShowFeedback: false,
       },
       {
-        date: '23-09-2020',
+        dateTime: '23-09-2020',
         type: 'live',
         place: 'online',
         name: ' Lecture Events and Event Loop + Async Development Introduction + Filesystem and Streams',
@@ -215,7 +219,7 @@ export const events = [
         isShowFeedback: false,
       },
       {
-        date: '23-09-2020',
+        dateTime: '23-09-2020',
         type: 'deadline',
         name: 'Caesar cipher CLI tool',
         key: '3',

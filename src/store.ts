@@ -1,4 +1,8 @@
-import { createStore } from 'redux';
-import { reducer } from './reducers/index';
+import { tableReducer } from './reducers/table-reducer';
+import { combineReducers, createStore } from 'redux';
 
-export const store = createStore(reducer);
+let reducers = combineReducers({
+  eventsData: tableReducer,
+});
+
+export const store = createStore(reducers);

@@ -2,7 +2,7 @@
 //   key: string;
 //   time: string;
 //   timeToComplete: string;
-//   date: string;
+//   dateTime: string;
 //   place: string;
 //   name: string;
 //   organizer: string;
