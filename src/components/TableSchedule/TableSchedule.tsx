@@ -9,6 +9,8 @@ import TaskPage from '../TaskPage';
 import { switchTypeToColor } from '../utilities/switcher';
 
 export const TableSchedule = (props: any) => {
+  //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
+  const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
@@ -143,11 +145,43 @@ export const TableSchedule = (props: any) => {
       }),
     };
   });
+  
+  const isНandlingClickOnRow = (event:React.FormEvent<EventTarget>) => {
+    let target = event.target as HTMLInputElement;
+    let tagClassName = target.className !== '' &&  typeof(target.className)==='string' 
+                        ? target.className.split(' ')[0] 
+                        : '';
+     if(target.tagName === 'TD' 
+                      || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')){
+      return true;
+    }
+    return false;
+  }
 
-  const handleRow = (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
-    setClickingRow(record);
-    setVisibleModal(true);
-  };
+  const handleDoubleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+    if(isНandlingClickOnRow(event)){
+      setClickingRow(record);
+      setVisibleModal(true);
+    }
+   }
+
+  const handleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+    if(isНandlingClickOnRow(event))
+    {
+      const ind = rowIndex ? rowIndex : 0;
+      const selRow= document.getElementsByClassName('ant-table-tbody')[0].children[ind];
+      const rowClassName = selRow.className;
+      let newRowClassName;
+      const classSel  =  ' ant-table-row-selected';
+      if(rowClassName.indexOf(classSel)!==-1){
+        newRowClassName = rowClassName.replace(classSel, '');
+      }else{
+        newRowClassName = rowClassName+classSel;
+      }
+     selRow.className = newRowClassName;
+     }
+  }
+
   return (
     <Form form={form} component={false}>
       <Button
@@ -186,13 +220,12 @@ export const TableSchedule = (props: any) => {
         }}
         onRow={(record, rowIndex) => {
           return {
-            onDoubleClick: (event) => {
-              handleRow(record, rowIndex, event);
-            }, // double click row
-          };
+              onClick: (event) => {handleClickRow(record,rowIndex,event)},
+              onDoubleClick: (event) => { handleDoubleClickRow(record,rowIndex,event)}// double click row
+          }
         }}
       />
-      {clickingRow ? (
+      {clickingRow ? 
         <Modal
           title={clickingRow.course}
           centered
@@ -212,9 +245,11 @@ export const TableSchedule = (props: any) => {
             organizer={clickingRow.organizer}
             taskContent={clickingRow.taskContent}
             isShowFeedback={clickingRow.isShowFeedback}
-          />
-        </Modal>
-      ) : null}
+            isMentor={isMentor}
+        />
+      </Modal>
+    : null
+    }
     </Form>
   );
 };
