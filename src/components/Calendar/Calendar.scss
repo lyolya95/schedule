@@ -9,6 +9,17 @@
     list-style: none;
     padding: 0 5px;
   }
+
+  .size {
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 5px;
+    text-overflow: ellipsis;
+  }
+  .size:hover {
+    white-space: normal;
+  }
 }
 
 .calendar {
