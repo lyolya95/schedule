@@ -1,0 +1,25 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  .filters_select{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    /*justify-content: space-around;*/
+    .filters_select_item {
+      min-width: 250px;
+      margin: 5px 5px;
+      flex-grow: 1;
+    }
+    .filters_select_item_range{
+      min-width: 250px;
+      margin: 5px 5px;
+    }
+  }
+  .filters_btn {
+    margin: 10px 5px 0;
+    align-self: end;
+  }
+}

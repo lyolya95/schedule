@@ -89,7 +89,8 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description React. Webpack',
-        isShowFeedback: true,
+        isShowFeedback:true,
+        timestamp: 1603100760000
       },
       {
         date: '20-09-2020',
@@ -109,7 +110,8 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description Songbird',
-        isShowFeedback: false,
+        isShowFeedback:false,
+        timestamp: 1603190280000
       },
       {
         date: '21-09-2020',
@@ -129,7 +131,8 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description React. Base',
-        isShowFeedback: false,
+        isShowFeedback:false,
+        timestamp: 1603179000000
       },
       {
         date: '21-09-2020',
@@ -147,7 +150,10 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description Songbird deadline',
-        isShowFeedback: false,
+        isShowFeedback:false,
+        organizer: "Anton G.",
+        place: "Minsk",
+        timestamp: 1603276200000
       },
     ],
   },
@@ -160,7 +166,7 @@ export const events = [
         place: 'online',
         name: 'Lecture Introduction + Modules. NPM + Debugging',
         organizer: 'Anton G.',
-        key: '0',
+        key: '4',
         time: new Date().toISOString().slice(11, 16),
         timeToComplete: '20 дней',
         url: 'youtube.com/c/RollingScopesSchool/',
@@ -172,15 +178,16 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback: false,
+        isShowFeedback:false,
+        timestamp: 1603358400000
       },
       {
         date: '22-09-2020',
         type: 'task',
         place: 'online',
         name: 'Caesar cipher CLI tool',
-        organizer: ' sixtyxi',
-        key: '1',
+        organizer: 'sixtyxi',
+        key: '5',
         time: new Date().toISOString().slice(11, 16),
         timeToComplete: '20 дней',
         url: 'youtube.com/c/RollingScopesSchool/',
@@ -192,7 +199,8 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback: false,
+        isShowFeedback:false,
+        timestamp: 1603358400000
       },
       {
         date: '23-09-2020',
@@ -200,7 +208,7 @@ export const events = [
         place: 'online',
         name: ' Lecture Events and Event Loop + Async Development Introduction + Filesystem and Streams',
         organizer: 'Dmitry Kornev',
-        key: '2',
+        key: '6',
         time: new Date().toISOString().slice(11, 16),
         timeToComplete: '20 дней',
         url: 'youtube.com/c/RollingScopesSchool/',
@@ -212,13 +220,14 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback: false,
+        isShowFeedback:false,
+        timestamp: 1603444800000
       },
       {
         date: '23-09-2020',
         type: 'deadline',
         name: 'Caesar cipher CLI tool',
-        key: '3',
+        key: '7',
         time: new Date().toISOString().slice(11, 16),
         timeToComplete: '20 дней',
         url: 'youtube.com/c/RollingScopesSchool/',
@@ -230,7 +239,10 @@ export const events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback: false,
+        isShowFeedback:false,
+        organizer: 'Dmitry Kornev',
+        place: 'Moscow',
+        timestamp: 1603444800000
       },
     ],
   },
