@@ -1,8 +1,9 @@
-import { tableReducer } from './reducers/table-reducer';
-import { combineReducers, createStore } from 'redux';
+import { reducer } from './reducers/index';
+import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 let reducers = combineReducers({
-  eventsData: tableReducer,
+  reducer: reducer,
 });
 
-export const store = createStore(reducers);
+export const store = createStore(reducers, compose(applyMiddleware(thunk)));

@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
+    "@types/redux-thunk": "^2.1.0",
     "antd": "^4.5.4",
     "axios": "^0.20.0",
     "dayjs": "^1.8.35",
@@ -27,6 +28,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "typescript": "^4.0.2"
   },
   "scripts": {
