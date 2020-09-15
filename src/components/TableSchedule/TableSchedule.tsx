@@ -1,30 +1,46 @@
-import React, { useState } from "react";
-import { Table, Popconfirm, Form, Button, Tag, Modal } from "antd";
-import "antd/dist/antd.css";
-import "./Tables.scss";
-import { IAgeMap } from "./TableSchedule.model";
-import { events } from "../../mocks/events";
-import { columnsName } from "../../mocks/tableColumnNames";
-import EditableCell from "./EditableCell";
-import { EditTwoTone } from "@ant-design/icons";
+import React, { useState } from 'react';
+import { Table, Popconfirm, Form, Button, Tag, Modal, Select } from 'antd';
+import 'antd/dist/antd.css';
+import { IAgeMap } from './TableSchedule.model';
+import { events } from '../../mocks/events';
+import EditableCell from './EditableCell';
+import { DeleteTwoTone, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 import TaskPage from '../TaskPage';
+import { switchTypeToColor } from '../utilities/switcher';
 
-export const TableSchedule = () => {
+export const TableSchedule = (props: any) => {
+  //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
+  const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
-  const [editingKey, setEditingKey] = useState(""); // храним какое поле(строку таблыцы) сейчас редактируем
+  const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [visibleModal, setVisibleModal] = useState(false);
-  const [clickingRow, setClickingRow] = useState<any|null>(); 
- 
+  const [clickingRow, setClickingRow] = useState<any | null>();
+
   const edit = (record: any) => {
     //при нажатии на кнопку edit
     form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
     setEditingKey(record.key); // указывает какая из строк сейчас редактируется
   };
+  const add = () => {
+    //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
+    const addData = { ...data[0] }; // создаем копию! данных одной строчки
+    addData.key = String(data.length + 1); // временное решение создания нового уникального ключа
+    const newData = [...data, addData]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание) и наша новая строчка добавляется в конце
+    setData(newData); // все сохранения изменения что мы сделали
+    edit(addData); // запускаем редактирование
+  };
+  const remove = (key: React.Key) => {
+    // при нажатии кнопки remove
+    const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
+    const index = newData.findIndex((item) => key === item.key); // Указывает индекс массива пришедших данных
+    newData.splice(index, 1); // удаляем строку под индексем index одну строку 1
+    setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
+  };
   const cancel = () => {
     //при нажатии на кнопку edit
-    setEditingKey(""); // отменяет редактирование
+    setEditingKey(''); // отменяет редактирование
   };
 
   const save = async (key: React.Key) => {
@@ -33,11 +49,15 @@ export const TableSchedule = () => {
       const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
       const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
       const index = newData.findIndex((item) => key === item.key); // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
+
       if (index > -1) {
         const item = newData[index]; // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
-        if (row["date-picker"]._d) {
+        if (row['date-picker']) {
           // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
-          item.date = row["date-picker"]._d.toISOString().slice(0, 10);
+          const selectDate = row['date-picker']._d.toISOString();
+          item.date = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)}`;
+
+          //('2020-09-11T19:24:01.734Z');
         }
         newData.splice(index, 1, {
           //заменяем в массиве элемент под номером index (точнее его сначала удаляем потом добавляем ...item, ...row) который пришел с данными (всеми данными таблицы всех строк проиндексированные)
@@ -45,46 +65,39 @@ export const TableSchedule = () => {
           ...row, // если что то поменялось то тут мы перезатрем что было в ...item,
         });
         setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        setEditingKey(""); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
+        setEditingKey(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
       } else {
         // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
         newData.push(row);
         setData(newData);
-        setEditingKey("");
+        setEditingKey('');
       }
     } catch (errInfo) {
       // обработка ошибки если нажали на кнопку Save, что то пошло не так, то смотреть, что именно в консоль
-      console.log("Validate Failed:", errInfo); // вывод ошибки в консоль при сохранении
+      console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
     }
   };
 
   const columns: IAgeMap[] = [
     // Хронятся данные названия столбцов (title, dataIndex) и то можно ли их редактировать,
-    ...columnsName, // Данные с названием столбцов импортируется из columnsName.tsx
+    // Данные с названием столбцов импортируется из columnsName.tsx
+    ...props.columnsName,
+    //...columnsName,
     {
-      title: "Tags",
-      dataIndex: "tags",
+      title: 'Type',
+      dataIndex: 'type',
       editable: true,
       render: (_: any, record: any) => {
-        let colorTag: string = "cyan";
-        switch (record.tags) {
-          case "deadline":
-            colorTag = "red";
-            break;
-          case "task":
-            colorTag = "green";
-            break;
-        }
         return (
-          <Tag key={record.tags} color={colorTag}>
-            {record.tags}
+          <Tag key={record.type} color={switchTypeToColor(record.type)}>
+            {record.type}
           </Tag>
         );
       },
     },
     {
-      title: "",
-      dataIndex: "operation",
+      title: '',
+      dataIndex: 'operation',
       render: (_: any, record: any) => {
         // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
         const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
@@ -98,7 +111,15 @@ export const TableSchedule = () => {
             </Popconfirm>
           </span>
         ) : (
-          <Button disabled={editingKey !== ""} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
+          <>
+            <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
+            <Button
+              ghost={true}
+              className="tableSchedule__button_remove"
+              onClick={() => remove(record.key)}
+              icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
+            ></Button>
+          </>
         );
         //save отправим колбэк с ключем текущей строки что бы сохранить
         //cancel отправим колбэк с ключем текущей строки что бы отменить
@@ -113,19 +134,11 @@ export const TableSchedule = () => {
       return col;
     }
 
-    let lineFormat: string;
-    switch (col.dataIndex) {
-      case "score":
-        lineFormat = "number";
-        break;
-      case "date":
-        lineFormat = "date";
-    }
     return {
       ...col,
       onCell: (record: any) => ({
         record,
-        inputType: lineFormat,
+        inputType: col.dataIndex,
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -133,13 +146,65 @@ export const TableSchedule = () => {
     };
   });
   
-  const handleRow = (record:any,rowIndex:number|undefined,event:React.MouseEvent) =>{
-    setClickingRow(record);
-    setVisibleModal(true);
+  const isНandlingClickOnRow = (event:React.FormEvent<EventTarget>) => {
+    let target = event.target as HTMLInputElement;
+    let tagClassName = target.className !== '' &&  typeof(target.className)==='string' 
+                        ? target.className.split(' ')[0] 
+                        : '';
+     if(target.tagName === 'TD' 
+                      || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')){
+      return true;
+    }
+    return false;
+  }
+
+  const handleDoubleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+    if(isНandlingClickOnRow(event)){
+      setClickingRow(record);
+      setVisibleModal(true);
+    }
+   }
+
+  const handleClickRow = (record:any,rowIndex:number|undefined,event:React.FormEvent<EventTarget>) =>{
+    if(isНandlingClickOnRow(event))
+    {
+      const ind = rowIndex ? rowIndex : 0;
+      const selRow= document.getElementsByClassName('ant-table-tbody')[0].children[ind];
+      const rowClassName = selRow.className;
+      let newRowClassName;
+      const classSel  =  ' ant-table-row-selected';
+      if(rowClassName.indexOf(classSel)!==-1){
+        newRowClassName = rowClassName.replace(classSel, '');
+      }else{
+        newRowClassName = rowClassName+classSel;
+      }
+     selRow.className = newRowClassName;
+     }
   }
 
   return (
     <Form form={form} component={false}>
+      <Button
+        className="tableSchedule__button_add"
+        ghost={true}
+        disabled={editingKey !== ''}
+        onClick={() => add()}
+        icon={<PlusCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '30px' }} />}
+      ></Button>
+      <Select
+        mode="multiple"
+        listItemHeight={10}
+        size="small"
+        showArrow
+        bordered={false}
+        maxTagCount={6}
+        maxTagTextLength={6}
+        tagRender={props.tagRender}
+        defaultValue={props.defaultColumns}
+        options={props.optionsKeyOfEvents}
+        onChange={props.changeColumnsSelect}
+        className="select-dropdown-columns"
+      />
       <Table
         components={{
           body: {
@@ -155,33 +220,34 @@ export const TableSchedule = () => {
         }}
         onRow={(record, rowIndex) => {
           return {
-                onDoubleClick: (event) => {handleRow(record,rowIndex,event)}// double click row
+              onClick: (event) => {handleClickRow(record,rowIndex,event)},
+              onDoubleClick: (event) => { handleDoubleClickRow(record,rowIndex,event)}// double click row
           }
         }}
       />
-      {clickingRow
-      ?<Modal
-        title={clickingRow.course}
-        centered
-        visible={visibleModal}
-        footer={[
-            <Button key="back" onClick={() => setVisibleModal(false)} >
+      {clickingRow ? 
+        <Modal
+          title={clickingRow.course}
+          centered
+          visible={visibleModal}
+          footer={[
+            <Button key="back" onClick={() => setVisibleModal(false)}>
               Return
             </Button>,
-            
           ]}
-        onCancel={() => setVisibleModal(false)}
-        width={1000}
-    >
-        <TaskPage 
+          onCancel={() => setVisibleModal(false)}
+          width={1000}
+        >
+          <TaskPage
             name={clickingRow.name}
             date={clickingRow.date}
-            type={clickingRow.type} 
+            type={clickingRow.type}
             organizer={clickingRow.organizer}
             taskContent={clickingRow.taskContent}
             isShowFeedback={clickingRow.isShowFeedback}
+            isMentor={isMentor}
         />
-    </Modal>
+      </Modal>
     : null
     }
     </Form>

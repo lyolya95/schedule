@@ -1,3 +1,4 @@
+import './TaskEditor.scss';
 import React, {FC, useState, useRef} from 'react';
 import ReactMarkdown from 'react-markdown';
 import MdEditor, { Plugins }  from 'react-markdown-editor-lite';
@@ -12,10 +13,11 @@ type StateType = {
 interface PropsType {
    currTaskContent:string;
    handleSave(text:string):void;
+   handleCancel():void;
 }
  const TaskEditor:FC<PropsType> = (props)=> {
    
-    const {currTaskContent, handleSave} = props;
+    const {currTaskContent, handleSave, handleCancel} = props;
     MdEditor.unuse(Plugins.ModeToggle);
     MdEditor.unuse(Plugins.FullScreen);
     MdEditor.use(ModeToggleMDHtml);
@@ -52,6 +54,10 @@ interface PropsType {
         }
        }
 
+       const handleCancelClick = () => {
+        handleCancel();
+       }
+
     return (
           <div className="task-editor">
             <MdEditor
@@ -81,6 +87,12 @@ interface PropsType {
               onClick={handleSaveClick}
             >
               Save changes
+            </Button>
+            <Button 
+              size="large"
+              onClick={handleCancelClick}
+            >
+              Cancel
             </Button>
           </div>
       

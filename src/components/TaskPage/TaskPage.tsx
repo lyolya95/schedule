@@ -1,13 +1,9 @@
-import React, { FC, useState } from 'react';
-import TaskEditor from '../TaskEditor';
+import React, { FC} from 'react';
+import MentorTaskForm from '../MentorTaskForm';
 import ReactMarkdown from 'react-markdown';
-import {EditFilled} from '@ant-design/icons';
-import { Checkbox } from 'antd';
+import FeedbackForm from '../FeedbackForm';
 import './TaskPage.scss';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-  
- 
-   
+
 type PropsType = {
     name:string;
     date:string;
@@ -15,6 +11,7 @@ type PropsType = {
     organizer:string;
     taskContent:string;
     isShowFeedback:boolean;
+    isMentor:boolean;
   }
 
   type StateType = {
@@ -22,57 +19,39 @@ type PropsType = {
 }
   const TaskPage:FC<PropsType> = (props) =>{
     
-    const {name, date, type, organizer, taskContent, isShowFeedback} = props;
-    const [editStatus, setEditStatus] = useState(false);
-    const [saveTaskContent, setSaveTaskContent] = useState(taskContent);
-    const [showFeedback, setShowFeedback] = useState(isShowFeedback);
-    const taskContentHtml = React.createElement(ReactMarkdown, {source: saveTaskContent});
-    
-    const handleClick = () => {
-      setEditStatus(true);
-    }
+    const {name, date, type, organizer, taskContent, isShowFeedback, isMentor} = props;
+    const taskContentHtml = React.createElement(ReactMarkdown, {source: taskContent});
 
-    const handleSave = (text:string) => {
-      setSaveTaskContent(text);
-      setEditStatus(false);
-    }
+    //const [showFeedback, setShowFeedback] = useState(isShowFeedback);
+  
+  /*  useEffect( () => {
+      console.log('use');
+      return function cleanup() {
+        console.log('del use');
+        setShowFeedback(false);
+      }
+    },[showFeedback]);*/
 
-    const onChangeShowFeedback = (e:CheckboxChangeEvent) =>{
-       setShowFeedback(e.target.checked);
-    }
 
     return(
-        //mentor
-        <div>
+          <div>
             <h1>{name}</h1>
             <div><b>Date:</b> {date}</div>
             <div><b>Type:</b> {type}</div>
             <div className="mb20"><b>Organizer:</b> {organizer}</div>
-            <Checkbox 
-              onChange={onChangeShowFeedback}
-              checked={isShowFeedback}>
-                Feedback is available for student
-            </Checkbox>
-            { editStatus
-                ? <div className="task-description">
-                    <TaskEditor 
-                      currTaskContent={saveTaskContent}
-                      handleSave={handleSave}
-                    />
-                  </div>
-                : <div className="task-description">
-                    <div className="icons-list">
-                      <EditFilled 
-                        label="Edit"
-                        onClick={handleClick}
-                        />
-                    </div>
-                    <div>
-                      {taskContentHtml}
-                    </div>
+
+            { isMentor
+              ? <MentorTaskForm 
+                taskContent={taskContent}
+                isShowFeedback={isShowFeedback}
+                />
+              : <div>
+                  {taskContentHtml}
+                  <FeedbackForm />
                 </div>
             }
-        </div>
+              
+          </div>
     )
 }
 export default TaskPage;

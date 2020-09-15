@@ -1,60 +1,126 @@
-import React, {FC, useState} from "react";
-import {MentorFiltersPattern} from "./MentorFilterPattern";
-import {TestTableSchedule} from "../TestTable/TestTableSchedule";
+import React, {FC} from "react";
+import {DatePicker, Space, Select, Button, Form} from 'antd';
+import {Collapse} from 'antd';
 
-import {events} from "../../mocks/events";
+import './MentorFilters.scss';
+import 'antd/dist/antd.css';
+import {MentorFiltersProps} from "./MentorFiltersProps.model";
 
-export const MentorFilters: FC = () => {
-    const [filerFlags, setFilterFlags] = useState({});
-    const [dates, setDates] = useState([]);
+const {Option} = Select;
+const {RangePicker} = DatePicker;
+const {Panel} = Collapse;
 
-    const data = events.map((item) => {
-        const course = item.course;
-        return item.events.map((event) => {
-            return {
-                ...event,
-                course: course
-            }
-        })
-    }).flat();
+export const MentorFiltersPattern: FC<MentorFiltersProps> = ({data, setFilterFlags, filterFlag, setDates}) => {
 
-    const hasFilterFlag = (data: any, flags: any): boolean => {
-        const keys = Object.keys(flags);
-        if (keys.length === 0) {
-            return true;
-        }
-        const keysToCheck: string[] = keys.filter((key: string) => flags[key].length > 0);
-        const valueToCheck: string[] = keys.reduce((acc: any[], key: string) => [...acc, flags[key]], []).flat();
-        for (const key of keysToCheck) {
-            if (!valueToCheck.includes(data[key])) {
-                return false;
-            }
-        }
-        return true;
-    };
+    const [form] = Form.useForm();
+    let initialKey = 1;
 
-    const isInDateRange = (date: any, dateRange: any): boolean => {
-        if (dateRange.length === 0) {
-            return  true;
-        }
-        const compareDate = new Date(date);
-        const firstDate = new Date(dateRange[0]);
-        const lastDate = new Date(dateRange[1]);
-        if (firstDate < compareDate && compareDate < lastDate) {
-            return true;
-        }
-        return false;
+    const getKey = () => {
+        const key = initialKey;
+        initialKey++;
+        return key;
     }
 
-    const visibleData = data
-        .filter((item) => hasFilterFlag(item, filerFlags))
-        .filter((item) => isInDateRange(item.timestamp, dates));
+    function handleChange(tag: string, value: Array<string>): void {
+        const keys = Object.keys(filterFlag);
+        const flag: any = {};
+        flag[tag] = value;
+        if (keys.includes(tag)) {
+            if (filterFlag[tag].includes(value)) {
+                return
+            }
+            const newFlag = {...filterFlag, ...flag};
+            setFilterFlags(newFlag);
+        }
+        const newFlag = {...filterFlag, ...flag};
+        setFilterFlags(newFlag);
+    }
 
-    return (
-        <>
-            <MentorFiltersPattern data={data} filterFlag={filerFlags} setFilterFlags={setFilterFlags} setDates={setDates}/>
-            <TestTableSchedule visibleData={visibleData}/>
-        </>
+    function dateChange(value: any): void {
+        if (value === null) {
+            setDates([]);
+            return;
+        }
+        const dates = value.map((item: any) => item._d);
+        setDates(dates);
+    }
+
+    const optionCreate = (data: any, tag: string) => {
+        const labels: any = [];
+        const option: Array<JSX.Element> = data.map((item: any) => {
+            if (labels.includes(item[tag])) {
+                return;
+            }
+            labels.push(item[tag]);
+            return <Option value={item[tag]} key={getKey()}>{item[tag]}</Option>
+        })
+        return option;
+    }
+
+    const onReset = () => {
+        form.resetFields();
+        setFilterFlags({});
+    }
+
+    const filters = (
+        <div className="filters">
+            <Form className="filters_select" form={form} name="control-hooks">
+                <Form.Item name="organizer" className="filters_select_item" key='1'>
+                    <Select
+                        mode="multiple"
+                        placeholder="Organizer"
+                        onChange={(value: Array<string>) => handleChange('organizer', value)}
+                        allowClear>
+                        {optionCreate(data, 'organizer')}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="tags" className="filters_select_item" key='2'>
+                    <Select
+                        mode="multiple"
+                        placeholder="Type"
+                        onChange={(value: Array<string>) => handleChange('type', value)}
+                        allowClear>
+                        {optionCreate(data, 'type')}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="course" className="filters_select_item" key='3'>
+                    <Select
+                        placeholder="Course"
+                        mode="multiple"
+                        onChange={(value: Array<string>) => handleChange('course', value)}
+                        allowClear>
+                        {optionCreate(data, 'course')}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="place" className="filters_select_item" key='4'>
+                    <Select
+                        mode="multiple"
+                        placeholder="Place"
+                        onChange={(value: Array<string>) => handleChange('place', value)}
+                        allowClear>
+                        {optionCreate(data, 'place')}
+                    </Select>
+                </Form.Item>
+                <Form.Item className="filters_select_item" key='5'>
+                    <Space direction="vertical" size={12}>
+                        <RangePicker onChange={dateChange}/>
+                    </Space>
+                </Form.Item>
+            </Form>
+            <Form.Item className="filters_select_item" key='6'>
+                <Button className="filters_btn" onClick={() => onReset()} htmlType="button" danger>Reset</Button>
+            </Form.Item>
+        </div>
     )
 
-}
+    return (
+        <Collapse bordered={false}>
+            <Panel header="Filters" key="1">
+                {filters}
+            </Panel>
+        </Collapse>
+    )
+};
+
+
+
