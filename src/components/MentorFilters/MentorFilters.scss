@@ -7,7 +7,6 @@
     display: flex;
     flex-wrap: wrap;
     margin: 0;
-    /*justify-content: space-around;*/
     .filters_select_item {
       min-width: 250px;
       margin: 5px 5px;
@@ -18,8 +17,17 @@
       margin: 5px 5px;
     }
   }
+  .ant-row {
+    margin-bottom: 5px;
+
+  }
   .filters_btn {
     margin: 10px 5px 0;
     align-self: end;
   }
+}
+
+.ant-collapse-header {
+  font-weight: 500;
+  font-size: 16px;
 }
