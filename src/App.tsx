@@ -14,7 +14,7 @@ export const App = () => {
         <Router>
           <HeaderContainer />
           <Switch>
-            <Route path="/table" component={TableScheduleContainer} exact />
+            <Route path="/" component={TableScheduleContainer} exact />
             <Route path="/calendar" component={CalendarItemContainer} />
             {/* <Route path="/list" component={КомпонентСписка} exact /> */}
           </Switch>
