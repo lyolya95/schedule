@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GeolocationControl, Map, Placemark, SearchControl, YMaps } from 'react-yandex-maps';
+import { Map, Placemark, SearchControl, YMaps } from 'react-yandex-maps';
 import './Maps.scss';
 
 export const Maps = () => {
@@ -9,22 +9,33 @@ export const Maps = () => {
   const mapData = {
     center: [55.751574, 37.573856],
     zoom: 5,
+    controls: ['zoomControl', 'fullscreenControl'],
   };
 
   const onMapClick = (event: any) => {
     setCoords((state) => [...state, event.get('coords')]);
-    console.log(coords);
   };
 
   return (
     <div className="task-editor-maps">
-      <YMaps>
-        <Map onClick={onMapClick} defaultState={mapData} width={550}>
+      <YMaps
+        query={{
+          apikey: 'a4b10d40-705d-42bc-8f57-732d5435907d',
+          load: 'package.full',
+          ns: 'use-load-option',
+          lang: 'ru_RU',
+        }}
+      >
+        <Map
+          onClick={onMapClick}
+          defaultState={mapData}
+          width={600}
+          modules={['control.ZoomControl', 'control.FullscreenControl']}
+        >
           {coords.map((coord: any) => (
             <Placemark key={coord.join(',')} geometry={coord} />
           ))}
           <SearchControl options={{ float: 'right' }} />
-          <GeolocationControl options={{ float: 'left' }} />
         </Map>
       </YMaps>
     </div>
