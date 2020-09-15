@@ -88,7 +88,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'task',
         taskContent: 'big description React. Webpack',
         isShowFeedback:true,
         timestamp: 1603100760000
@@ -110,7 +109,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'deadline',
         taskContent: 'big description Songbird',
         isShowFeedback:false,
         timestamp: 1603190280000
@@ -132,7 +130,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'deadline',
         taskContent: 'big description React. Base',
         isShowFeedback:false,
         timestamp: 1603179000000
@@ -152,7 +149,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'deadline',
         taskContent: 'big description Songbird deadline',
         isShowFeedback:false,
         organizer: "Anton G.",
@@ -181,7 +177,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'deadline',
         taskContent: 'big description Node',
         isShowFeedback:false,
         timestamp: 1603358400000
@@ -203,7 +198,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'deadline',
         taskContent: 'big description Node',
         isShowFeedback:false,
         timestamp: 1603358400000
@@ -225,7 +219,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'deadline',
         taskContent: 'big description Node',
         isShowFeedback:false,
         timestamp: 1603444800000
@@ -245,7 +238,6 @@ export const events = [
         importance: true,
         done: false,
         score: 131,
-        tags: 'deadline',
         taskContent: 'big description Node',
         isShowFeedback:false,
         organizer: 'Dmitry Kornev',

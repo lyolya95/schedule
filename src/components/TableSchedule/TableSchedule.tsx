@@ -7,6 +7,7 @@ import EditableCell from './EditableCell';
 import { DeleteTwoTone, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 import TaskPage from '../TaskPage';
 import { switchTypeToColor } from '../utilities/switcher';
+import {MentorFilters} from "../MentorFilters/MentorFilters";
 
 export const TableSchedule = (props: any) => {
   //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
@@ -182,6 +183,55 @@ export const TableSchedule = (props: any) => {
      }
   }
 
+  // Добавлена логика сортировки данных для таблицы
+  //____________________________________________________________________________________________________________________
+  const [filerFlags, setFilterFlags] = useState({});
+  const [dates, setDates] = useState([]);
+
+  const initialData = events.map((item) => {
+    const course = item.course;
+    return item.events.map((event) => {
+      return {
+        ...event,
+        course: course
+      }
+    })
+  }).flat();
+
+  const hasFilterFlag = (data: any, flags: any): boolean => {
+    const keys = Object.keys(flags);
+    if (keys.length === 0) {
+      return true;
+    }
+    const keysToCheck: string[] = keys.filter((key: string) => flags[key].length > 0);
+    const valueToCheck: string[] = keys.reduce((acc: any[], key: string) => [...acc, flags[key]], []).flat();
+    for (const key of keysToCheck) {
+      if (!valueToCheck.includes(data[key])) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const isInDateRange = (date: any, dateRange: any): boolean => {
+    if (dateRange.length === 0) {
+      return  true;
+    }
+    const compareDate = new Date(date);
+    const firstDate = new Date(dateRange[0]);
+    const lastDate = new Date(dateRange[1]);
+    if (firstDate < compareDate && compareDate < lastDate) {
+      return true;
+    }
+    return false;
+  }
+
+  const visibleData = initialData
+      .filter((item) => hasFilterFlag(item, filerFlags))
+      .filter((item) => isInDateRange(item.timestamp, dates));
+
+  //____________________________________________________________________________________________________________________
+
   return (
     <Form form={form} component={false}>
       <Button
@@ -205,6 +255,7 @@ export const TableSchedule = (props: any) => {
         onChange={props.changeColumnsSelect}
         className="select-dropdown-columns"
       />
+      <MentorFilters data={initialData} filterFlag={filerFlags} setFilterFlags={setFilterFlags} setDates={setDates}/>
       <Table
         components={{
           body: {
@@ -212,7 +263,7 @@ export const TableSchedule = (props: any) => {
           },
         }}
         bordered
-        dataSource={data}
+        dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
         pagination={{

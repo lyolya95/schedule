@@ -10,7 +10,7 @@ const {Option} = Select;
 const {RangePicker} = DatePicker;
 const {Panel} = Collapse;
 
-export const MentorFiltersPattern: FC<MentorFiltersProps> = ({data, setFilterFlags, filterFlag, setDates}) => {
+export const MentorFilters: FC<MentorFiltersProps> = ({data, setFilterFlags, filterFlag, setDates}) => {
 
     const [form] = Form.useForm();
     let initialKey = 1;
@@ -101,13 +101,13 @@ export const MentorFiltersPattern: FC<MentorFiltersProps> = ({data, setFilterFla
                         {optionCreate(data, 'place')}
                     </Select>
                 </Form.Item>
-                <Form.Item className="filters_select_item" key='5'>
+                <Form.Item className="filters_select_item_range" key='5'>
                     <Space direction="vertical" size={12}>
                         <RangePicker onChange={dateChange}/>
                     </Space>
                 </Form.Item>
             </Form>
-            <Form.Item className="filters_select_item" key='6'>
+            <Form.Item key='6'>
                 <Button className="filters_btn" onClick={() => onReset()} htmlType="button" danger>Reset</Button>
             </Form.Item>
         </div>
