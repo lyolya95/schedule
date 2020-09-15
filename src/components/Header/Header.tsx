@@ -16,7 +16,7 @@ export const Header: FC<HeaderProps> = React.memo(({ isShowCalendarOrTable }) =>
 
   const handleShowCalendar = useCallback(() => {
     setShowCalendar((prev) => !prev);
-    !showCalendar ? history.push('/calendar') : history.push('/table');
+    !showCalendar ? history.push('/calendar') : history.push('/');
   }, [history, showCalendar]);
 
   const eventsTitle = useMemo(() => {
