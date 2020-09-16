@@ -28,7 +28,6 @@ const Container = (props: any) => {
 let mapStateToProps = (state: any) => {
   return {
     data: state.reducer.data,
-    organizers: state.reducer.organizers,
   };
 };
 

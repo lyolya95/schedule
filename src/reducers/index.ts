@@ -1,4 +1,4 @@
-import { setDataEventsAC, SET_DATA_EVENT, IS_SHOW_CALENDAR, GET_DATA_ORGANIZERS, setDataOrganizersAC } from './../actions/index';
+import { setDataEventsAC, SET_DATA_EVENT, IS_SHOW_CALENDAR } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 // export interface StateModel {
@@ -42,12 +42,10 @@ import { scheduleAPI } from './../API/api';
 export interface StateModel {
   isShowCalendarOrTable: boolean;
   data: any;
-  organizers: any;
 }
 const initialState: StateModel = {
   isShowCalendarOrTable: false,
   data: [],
-  organizers: [],
 };
 
 export const reducer = (state = initialState, action: any) => {
@@ -57,10 +55,31 @@ export const reducer = (state = initialState, action: any) => {
         isShowCalendarOrTable: action.payload,
       };
     case SET_DATA_EVENT: {
-      return { ...state, data: [...state.data, ...action.payload] };
-    }
-    case GET_DATA_ORGANIZERS: {
-      return { ...state, organizers: [...state.organizers, ...action.payload] };
+      action.events.map((event: any) => {
+        // проходимся по данным что бы найти организаторов и поменять их id на соответствующие им имена
+        action.organizers.map((mentor: any) => {
+          let arrayOfStrings = { id: '', name: '' };
+          if (event.organizer) {
+            // если пришли данные организатора
+            if (event.organizer.indexOf(',') !== -1) {
+              // если внутри строки есть запятая (внутри id "Do3SJBnxSjd,DJkd....") это значит что несколько организаторов
+
+              arrayOfStrings.id = event.id;
+              arrayOfStrings.name = event.organizer.split(',');
+            } else {
+              event.organizer === mentor.id && (event.organizer = mentor.name); // если в данных Id совпадает со id ментора тогда переназначить на имя иначе оставить как есть
+            }
+          }
+
+          console.log(arrayOfStrings); // id события name id ментаров из этого события
+
+          return mentor;
+        });
+
+        return event;
+      });
+
+      return { ...state, data: [...action.events] };
     }
     default:
       return state;
@@ -68,10 +87,7 @@ export const reducer = (state = initialState, action: any) => {
 };
 
 export const getDataEvent = () => async (dispatch: any) => {
-  const data = await scheduleAPI.getDataEvents();
-  dispatch(setDataEventsAC(data));
-};
-export const getDataOrganizers = () => async (dispatch: any) => {
-  const data = await scheduleAPI.getDataOrganizers();
-  dispatch(setDataOrganizersAC(data));
+  const events = await scheduleAPI.getDataEvents();
+  const organizers = await scheduleAPI.getDataOrganizers();
+  dispatch(setDataEventsAC(events, organizers));
 };
