@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Popconfirm, Form, Button, Tag, Modal, Select } from 'antd';
+import { Table, Popconfirm, Form, Button, Tag, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
 import { events } from '../../mocks/events';
@@ -243,27 +243,14 @@ export const TableSchedule = (props: any) => {
 
   return (
     <Form form={form} component={false}>
-      <Button
-        className="tableSchedule__button_add"
-        ghost={true}
+      <Button 
+        type="primary" 
         disabled={editingKey !== ''}
         onClick={() => add()}
-        icon={<PlusCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '30px' }} />}
-      ></Button>
-      {/*<Select
-        mode="multiple"
-        listItemHeight={10}
-        size="small"
-        showArrow
-        bordered={false}
-        maxTagCount={6}
-        maxTagTextLength={6}
-        tagRender={props.tagRender}
-        defaultValue={props.defaultColumns}
-        options={props.optionsKeyOfEvents}
-        onChange={props.changeColumnsSelect}
-        className="select-dropdown-columns"
-      />*/}
+        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }}
+      />}>
+        Add event
+      </Button>
       <MentorFilters
           data={data}
           filterFlag={filerFlags}
