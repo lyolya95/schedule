@@ -13,7 +13,7 @@ export const CalendarItem: FC<CalendarItemProps> = React.memo(({ isShowCalendarO
     events.map((i) =>
       i.events.map((i) => {
         switch (value.date()) {
-          case +i.date.slice(0, 2):
+          case +i.dateTime.slice(0, 2):
             listData.push({
               type: i.type,
               content: i.name,
