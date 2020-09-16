@@ -1,9 +1,9 @@
-import { reducer } from './reducers/index';
-import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
+import { reducer } from './reducers/index';
 
 const reducers = combineReducers({
-  reducer: reducer,
+  reducer,
 });
 
 export const store = createStore(reducers, compose(applyMiddleware(thunk)));
