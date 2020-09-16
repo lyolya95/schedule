@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import { StateModel } from '../../reducers';
+import { getDataEvent } from '../../reducers';
 import { CalendarItem } from './CalendarItem';
 
-const mapStateToProps = (state: StateModel) => {
+const mapStateToProps = (state: any) => {
   return {
     isShowCalendarOrTable: state.isShowCalendarOrTable,
+    data: state.reducer.data,
   };
 };
 
-export const CalendarItemContainer = connect(mapStateToProps)(CalendarItem);
+export const CalendarItemContainer = connect(mapStateToProps, { getDataEvent })(CalendarItem);

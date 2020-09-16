@@ -20,7 +20,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     case 'score':
       inputNode = <InputNumber />;
       break;
-    case 'date':
+    case 'dateTime':
       inputNode = <DatePicker autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
       break;
     case 'type':
@@ -71,7 +71,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     <td {...restProps}>
       {editing ? (
         <Form.Item
-          name={inputType === 'date' ? 'date-picker' : dataIndex}
+          name={inputType === 'dateTime' ? 'date-picker' : dataIndex}
           style={{ margin: 0 }}
           rules={[
             {
