@@ -2,7 +2,7 @@ import { reducer } from './reducers/index';
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-let reducers = combineReducers({
+const reducers = combineReducers({
   reducer: reducer,
 });
 

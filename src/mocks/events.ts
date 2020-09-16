@@ -1,4 +1,4 @@
-export let events = [
+export const events = [
   // {
   //   course: 'JS/FE 2020 Q4',
   //   weeks: [
@@ -113,8 +113,8 @@ export let events = [
         done: false,
         score: 131,
         taskContent: 'big description Songbird',
-        isShowFeedback:false,
-        timestamp: 1603190280000
+        isShowFeedback: false,
+        timestamp: 1603190280000,
       },
       {
         dateTime: '21-09-2020',
@@ -134,8 +134,8 @@ export let events = [
         done: false,
         score: 131,
         taskContent: 'big description React. Base',
-        isShowFeedback:false,
-        timestamp: 1603179000000
+        isShowFeedback: false,
+        timestamp: 1603179000000,
       },
       {
         dateTime: '21-09-2020',
@@ -153,10 +153,10 @@ export let events = [
         done: false,
         score: 131,
         taskContent: 'big description Songbird deadline',
-        isShowFeedback:false,
-        organizer: "Anton G.",
-        place: "Minsk",
-        timestamp: 1603276200000
+        isShowFeedback: false,
+        organizer: 'Anton G.',
+        place: 'Minsk',
+        timestamp: 1603276200000,
       },
     ],
   },
@@ -181,8 +181,8 @@ export let events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback:false,
-        timestamp: 1603358400000
+        isShowFeedback: false,
+        timestamp: 1603358400000,
       },
       {
         dateTime: '22-09-2020',
@@ -202,8 +202,8 @@ export let events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback:false,
-        timestamp: 1603358400000
+        isShowFeedback: false,
+        timestamp: 1603358400000,
       },
       {
         dateTime: '23-09-2020',
@@ -223,8 +223,8 @@ export let events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback:false,
-        timestamp: 1603444800000
+        isShowFeedback: false,
+        timestamp: 1603444800000,
       },
       {
         dateTime: '23-09-2020',
@@ -242,10 +242,10 @@ export let events = [
         done: false,
         score: 131,
         taskContent: 'big description Node',
-        isShowFeedback:false,
+        isShowFeedback: false,
         organizer: 'Dmitry Kornev',
         place: 'Moscow',
-        timestamp: 1603444800000
+        timestamp: 1603444800000,
       },
     ],
   },

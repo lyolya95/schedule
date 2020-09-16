@@ -6,13 +6,13 @@ const instance = Axios.create({
 
 export const scheduleAPI = {
   getDataEvents() {
-    return instance.get('events').then((respons) => {
-      return respons.data.data;
+    return instance.get('events').then((response) => {
+      return response.data.data;
     });
   },
   getDataOrganizers() {
-    return instance.get('organizers').then((respons) => {
-      return respons.data.data;
+    return instance.get('organizers').then((response) => {
+      return response.data.data;
     });
   },
 };

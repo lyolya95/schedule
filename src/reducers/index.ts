@@ -1,12 +1,49 @@
 import { setDataEventsAC, SET_DATA_EVENT, IS_SHOW_CALENDAR, GET_DATA_ORGANIZERS, setDataOrganizersAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
+// export interface StateModel {
+//   isShowCalendarOrTable: boolean;
+//   data: [
+//     {
+//       id: string;
+//       name: string;
+//       course: string;
+//       dateTime: string;
+//       type: string;
+//       timeZone: string;
+
+//       organizer?: string;
+//       descriptionUrl?: string;
+//       timeToComplete?: string;
+//       place?: string;
+//       week?: number;
+//       maxScore?: number;
+//       taskContent?: string;
+//       isShowFeedback?: boolean;
+//     }
+//   ];
+//   organizers: any;
+// }
+// const initialState: StateModel = {
+//   isShowCalendarOrTable: false,
+//   data: [
+//     {
+//       id: '',
+//       name: '',
+//       course: '',
+//       dateTime: '',
+//       type: '',
+//       timeZone: '',
+//     },
+//   ],
+//   organizers: [],
+// };
+
 export interface StateModel {
   isShowCalendarOrTable: boolean;
   data: any;
   organizers: any;
 }
-
 const initialState: StateModel = {
   isShowCalendarOrTable: false,
   data: [],
@@ -31,10 +68,10 @@ export const reducer = (state = initialState, action: any) => {
 };
 
 export const getDataEvent = () => async (dispatch: any) => {
-  let data = await scheduleAPI.getDataEvents();
+  const data = await scheduleAPI.getDataEvents();
   dispatch(setDataEventsAC(data));
 };
 export const getDataOrganizers = () => async (dispatch: any) => {
-  let data = await scheduleAPI.getDataOrganizers();
+  const data = await scheduleAPI.getDataOrganizers();
   dispatch(setDataOrganizersAC(data));
 };
