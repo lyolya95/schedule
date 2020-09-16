@@ -10,7 +10,6 @@ export const TableScheduleContainer = (props: any) => {
     // вытаскивает все ключи для записи их в заголовок колонок и для функции скрытия и отображения колонок
     value: n,
   }));
-
   const toUpperCase = (value: string) => value[0].toUpperCase() + value.slice(1);
   const tagRender = (props: any) => {
     const { label, closable, onClose } = props;

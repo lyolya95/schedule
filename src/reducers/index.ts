@@ -20,10 +20,10 @@ export const reducer = (state = initialState, action: any) => {
         isShowCalendarOrTable: action.payload,
       };
     case SET_DATA_EVENT: {
-      return { ...state, data: action.payload };
+      return { ...state, data: [...state.data, ...action.payload] };
     }
     case GET_DATA_ORGANIZERS: {
-      return { ...state, organizers: action.payload };
+      return { ...state, organizers: [...state.organizers, ...action.payload] };
     }
     default:
       return state;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Popconfirm, Form, Button, Tag, Modal, Select } from 'antd';
+import { Table, Popconfirm, Form, Button, Tag, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
@@ -11,7 +11,6 @@ import { MentorFilters } from '../MentorFilters/MentorFilters';
 export const TableSchedule = (props: any) => {
   const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
 
-  const initialData = data;
   //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
   const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
@@ -228,22 +227,7 @@ export const TableSchedule = (props: any) => {
         onClick={() => add()}
         icon={<PlusCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '30px' }} />}
       ></Button>
-      {/*<Select
-        mode="multiple"
-        listItemHeight={10}
-        size="small"
-        showArrow
-        bordered={false}
-        maxTagCount={6}
-        maxTagTextLength={6}
-        tagRender={props.tagRender}
-        defaultValue={props.defaultColumns}
-        options={props.optionsKeyOfEvents}
-        onChange={props.changeColumnsSelect}
-        className="select-dropdown-columns"
-      />
-      <MentorFilters data={data} filterFlag={filerFlags} setFilterFlags={setFilterFlags} setDates={setDates} />
-      />*/}
+
       <MentorFilters
         data={data}
         filterFlag={filerFlags}

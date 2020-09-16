@@ -6,10 +6,16 @@ import { Alert, Spin } from 'antd';
 
 const Container = (props: any) => {
   const [preloader, setPreloader] = useState(true);
+
   useEffect(() => {
-    props.data.length === 0 ? setPreloader(true) : setPreloader(false);
-  }, [props.data]);
-  props.getDataEvent();
+    if (props.data.length < 1) {
+      props.getDataEvent();
+      setPreloader(true);
+    } else {
+      setPreloader(false);
+    }
+  }, [props]);
+
   return preloader ? (
     <Spin tip="Loading...">
       <Alert message="Data of table" description="Loading" type="info" />
@@ -22,6 +28,7 @@ const Container = (props: any) => {
 let mapStateToProps = (state: any) => {
   return {
     data: state.reducer.data,
+    organizers: state.reducer.organizers,
   };
 };
 
