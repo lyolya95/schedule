@@ -10,10 +10,19 @@ import { switchTypeToColor } from '../utilities/switcher';
 import {MentorFilters} from "../MentorFilters/MentorFilters";
 
 export const TableSchedule = (props: any) => {
+  const initialData = events.map((item) => {
+    const course = item.course;
+    return item.events.map((event) => {
+      return {
+        ...event,
+        course: course
+      }
+    })
+  }).flat();
   //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
   const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
-  const [data, setData] = useState(events[0].events); // хранятся все данные таблиц которые приходят
+  const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [visibleModal, setVisibleModal] = useState(false);
@@ -188,7 +197,7 @@ export const TableSchedule = (props: any) => {
   const [filerFlags, setFilterFlags] = useState({});
   const [dates, setDates] = useState([]);
 
-  const initialData = events.map((item) => {
+  /*const initialData = events.map((item) => {
     const course = item.course;
     return item.events.map((event) => {
       return {
@@ -196,7 +205,7 @@ export const TableSchedule = (props: any) => {
         course: course
       }
     })
-  }).flat();
+  }).flat();*/
 
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
@@ -226,7 +235,7 @@ export const TableSchedule = (props: any) => {
     return false;
   }
 
-  const visibleData = initialData
+  const visibleData = data
       .filter((item) => hasFilterFlag(item, filerFlags))
       .filter((item) => isInDateRange(item.timestamp, dates));
 
@@ -241,7 +250,7 @@ export const TableSchedule = (props: any) => {
         onClick={() => add()}
         icon={<PlusCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '30px' }} />}
       ></Button>
-      <Select
+      {/*<Select
         mode="multiple"
         listItemHeight={10}
         size="small"
@@ -254,8 +263,16 @@ export const TableSchedule = (props: any) => {
         options={props.optionsKeyOfEvents}
         onChange={props.changeColumnsSelect}
         className="select-dropdown-columns"
-      />
-      <MentorFilters data={initialData} filterFlag={filerFlags} setFilterFlags={setFilterFlags} setDates={setDates}/>
+      />*/}
+      <MentorFilters
+          data={data}
+          filterFlag={filerFlags}
+          setFilterFlags={setFilterFlags}
+          setDates={setDates}
+          tagRender={props.tagRender}
+          defaultColumns={props.defaultColumns}
+          optionsKeyOfEvents={props.optionsKeyOfEvents}
+          changeColumnsSelect={props.changeColumnsSelect}/>
       <Table
         components={{
           body: {

@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {DatePicker, Space, Select, Button, Form} from 'antd';
+import {DatePicker, Space, Select, Button, Form, Divider} from 'antd';
 import {Collapse} from 'antd';
 
 import './MentorFilters.scss';
@@ -10,8 +10,9 @@ const {Option} = Select;
 const {RangePicker} = DatePicker;
 const {Panel} = Collapse;
 
-export const MentorFilters: FC<MentorFiltersProps> = ({data, setFilterFlags, filterFlag, setDates}) => {
+export const MentorFilters: FC<MentorFiltersProps> = (props) => {
 
+    const {data, setFilterFlags, filterFlag, setDates} = props;
     const [form] = Form.useForm();
     let initialKey = 1;
 
@@ -110,6 +111,18 @@ export const MentorFilters: FC<MentorFiltersProps> = ({data, setFilterFlags, fil
             <Form.Item key='6'>
                 <Button className="filters_btn" onClick={() => onReset()} htmlType="button" danger>Reset</Button>
             </Form.Item>
+            <Divider orientation="left" plain>Visible columns</Divider>
+            <Select
+                bordered={false}
+                showArrow
+                mode="multiple"
+                placeholder="Columns"
+                className="select-dropdown-columns"
+                tagRender={props.tagRender}
+                defaultValue={props.defaultColumns}
+                options={props.optionsKeyOfEvents}
+                onChange={props.changeColumnsSelect}
+                />
         </div>
     )
 

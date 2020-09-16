@@ -15,7 +15,7 @@ const tagRender = (props: any) => {
   const { label, closable, onClose } = props;
   //то как отображаются списки с отображаемымы колонками
   return (
-    <Tag closable={closable} onClose={onClose} style={{ marginRight: 3, fontSize: 10 }}>
+    <Tag closable={closable} onClose={onClose} style={{ marginRight: 3, fontSize: 14 }}>
       {toUpperCase(label)}
     </Tag>
   );
