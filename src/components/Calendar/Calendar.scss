@@ -33,3 +33,34 @@
     }
   }
 }
+
+.site-calendar-demo-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+}
+[data-theme='dark'] .site-calendar-demo-card {
+  border: 1px solid #303030;
+}
+
+@media screen and (max-width: 1000px) {
+  .ant-picker-calendar {
+    .size {
+      width: 65px;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .events {
+    display: flex;
+  }
+
+  .ant-badge-status-text {
+    margin-left: 2px;
+  }
+
+  .ant-picker-content th,
+  .ant-picker-content td {
+    height: 50px;
+  }
+}

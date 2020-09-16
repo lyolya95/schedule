@@ -1,4 +1,10 @@
-import { setDataEventsAC, SET_DATA_EVENT, IS_SHOW_CALENDAR, GET_DATA_ORGANIZERS, setDataOrganizersAC } from './../actions/index';
+import {
+  GET_DATA_ORGANIZERS,
+  IS_SHOW_CALENDAR,
+  setDataEventsAC,
+  setDataOrganizersAC,
+  SET_DATA_EVENT,
+} from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 // export interface StateModel {
@@ -54,6 +60,7 @@ export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case IS_SHOW_CALENDAR:
       return {
+        ...state,
         isShowCalendarOrTable: action.payload,
       };
     case SET_DATA_EVENT: {
