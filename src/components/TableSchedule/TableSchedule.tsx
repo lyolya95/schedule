@@ -9,10 +9,13 @@ import { switchTypeToColor } from '../utilities/switcher';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 
 export const TableSchedule = (props: any) => {
+  const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
+
+  const initialData = data;
   //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
   const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
-  const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
+
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [visibleModal, setVisibleModal] = useState(false);
@@ -182,7 +185,6 @@ export const TableSchedule = (props: any) => {
   //____________________________________________________________________________________________________________________
   const [filerFlags, setFilterFlags] = useState({});
   const [dates, setDates] = useState([]);
-
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
     if (keys.length === 0) {
@@ -226,7 +228,7 @@ export const TableSchedule = (props: any) => {
         onClick={() => add()}
         icon={<PlusCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '30px' }} />}
       ></Button>
-      <Select
+      {/*<Select
         mode="multiple"
         listItemHeight={10}
         size="small"
@@ -241,6 +243,17 @@ export const TableSchedule = (props: any) => {
         className="select-dropdown-columns"
       />
       <MentorFilters data={data} filterFlag={filerFlags} setFilterFlags={setFilterFlags} setDates={setDates} />
+      />*/}
+      <MentorFilters
+        data={data}
+        filterFlag={filerFlags}
+        setFilterFlags={setFilterFlags}
+        setDates={setDates}
+        tagRender={props.tagRender}
+        defaultColumns={props.defaultColumns}
+        optionsKeyOfEvents={props.optionsKeyOfEvents}
+        changeColumnsSelect={props.changeColumnsSelect}
+      />
       <Table
         components={{
           body: {
