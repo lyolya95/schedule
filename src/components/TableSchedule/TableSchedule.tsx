@@ -6,10 +6,9 @@ import EditableCell from './EditableCell';
 import { DeleteTwoTone, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 import TaskPage from '../TaskPage';
 import { switchTypeToColor } from '../utilities/switcher';
-import {MentorFilters} from "../MentorFilters/MentorFilters";
+import { MentorFilters } from '../MentorFilters/MentorFilters';
 
 export const TableSchedule = (props: any) => {
-  debugger;
   //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
   const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
@@ -24,7 +23,6 @@ export const TableSchedule = (props: any) => {
     form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
     setEditingKey(record.key); // указывает какая из строк сейчас редактируется
   };
-  debugger;
   const add = () => {
     //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
     const addData = { ...data[0] }; // создаем копию! данных одной строчки
@@ -185,16 +183,6 @@ export const TableSchedule = (props: any) => {
   const [filerFlags, setFilterFlags] = useState({});
   const [dates, setDates] = useState([]);
 
-  const initialData = events.map((item) => {
-    const course = item.course;
-    return item.events.map((event) => {
-      return {
-        ...event,
-        course: course
-      }
-    })
-  }).flat();
-
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
     if (keys.length === 0) {
@@ -212,7 +200,7 @@ export const TableSchedule = (props: any) => {
 
   const isInDateRange = (date: any, dateRange: any): boolean => {
     if (dateRange.length === 0) {
-      return  true;
+      return true;
     }
     const compareDate = new Date(date);
     const firstDate = new Date(dateRange[0]);
@@ -221,11 +209,11 @@ export const TableSchedule = (props: any) => {
       return true;
     }
     return false;
-  }
+  };
 
-  const visibleData = initialData
-      .filter((item) => hasFilterFlag(item, filerFlags))
-      .filter((item) => isInDateRange(item.timestamp, dates));
+  const visibleData = data
+    .filter((item: any) => hasFilterFlag(item, filerFlags))
+    .filter((item: any) => isInDateRange(item.timestamp, dates));
 
   //____________________________________________________________________________________________________________________
 
@@ -252,7 +240,7 @@ export const TableSchedule = (props: any) => {
         onChange={props.changeColumnsSelect}
         className="select-dropdown-columns"
       />
-      <MentorFilters data={initialData} filterFlag={filerFlags} setFilterFlags={setFilterFlags} setDates={setDates}/>
+      <MentorFilters data={data} filterFlag={filerFlags} setFilterFlags={setFilterFlags} setDates={setDates} />
       <Table
         components={{
           body: {
