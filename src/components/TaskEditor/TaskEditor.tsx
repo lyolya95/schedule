@@ -5,7 +5,9 @@ import MdEditor, { Plugins } from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Maps } from '../Maps';
 import ModeToggleMDHtml from './modeToggleMDHtml';
+import VideoAddElement from './videoAddElement';
 import './TaskEditor.scss';
+import ReactPlayer from 'react-player';
 
 type StateType = {
   value: string;
@@ -21,6 +23,7 @@ const TaskEditor: FC<PropsType> = (props) => {
   MdEditor.unuse(Plugins.ModeToggle);
   MdEditor.unuse(Plugins.FullScreen);
   MdEditor.use(ModeToggleMDHtml);
+  MdEditor.use(VideoAddElement);
 
   const mdEditor = useRef<MdEditor>(null);
   const [state, setState] = useState<StateType>({ value: currTaskContent });
@@ -81,6 +84,7 @@ const TaskEditor: FC<PropsType> = (props) => {
         onChange={handleEditorChange}
         onImageUpload={handleImageUpload}
       />
+      <ReactPlayer url='https://www.youtube.com/watch?v=ysz5S6PUM-U' />
       <Maps />
       <Button type="primary" size="large" onClick={handleSaveClick}>
         Save changes
