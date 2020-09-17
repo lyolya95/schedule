@@ -5,7 +5,6 @@ import {changeMentorStatus} from '../../actions';
 
 const mapStateToProps = (state: StateModel) => {
   return {
-  //  isShowCalendarOrTable: state.isShowCalendarOrTable,
     isMentorStatus: state.isMentorStatus,
   };
 };

@@ -1,4 +1,4 @@
-import { IS_SHOW_CALENDAR, CHANGE_MENTOR_STATUS, setDataEventsAC, SET_DATA_EVENT } from './../actions/index';
+import { CHANGE_MENTOR_STATUS, setDataEventsAC, SET_DATA_EVENT } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 // export interface StateModel {
@@ -40,12 +40,10 @@ import { scheduleAPI } from './../API/api';
 // };
 
 export interface StateModel {
-  isShowCalendarOrTable: boolean;
   isMentorStatus: boolean,
   data: any;
 }
 const initialState: StateModel = {
-  isShowCalendarOrTable: false,
   isMentorStatus: false,
   data: [],
 };
@@ -53,11 +51,6 @@ const initialState: StateModel = {
 
 export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case IS_SHOW_CALENDAR:
-      return {
-        ...state,
-        isShowCalendarOrTable: action.payload,
-      };
     case CHANGE_MENTOR_STATUS:
         return {
           ...state,
