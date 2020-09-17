@@ -220,14 +220,14 @@ export const TableSchedule = (props: any) => {
 
   return (
     <Form form={form} component={false}>
-      <Button
-        className="tableSchedule__button_add"
-        ghost={true}
+      <Button 
+        type="primary" 
         disabled={editingKey !== ''}
         onClick={() => add()}
-        icon={<PlusCircleTwoTone twoToneColor="#52c41a" style={{ fontSize: '30px' }} />}
-      ></Button>
-
+        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }}
+      />}>
+        Add event
+      </Button>
       <MentorFilters
         data={data}
         filterFlag={filerFlags}
