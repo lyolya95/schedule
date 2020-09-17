@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Table, Popconfirm, Form, Button, Tag, Modal } from 'antd';
+import { Table, Form, Button, Tag, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
-import { DeleteTwoTone, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
@@ -85,6 +85,7 @@ export const TableSchedule = (props: any) => {
       title: 'Type',
       dataIndex: 'type',
       editable: true,
+
       render: (_: any, record: any) => {
         return (
           <Tag key={record.type} color={switchTypeToColor(record.type)}>
@@ -94,7 +95,7 @@ export const TableSchedule = (props: any) => {
       },
     },
     {
-      title: '',
+      title: 'Edit',
       dataIndex: 'operation',
       render: (_: any, record: any) => {
         // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
@@ -104,20 +105,18 @@ export const TableSchedule = (props: any) => {
             <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
               Save
             </Button>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <Button>Cancel</Button>
-            </Popconfirm>
+            <Button onClick={cancel}>Cancel</Button>
           </span>
         ) : (
-          <>
-            <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<EditTwoTone />}></Button>
+          <span>
+            <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<HighlightTwoTone />}></Button>
             <Button
               ghost={true}
               className="tableSchedule__button_remove"
               onClick={() => remove(record.key)}
-              icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
+              icon={<DeleteTwoTone />}
             ></Button>
-          </>
+          </span>
         );
         //save отправим колбэк с ключем текущей строки что бы сохранить
         //cancel отправим колбэк с ключем текущей строки что бы отменить
@@ -216,12 +215,12 @@ export const TableSchedule = (props: any) => {
 
   return (
     <Form form={form} component={false}>
-      <Button 
-        type="primary" 
+      <Button
+        type="primary"
         disabled={editingKey !== ''}
         onClick={() => add()}
-        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }}
-      />}>
+        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}
+      >
         Add event
       </Button>
       <MentorFilters
@@ -235,6 +234,7 @@ export const TableSchedule = (props: any) => {
         changeColumnsSelect={props.changeColumnsSelect}
       />
       <Table
+        size="small"
         components={{
           body: {
             cell: EditableCell,
@@ -244,8 +244,10 @@ export const TableSchedule = (props: any) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
+        scroll={{ x: 2500, y: 500 }}
         pagination={{
           onChange: cancel,
+          showSizeChanger: true,
         }}
         onRow={(record, rowIndex) => {
           return {
@@ -278,7 +280,7 @@ export const TableSchedule = (props: any) => {
             organizer={clickingRow.organizer}
             taskContent={clickingRow.taskContent}
             isShowFeedback={clickingRow.isShowFeedback}
-           />
+          />
         </Modal>
       ) : null}
     </Form>

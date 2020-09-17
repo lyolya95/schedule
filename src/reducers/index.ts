@@ -42,10 +42,27 @@ import { scheduleAPI } from './../API/api';
 export interface StateModel {
   isMentorStatus: boolean;
   data: any;
+  columnsName: string[];
 }
 const initialState: StateModel = {
   isMentorStatus: false,
   data: [],
+  columnsName: [
+    'id',
+    'name',
+    'course',
+    'dateTime',
+    //'type',   /* удалил так как возникают тогда две колонки с type из-за добавления в TableSchedule.tsx после строчки с "...props.columnsName," */
+    'timeZone',
+    'organizer',
+    'descriptionUrl',
+    'timeToComplete',
+    'place',
+    'week',
+    'maxScore',
+    'taskContent',
+    'isShowFeedback',
+  ],
 };
 
 export const reducer = (state = initialState, action: any) => {
