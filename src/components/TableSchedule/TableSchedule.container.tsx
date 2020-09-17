@@ -26,8 +26,10 @@ const Container = (props: any) => {
 };
 
 let mapStateToProps = (state: any) => {
+ console.log('stTab=',state);
   return {
-    data: state.reducer.data,
+    data: state.data,
+    isMentorStatus: state.isMentorStatus,
   };
 };
 

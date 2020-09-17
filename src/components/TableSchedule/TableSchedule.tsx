@@ -4,17 +4,13 @@ import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
 import { DeleteTwoTone, EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
-import TaskPage from '../TaskPage';
+import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 
 export const TableSchedule = (props: any) => {
   const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
-
-  //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
-  const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
-
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [visibleModal, setVisibleModal] = useState(false);
@@ -275,15 +271,14 @@ export const TableSchedule = (props: any) => {
           onCancel={() => setVisibleModal(false)}
           width={1000}
         >
-          <TaskPage
+          <TaskPageContainer
             name={clickingRow.name}
             date={clickingRow.dateTime}
             type={clickingRow.type}
             organizer={clickingRow.organizer}
             taskContent={clickingRow.taskContent}
             isShowFeedback={clickingRow.isShowFeedback}
-            isMentor={isMentor}
-          />
+           />
         </Modal>
       ) : null}
     </Form>
