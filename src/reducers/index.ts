@@ -40,7 +40,7 @@ import { scheduleAPI } from './../API/api';
 // };
 
 export interface StateModel {
-  isMentorStatus: boolean,
+  isMentorStatus: boolean;
   data: any;
 }
 const initialState: StateModel = {

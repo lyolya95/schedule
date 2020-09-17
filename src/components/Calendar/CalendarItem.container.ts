@@ -3,7 +3,6 @@ import { getDataEvent } from '../../reducers';
 import { CalendarItem } from './CalendarItem';
 
 const mapStateToProps = (state: any) => {
-  console.log('stCal=',state);
   return {
     isMentorStatus: state.isMentorStatus,
     data: state.data,
