@@ -25,9 +25,10 @@ const Container = (props: any) => {
   );
 };
 
-let mapStateToProps = (state: any) => {
+const mapStateToProps = (state: any) => {
   return {
-    data: state.reducer.data,
+    data: state.data,
+    isMentorStatus: state.isMentorStatus,
   };
 };
 

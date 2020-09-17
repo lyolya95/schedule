@@ -4,8 +4,8 @@ import { CalendarItem } from './CalendarItem';
 
 const mapStateToProps = (state: any) => {
   return {
-    isShowCalendarOrTable: state.isShowCalendarOrTable,
-    data: state.reducer.data,
+    isMentorStatus: state.isMentorStatus,
+    data: state.data,
   };
 };
 

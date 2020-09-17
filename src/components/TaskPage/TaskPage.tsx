@@ -1,24 +1,12 @@
 import React, { FC } from 'react';
+import { TaskPageProps } from './TaskPage.model';
 import MentorTaskForm from '../MentorTaskForm';
 import ReactMarkdown from 'react-markdown';
 import FeedbackForm from '../FeedbackForm';
 import './TaskPage.scss';
 
-type PropsType = {
-  name: string;
-  dateTime: string;
-  type: string;
-  organizer: string;
-  taskContent: string;
-  isShowFeedback: boolean;
-  isMentor: boolean;
-};
-
-type StateType = {
-  value: boolean;
-};
-const TaskPage: FC<PropsType> = (props) => {
-  const { name, dateTime, type, organizer, taskContent, isShowFeedback, isMentor } = props;
+export const TaskPage: FC<TaskPageProps> = React.memo((props) => {
+  const { name, date, type, organizer, taskContent, isShowFeedback, isMentorStatus } = props;
   const taskContentHtml = React.createElement(ReactMarkdown, { source: taskContent });
 
   //const [showFeedback, setShowFeedback] = useState(isShowFeedback);
@@ -35,7 +23,7 @@ const TaskPage: FC<PropsType> = (props) => {
     <div>
       <h1>{name}</h1>
       <div>
-        <b>Date:</b> {dateTime}
+        <b>Date:</b> {date}
       </div>
       <div>
         <b>Type:</b> {type}
@@ -44,8 +32,11 @@ const TaskPage: FC<PropsType> = (props) => {
         <b>Organizer:</b> {organizer}
       </div>
 
-      {isMentor ? (
-        <MentorTaskForm taskContent={taskContent} isShowFeedback={isShowFeedback} />
+      {isMentorStatus ? (
+        <MentorTaskForm 
+          taskContent={taskContent} 
+          isShowFeedback={isShowFeedback} 
+        />
       ) : (
         <div>
           {taskContentHtml}
@@ -54,5 +45,4 @@ const TaskPage: FC<PropsType> = (props) => {
       )}
     </div>
   );
-};
-export default TaskPage;
+});

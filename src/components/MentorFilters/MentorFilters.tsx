@@ -50,7 +50,7 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
         const labels: any = [];
         const option: Array<JSX.Element> = data.map((item: any) => {
             if (labels.includes(item[tag])) {
-                return;
+                return null;
             }
             labels.push(item[tag]);
             return <Option value={item[tag]} key={getKey()}>{item[tag]}</Option>
@@ -113,8 +113,8 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
             </Form.Item>
             <Divider orientation="left" plain>Visible columns</Divider>
             <Select
-                bordered={false}
-                showArrow
+                bordered={true}
+                showArrow={true}
                 mode="multiple"
                 placeholder="Columns"
                 className="select-dropdown-columns"

@@ -7,3 +7,26 @@
 .tableSchedule__button_add {
     margin-left: 25px;
 }
+.ant-divider-inner-text{
+    padding: 0 1em 0 0;
+    font-weight:bold;
+}
+.ant-divider-horizontal.ant-divider-with-text-left::before{
+    top: 0;
+width: 0;
+}
+.select-dropdown-columns{
+    .ant-tag{
+        background-color: #e6f7ff;
+    }
+    .ant-select-selector{
+        padding:10px;
+    }
+    .ant-select-arrow{
+        font-size:26px;
+        color:#1890ff;
+        width: 26px;
+        height: 26px;
+        margin-top: -13px;
+    }
+}
