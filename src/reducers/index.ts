@@ -72,7 +72,7 @@ export const reducer = (state = initialState, action: any) => {
             }
           }
 
-          console.log(arrayOfStrings); // id события name id ментаров из этого события
+          //console.log(arrayOfStrings); // id события name id ментаров из этого события
 
           return mentor;
         });
