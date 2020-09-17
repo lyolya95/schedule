@@ -66,14 +66,13 @@ export const reducer = (state = initialState, action: any) => {
     case SET_DATA_EVENT: {
       action.events.map((event: any) => {
         if (event.organizer) {
-           // проходимся по данным что бы найти организаторов и поменять их id на соответствующие им имена
-             const eventMentorArr = event.organizer.split(',').map(
+          // проходимся по данным что бы найти организаторов и поменять их id на соответствующие им имена
+          const eventMentorArr = event.organizer.split(',').map(
                                       (mentorId:String) => {
                                         const mentor = action.organizers.find((mentor:any) => mentor.id === mentorId);
                                         return mentor.name;
                                   });
-     
-              event.organizer = eventMentorArr.join(', ');
+          event.organizer = eventMentorArr.join(', ');
         }
         return event;
       });
