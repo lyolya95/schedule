@@ -3,9 +3,11 @@ import { getDataEvent } from '../../reducers';
 import { CalendarItem } from './CalendarItem';
 
 const mapStateToProps = (state: any) => {
+  console.log('stCal=',state);
   return {
     isShowCalendarOrTable: state.isShowCalendarOrTable,
-    data: state.reducer.data,
+    isMentorStatus: state.isMentorStatus,
+    data: state.data,
   };
 };
 

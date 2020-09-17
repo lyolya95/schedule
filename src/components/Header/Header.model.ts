@@ -1,3 +1,5 @@
 export interface HeaderProps {
-  isShowCalendarOrTable: boolean;
+  //isShowCalendarOrTable: boolean;
+  isMentorStatus: boolean;
+  changeMentorStatus():void;
 }

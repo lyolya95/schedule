@@ -1,4 +1,4 @@
-import { IS_SHOW_CALENDAR, setDataEventsAC, SET_DATA_EVENT } from './../actions/index';
+import { IS_SHOW_CALENDAR, CHANGE_MENTOR_STATUS, setDataEventsAC, SET_DATA_EVENT } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 // export interface StateModel {
@@ -41,12 +41,15 @@ import { scheduleAPI } from './../API/api';
 
 export interface StateModel {
   isShowCalendarOrTable: boolean;
+  isMentorStatus: boolean,
   data: any;
 }
 const initialState: StateModel = {
   isShowCalendarOrTable: false,
+  isMentorStatus: false,
   data: [],
 };
+
 
 export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
@@ -55,28 +58,23 @@ export const reducer = (state = initialState, action: any) => {
         ...state,
         isShowCalendarOrTable: action.payload,
       };
+    case CHANGE_MENTOR_STATUS:
+        return {
+          ...state,
+          isMentorStatus: !state.isMentorStatus,
+        };
     case SET_DATA_EVENT: {
       action.events.map((event: any) => {
-        // проходимся по данным что бы найти организаторов и поменять их id на соответствующие им имена
-        action.organizers.map((mentor: any) => {
-          let arrayOfStrings = { id: '', name: '' };
-          if (event.organizer) {
-            // если пришли данные организатора
-            if (event.organizer.indexOf(',') !== -1) {
-              // если внутри строки есть запятая (внутри id "Do3SJBnxSjd,DJkd....") это значит что несколько организаторов
-
-              arrayOfStrings.id = event.id;
-              arrayOfStrings.name = event.organizer.split(',');
-            } else {
-              event.organizer === mentor.id && (event.organizer = mentor.name); // если в данных Id совпадает со id ментора тогда переназначить на имя иначе оставить как есть
-            }
-          }
-
-          console.log(arrayOfStrings); // id события name id ментаров из этого события
-
-          return mentor;
-        });
-
+        if (event.organizer) {
+           // проходимся по данным что бы найти организаторов и поменять их id на соответствующие им имена
+             const eventMentorArr = event.organizer.split(',').map(
+                                      (mentorId:String) => {
+                                        const mentor = action.organizers.find((mentor:any) => mentor.id === mentorId);
+                                        return mentor.name;
+                                  });
+     
+              event.organizer = eventMentorArr.join(', ');
+        }
         return event;
       });
 
