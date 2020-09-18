@@ -1,3 +1,5 @@
+$buttonWidth: 250px;
+
 .select-dropdown-columns {
     margin: 0;
     align-self: flex-start;
@@ -7,26 +9,48 @@
 .tableSchedule__button_add {
     margin-left: 25px;
 }
-.ant-divider-inner-text{
+
+.ant-divider-inner-text {
     padding: 0 1em 0 0;
-    font-weight:bold;
+    font-weight: bold;
 }
-.ant-divider-horizontal.ant-divider-with-text-left::before{
+
+.ant-divider-horizontal.ant-divider-with-text-left::before {
     top: 0;
-width: 0;
+    width: 0;
 }
-.select-dropdown-columns{
-    .ant-tag{
+
+.select-dropdown-columns {
+    .ant-tag {
         background-color: #e6f7ff;
     }
-    .ant-select-selector{
-        padding:10px;
+
+    .ant-select-selector {
+        padding: 10px;
     }
-    .ant-select-arrow{
-        font-size:26px;
-        color:#1890ff;
+
+    .ant-select-arrow {
+        font-size: 26px;
+        color: #1890ff;
         width: 26px;
         height: 26px;
         margin-top: -13px;
+    }
+}
+
+.ant-btn-primary {
+    position: absolute;
+    width: $buttonWidth;
+    top: 10px;
+    height: 35px;
+    left: calc(50% - #{$buttonWidth}/2);
+}
+
+.ant-collapse-item {
+    background-color: rgb(244, 250, 252);
+    transition: 0.3s ease;
+
+    &:hover {
+        background-color: rgba(232, 246, 248, 0.534);
     }
 }
