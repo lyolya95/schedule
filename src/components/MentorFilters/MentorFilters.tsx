@@ -49,7 +49,8 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
     const optionCreate = (data: any, tag: string) => {
         const labels: any = [];
         const option: Array<JSX.Element> = data.map((item: any) => {
-            if (labels.includes(item[tag])) {
+            // @ts-ignore
+            if (labels.includes(item[tag]) | item[tag].trim() === '') {
                 return;
             }
             labels.push(item[tag]);

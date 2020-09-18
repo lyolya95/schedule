@@ -2,8 +2,50 @@
     margin: 0;
     align-self: flex-start;
     width: 100%;
+    box-shadow: 0 0 1px rgba(0,0,0,0.5);
 }
 
 .tableSchedule__button_add {
     margin-left: 25px;
+}
+
+/*
+@mixin md-icon-size($size: 24px) {
+    font-size: $size;
+    height: $size;
+    width: $size;
+    line-height: $size;
+}
+
+.shiftEye {
+    color: #8cc8ff;
+    @include md-icon-size();
+}
+*/
+
+.ant-table-row-selected.ant-table-row_hidden {
+    /*color: #eb2f96;*/
+    background: #ffccc7 !important;
+}
+
+.ant-table-row_hidden:hover {
+    /*color: #eb2f96;*/
+    background: #ebbcb8;
+}
+
+.hidden-btn-row {
+    display: flex;
+    margin: 10px 0;
+    .hide-btn {
+        height: 40px;
+        .icon {
+            color: #eb2f96;
+        }
+    }
+    .unhide-btn {
+        height: 40px;
+        .icon {
+            color: #2596ff;
+        }
+    }
 }
