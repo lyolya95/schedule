@@ -1,47 +1,44 @@
 import { CalendarOutlined, TableOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Badge, Button } from 'antd';
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import { Button } from 'antd';
+import React, { FC, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { events } from '../../mocks/events';
-import { eventsTitleCalendar } from '../../mocks/eventsTitleCalendar';
 import { FirstLogo } from '../../styles/basic-styles';
 import { HeaderProps } from './Header.model';
 import './Header.scss';
 
-export const Header: FC<HeaderProps> = React.memo(({ isShowCalendarOrTable }) => {
-  const [showCalendar, setShowCalendar] = useState(isShowCalendarOrTable);
+export const Header: FC<HeaderProps> = React.memo(({ isMentorStatus, changeMentorStatus }) => {
   const history = useHistory();
 
-  const titleCourse = useMemo(() => events.map((i) => i.course)[0], []);
+  const handleShowTable = useCallback(() => {
+      history.push('/');
+  }, [history]);
 
   const handleShowCalendar = useCallback(() => {
-    setShowCalendar((prev) => !prev);
-    !showCalendar ? history.push('/calendar') : history.push('/');
-  }, [history, showCalendar]);
-
-  const eventsTitle = useMemo(() => {
-    return eventsTitleCalendar.map((item: any) => (
-      <li key={item.content}>
-        <Badge status={item.type} text={item.content} />
-      </li>
-    ));
-  }, []);
+    history.push('/calendar');
+  }, [history]);
 
   return (
     <div className="header">
       <FirstLogo />
       <div className="calendar-title">
-        <span>Calendar</span>
-        <span>{titleCourse}</span>
       </div>
-
       <div className="btn-header">
-        <div>{showCalendar && <ul className="events-title">{eventsTitle}</ul>}</div>
-        <Button onClick={handleShowCalendar}>{showCalendar ? <TableOutlined /> : <CalendarOutlined />}</Button>
+        <Button 
+          onClick={handleShowTable}>
+          <TableOutlined />
+        </Button>
+        <Button 
+          onClick={handleShowCalendar}>
+          <CalendarOutlined />
+        </Button>
         <Button>
           <UnorderedListOutlined />
         </Button>
-        <Button>Autorizate</Button>
+        <Button
+          onClick={changeMentorStatus}
+        >
+          {isMentorStatus ? 'To Student App' : 'To Mentor App'}
+        </Button>
       </div>
     </div>
   );

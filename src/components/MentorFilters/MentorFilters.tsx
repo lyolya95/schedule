@@ -13,6 +13,7 @@ const {Panel} = Collapse;
 export const MentorFilters: FC<MentorFiltersProps> = (props) => {
 
     const {data, setFilterFlags, filterFlag, setDates} = props;
+    console.log('Mentor data: ', data)
     const [form] = Form.useForm();
     let initialKey = 1;
 
@@ -49,6 +50,9 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
     const optionCreate = (data: any, tag: string) => {
         const labels: any = [];
         const option: Array<JSX.Element> = data.map((item: any) => {
+            if (item[tag] === undefined) {
+                return;
+            }
             // @ts-ignore
             if (labels.includes(item[tag]) | item[tag].trim() === '') {
                 return;
@@ -114,8 +118,8 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
             </Form.Item>
             <Divider orientation="left" plain>Visible columns</Divider>
             <Select
-                bordered={false}
-                showArrow
+                bordered={true}
+                showArrow={true}
                 mode="multiple"
                 placeholder="Columns"
                 className="select-dropdown-columns"

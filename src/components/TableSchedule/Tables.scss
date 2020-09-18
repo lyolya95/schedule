@@ -1,51 +1,59 @@
 .select-dropdown-columns {
-    margin: 0;
-    align-self: flex-start;
-    width: 100%;
-    box-shadow: 0 0 1px rgba(0,0,0,0.5);
+  margin: 0;
+  align-self: flex-start;
+  width: 100%;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 .tableSchedule__button_add {
-    margin-left: 25px;
-}
-
-/*
-@mixin md-icon-size($size: 24px) {
-    font-size: $size;
-    height: $size;
-    width: $size;
-    line-height: $size;
-}
-
-.shiftEye {
-    color: #8cc8ff;
-    @include md-icon-size();
-}
-*/
-
-.ant-table-row-selected.ant-table-row_hidden {
-    /*color: #eb2f96;*/
-    background: #ffccc7 !important;
-}
-
-.ant-table-row_hidden:hover {
-    /*color: #eb2f96;*/
-    background: #ebbcb8;
+  margin-left: 25px;
 }
 
 .hidden-btn-row {
-    display: flex;
-    margin: 10px 0;
-    .hide-btn {
-        height: 40px;
-        .icon {
-            color: #eb2f96;
-        }
+  display: flex;
+  margin: 10px 0;
+
+  .hide-btn {
+    height: 40px;
+
+    .icon {
+      color: #eb2f96;
     }
-    .unhide-btn {
-        height: 40px;
-        .icon {
-            color: #2596ff;
-        }
+  }
+
+  .unhide-btn {
+    height: 40px;
+
+    .icon {
+      color: #2596ff;
     }
+  }
+}
+
+.ant-divider-inner-text {
+  padding: 0 1em 0 0;
+  font-weight: bold;
+}
+
+.ant-divider-horizontal.ant-divider-with-text-left::before {
+  top: 0;
+  width: 0;
+}
+
+.select-dropdown-columns {
+  .ant-tag {
+    background-color: #e6f7ff;
+  }
+
+  .ant-select-selector {
+    padding: 1px;
+  }
+
+  .ant-select-arrow {
+    font-size: 18px;
+    color: #1890ff;
+    width: 26px;
+    height: 26px;
+    margin-top: -9px;
+  }
 }

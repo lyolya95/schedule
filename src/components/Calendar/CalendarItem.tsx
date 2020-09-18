@@ -1,51 +1,66 @@
-import { Badge, Calendar } from 'antd';
+import { Badge, Calendar, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import moment from 'moment';
-import React, { FC, useCallback } from 'react';
-import { events } from '../../mocks/events';
+import React, { FC, useCallback, useEffect } from 'react';
+import { useMediaQuery } from '../MediaQuery/MediaQuery';
+import { switchTypeToColor } from '../utilities/switcher';
 import './Calendar.scss';
 import { CalendarItemProps } from './CalendarItem.model';
 
-export const CalendarItem: FC<CalendarItemProps> = React.memo(({ isShowCalendarOrTable }) => {
-  const getListData = useCallback((value: moment.Moment) => {
-    let listData: { type: string; content: string }[] = [];
-    events.map((i) =>
-      i.events.map((i) => {
-        const type = i.type === 'deadline' ? 'error' : i.type === 'task' ? 'success' : i.type === 'live' && 'warning';
+export const CalendarItem: FC<CalendarItemProps> = React.memo(({ data, getDataEvent }) => {
+  const isRowBased = useMediaQuery('(min-width: 800px)');
+
+  useEffect(() => {
+    getDataEvent();
+  }, [getDataEvent]);
+
+  const getListData = useCallback(
+    (value: moment.Moment) => {
+      let listData: { type: string; content: string }[] = [];
+      data.map((i: any) => {
         switch (value.date()) {
-          case +i.date.slice(0, 2):
+          case +i.dateTime.slice(8, 10):
             listData.push({
-              type: `${type}`,
+              type: i.type,
               content: i.name,
             });
             break;
           default:
         }
         return null;
-      })
-    );
-    return listData || [];
-  }, []);
+      });
+      return listData || [];
+    },
+    [data]
+  );
 
   const dateCellRender = useCallback(
     (value: moment.Moment) => {
       const listData = getListData(value);
       return (
-        <ul className="events">
-          {listData.map((item: any) => (
-            <li key={item.content}>
-              <Badge status={item.type} text={item.content} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="events">
+            {listData.map((item: any, index: number) => (
+              <li key={index}>
+                {isRowBased ? (
+                  <Tag color={switchTypeToColor(item.type)} className="size">
+                    {item.content}
+                  </Tag>
+                ) : (
+                  <Badge color={switchTypeToColor(item.type)}></Badge>
+                )}
+              </li>
+            ))}
+          </ul>
+        </>
       );
     },
-    [getListData]
+    [getListData, isRowBased]
   );
 
   return (
-    <div className="calendar">
-      <Calendar dateCellRender={dateCellRender} />
+    <div className={`${isRowBased ? 'calendar' : 'site-calendar-demo-card'}`}>
+      <Calendar dateCellRender={dateCellRender} fullscreen={isRowBased} />
     </div>
   );
 });
