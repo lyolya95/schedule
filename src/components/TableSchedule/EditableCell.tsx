@@ -3,8 +3,8 @@ import { Input, InputNumber, Form, DatePicker, Select } from 'antd';
 import 'antd/dist/antd.css';
 import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
-const { Option, OptGroup } = Select;
 
+const { Option, OptGroup } = Select;
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
@@ -21,7 +21,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       inputNode = <InputNumber />;
       break;
     case 'dateTime':
-      inputNode = <DatePicker autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
+      inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
       break;
     case 'type':
       inputNode = (

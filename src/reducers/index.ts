@@ -1,4 +1,4 @@
-import { CHANGE_MENTOR_STATUS, setDataEventsAC, SET_DATA_EVENT } from './../actions/index';
+import { CHANGE_MENTOR_STATUS, putDataEventAC, setDataEventsAC, SET_DATA_EVENT, PUT_DATA_EVENT } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 // export interface StateModel {
@@ -77,7 +77,8 @@ export const reducer = (state = initialState, action: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
             const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
-            return mentor.name;
+
+            return !!mentor && mentor.name; // проверка если ввел имя которого нет в манторах тогда в имени вернется false
           });
           event.organizer = eventMentorArr.join(', ');
         }
@@ -85,6 +86,9 @@ export const reducer = (state = initialState, action: any) => {
       });
 
       return { ...state, data: [...action.events] };
+    }
+    case PUT_DATA_EVENT: {
+      return { ...state };
     }
     default:
       return state;
@@ -95,4 +99,8 @@ export const getDataEvent = () => async (dispatch: any) => {
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
+};
+export const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
+  await scheduleAPI.updateDataEvent(idEvent, bodyData);
+  dispatch(putDataEventAC(idEvent, bodyData));
 };

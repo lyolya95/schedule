@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getDataEvent } from '../../reducers';
+import { getDataEvent, putDataEvent } from '../../reducers';
 import { TableScheduleContainer } from './TableScheduleContainer';
 import React, { useEffect, useState } from 'react';
 import { Alert, Spin } from 'antd';
@@ -33,4 +33,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export const TableSchedule = connect(mapStateToProps, { getDataEvent })(Container);
+export const TableSchedule = connect(mapStateToProps, { getDataEvent, putDataEvent })(Container);
