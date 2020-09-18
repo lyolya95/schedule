@@ -42,29 +42,43 @@ import { scheduleAPI } from './../API/api';
 export interface StateModel {
   isMentorStatus: boolean;
   data: any;
+  columnsName: string[];
 }
 const initialState: StateModel = {
   isMentorStatus: false,
   data: [],
+  columnsName: [
+    'id',
+    'name',
+    'course',
+    'dateTime',
+    //'type',   /* удалил так как возникают тогда две колонки с type из-за добавления в TableSchedule.tsx после строчки с "...props.columnsName," */
+    'timeZone',
+    'organizer',
+    'descriptionUrl',
+    'timeToComplete',
+    'place',
+    'week',
+    'maxScore',
+    'taskContent',
+    'isShowFeedback',
+  ],
 };
-
 
 export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case CHANGE_MENTOR_STATUS:
-        return {
-          ...state,
-          isMentorStatus: !state.isMentorStatus,
-        };
+      return {
+        ...state,
+        isMentorStatus: !state.isMentorStatus,
+      };
     case SET_DATA_EVENT: {
       action.events.map((event: any) => {
         if (event.organizer) {
-          // проходимся по данным что бы найти организаторов и поменять их id на соответствующие им имена
-          const eventMentorArr = event.organizer.split(',').map(
-                                      (mentorId:String) => {
-                                        const mentor = action.organizers.find((mentor:any) => mentor.id === mentorId);
-                                        return mentor.name;
-                                  });
+          const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
+            const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
+            return mentor.name;
+          });
           event.organizer = eventMentorArr.join(', ');
         }
         return event;
