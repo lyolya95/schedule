@@ -13,7 +13,6 @@ const {Panel} = Collapse;
 export const MentorFilters: FC<MentorFiltersProps> = (props) => {
 
     const {data, setFilterFlags, filterFlag, setDates} = props;
-    console.log('Mentor data: ', data)
     const [form] = Form.useForm();
     let initialKey = 1;
 
@@ -57,10 +56,22 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
             if (labels.includes(item[tag]) | item[tag].trim() === '') {
                 return;
             }
-            labels.push(item[tag]);
-            return <Option value={item[tag]} key={getKey()}>{item[tag]}</Option>
+            const splitItem = item[tag].split(',');
+            if (splitItem.length > 1) {
+                return splitItem.map((item: string) => {
+                    if (labels.includes(item)) {
+                        return;
+                    } else {
+                        labels.push(item);
+                        return <Option value={item} key={getKey()}>{item}</Option>
+                    }
+                })
+            } else {
+                labels.push(item[tag]);
+                return <Option value={item[tag]} key={getKey()}>{item[tag]}</Option>
+            }
         })
-        return option;
+        return option.flat();
     }
 
     const onReset = () => {

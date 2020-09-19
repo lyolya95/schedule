@@ -29,10 +29,34 @@ export const TableSchedule = (props: any) => {
             return true;
         }
         const keysToCheck: string[] = keys.filter((key: string) => flags[key].length > 0);
-        const valueToCheck: string[] = keys.reduce((acc: any[], key: string) => [...acc, flags[key]], []).flat();
+        if (keysToCheck.length === 0) {
+            return true;
+        }
+        for (let key of keysToCheck) {
+            if (data[key] === undefined) {
+                return false
+            }
+        }
+        const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+
+        const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
+            for (let item of arr1) {
+                if (arr2.includes(item)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
         for (const key of keysToCheck) {
-            if (!valueToCheck.includes(data[key])) {
-                return false;
+            if (data[key].split(',').length > 1) {
+                if (!haveAMatch(data[key].split(','), valueToCheck)) {
+                    return false;
+                }
+            } else {
+                if (!valueToCheck.includes(data[key])) {
+                    return false;
+                }
             }
         }
         return true;
@@ -49,16 +73,18 @@ export const TableSchedule = (props: any) => {
             return true;
         }
         return false;
-    }
+    };
+
     //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
     const isMentor = true;
     const [form] = Form.useForm(); // хранится общий объект для формы ant
     const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
-    console.log('setState data: ', data)
+
     const visibleData = data // формируем отоброжаемые данные для таблицы
         .filter((item: any) => hasFilterFlag(item, filerFlags))
-        .filter((item: any) => isInDateRange(item.timestamp, dates))
+        .filter((item: any) => isInDateRange(item.dateTime, dates))
         .filter((item: any) => !hiddenData.includes(item.key))
+
     const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
     const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
     const [visibleModal, setVisibleModal] = useState(false);
@@ -69,6 +95,7 @@ export const TableSchedule = (props: any) => {
         form.setFieldsValue({...record}); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
         setEditingKey(record.key); // указывает какая из строк сейчас редактируется
     };
+
     const add = () => {
         //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
         const addData = {...data[0]}; // создаем копию! данных одной строчки
@@ -77,6 +104,7 @@ export const TableSchedule = (props: any) => {
         setData(newData); // все сохранения изменения что мы сделали
         edit(addData); // запускаем редактирование
     };
+
     const remove = (key: React.Key) => {
         // при нажатии кнопки remove
         const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
@@ -84,18 +112,11 @@ export const TableSchedule = (props: any) => {
         newData.splice(index, 1); // удаляем строку под индексем index одну строку 1
         setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
     };
+
     const cancel = () => {
         //при нажатии на кнопку edit
         setEditingKey(''); // отменяет редактирование
     };
-    /*=======
-          if (index > -1) {
-            const item = newData[index]; // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
-            if (row['date-picker']) {
-              // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
-              const selectDate = row['date-picker']._d.toISOString();
-              item.dateTime = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)}`;
-    >>>>>>> 0621fcc54585efdfa7e9beb1bf5914886ca2cc5e*/
 
     const save = async (key: React.Key) => {
         // при нажатии кнопки сохранить
@@ -109,7 +130,7 @@ export const TableSchedule = (props: any) => {
                 if (row['date-picker']) {
                     // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
                     const selectDate = row['date-picker']._d.toISOString();
-                    item.date = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)}`;
+                    item.dateTime = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)}`;
 
                     //('2020-09-11T19:24:01.734Z');
                 }

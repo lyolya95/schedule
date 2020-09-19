@@ -57,3 +57,10 @@
     margin-top: -9px;
   }
 }
+
+.ant-table-row {
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
