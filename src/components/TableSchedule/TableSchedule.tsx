@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import { Table, Form, Button, Tag, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
@@ -8,7 +8,8 @@ import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 
-export const TableSchedule = (props: any) => {
+export const TableSchedule: FC<any> = React.memo((props) => {
+  const {columnsName, tagRender, defaultColumns, optionsKeyOfEvents,changeColumnsSelect,isMentorStatus } = props;
   const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
@@ -75,57 +76,74 @@ export const TableSchedule = (props: any) => {
       console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
     }
   };
+const editOperationData = {
+  title: 'Edit',
+  dataIndex: 'operation',
+  render: (_: any, record: any) => {
+    // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
+    const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
+    return editable ? (
+      <span>
+        <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+          Save
+        </Button>
+        <Button onClick={cancel}>Cancel</Button>
+      </span>
+    ) : (
+      <span>
+        <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<HighlightTwoTone />}></Button>
+        <Button
+          ghost={true}
+          className="tableSchedule__button_remove"
+          onClick={() => remove(record.key)}
+          icon={<DeleteTwoTone />}
+        ></Button>
+      </span>
+    );
+    //save отправим колбэк с ключем текущей строки что бы сохранить
+    //cancel отправим колбэк с ключем текущей строки что бы отменить
+    //Popconfirm от ant что бы спросить уверены или нет
+    //disabled={editingKey !== ""} отключаем все кнопки Edit на других строках на других строках во время редактирования
+    //edit отправим колбэк с данными изменяемой в данный момент строкой
+  },
+};
+const allColumns: IAgeMap[] = 
+  columnsName.map((item:any)=>{
+    switch( item.dataIndex ){
+       case 'type':
+        return  {title: 'Type',
+                  dataIndex: 'type',
+                  editable: true,
+                  render: (_: any, record: any) => {
+                    return (
+                      <Tag key={record.type} color={switchTypeToColor(record.type)}>
+                        {record.type}
+                      </Tag>
+                    );
+                  },
+                };
+                     
+        case 'combineScore':
+          return  {
+                    title: 'Score/maxScore',
+                    dataIndex: 'combineScore',
+                    editable: true,
+                  /*  render: (_: any, record: any) => {
+                      return (
+                        <Tag key={record.type} color={switchTypeToColor(record.type)}>
+                          {record.type}
+                        </Tag>
+                      );
+                    },*/
+                  };
+                        
+      default:
+        return item;
+    }
+  });
+    
+  const columns: IAgeMap[] = isMentorStatus? [...allColumns, editOperationData] : allColumns;
 
-  const columns: IAgeMap[] = [
-    // Хронятся данные названия столбцов (title, dataIndex) и то можно ли их редактировать,
-    // Данные с названием столбцов импортируется из columnsName.tsx
-    ...props.columnsName,
-    //...columnsName,
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      editable: true,
-
-      render: (_: any, record: any) => {
-        return (
-          <Tag key={record.type} color={switchTypeToColor(record.type)}>
-            {record.type}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: 'Edit',
-      dataIndex: 'operation',
-      render: (_: any, record: any) => {
-        // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
-        const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
-        return editable ? (
-          <span>
-            <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-              Save
-            </Button>
-            <Button onClick={cancel}>Cancel</Button>
-          </span>
-        ) : (
-          <span>
-            <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<HighlightTwoTone />}></Button>
-            <Button
-              ghost={true}
-              className="tableSchedule__button_remove"
-              onClick={() => remove(record.key)}
-              icon={<DeleteTwoTone />}
-            ></Button>
-          </span>
-        );
-        //save отправим колбэк с ключем текущей строки что бы сохранить
-        //cancel отправим колбэк с ключем текущей строки что бы отменить
-        //Popconfirm от ant что бы спросить уверены или нет
-        //disabled={editingKey !== ""} отключаем все кнопки Edit на других строках на других строках во время редактирования
-        //edit отправим колбэк с данными изменяемой в данный момент строкой
-      },
-    },
-  ];
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
       return col;
@@ -212,7 +230,6 @@ export const TableSchedule = (props: any) => {
     .filter((item: any) => isInDateRange(item.timestamp, dates));
 
   //____________________________________________________________________________________________________________________
-
   return (
     <Form form={form} component={false}>
       <Button
@@ -228,10 +245,10 @@ export const TableSchedule = (props: any) => {
         filterFlag={filerFlags}
         setFilterFlags={setFilterFlags}
         setDates={setDates}
-        tagRender={props.tagRender}
-        defaultColumns={props.defaultColumns}
-        optionsKeyOfEvents={props.optionsKeyOfEvents}
-        changeColumnsSelect={props.changeColumnsSelect}
+        tagRender={tagRender}
+        defaultColumns={defaultColumns}
+        optionsKeyOfEvents={optionsKeyOfEvents}
+        changeColumnsSelect={changeColumnsSelect}
       />
       <Table
         size="small"
@@ -256,7 +273,7 @@ export const TableSchedule = (props: any) => {
             },
             onDoubleClick: (event) => {
               handleDoubleClickRow(record, rowIndex, event);
-            }, // double click row
+            }, 
           };
         }}
       />
@@ -285,4 +302,4 @@ export const TableSchedule = (props: any) => {
       ) : null}
     </Form>
   );
-};
+});

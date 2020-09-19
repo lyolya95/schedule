@@ -10,6 +10,7 @@ const columnsName: string[] = [
   'timeToComplete',
   'place',
   'week',
+  'studentScore',
   'maxScore',
   'taskContent',
   'isShowFeedback',

@@ -43,25 +43,30 @@ export interface StateModel {
   isMentorStatus: boolean;
   data: any;
   columnsName: string[];
+  notEditableColumns: string[];
 }
 const initialState: StateModel = {
   isMentorStatus: false,
   data: [],
   columnsName: [
     'id',
-    'name',
-    'course',
     'dateTime',
-    //'type',   /* удалил так как возникают тогда две колонки с type из-за добавления в TableSchedule.tsx после строчки с "...props.columnsName," */
     'timeZone',
-    'organizer',
-    'descriptionUrl',
     'timeToComplete',
+    'type',   /* удалил так как возникают тогда две колонки с type из-за добавления в TableSchedule.tsx после строчки с "...props.columnsName," */
+    'name',
+    'descriptionUrl',
+    'course',
+    'organizer',
     'place',
     'week',
-    'maxScore',
-    'taskContent',
-    'isShowFeedback',
+    'combineScore',
+   // 'taskContent',
+   // 'isShowFeedback',
+  ],
+  notEditableColumns: [
+    'id',
+    'combineScore'
   ],
 };
 
@@ -77,9 +82,15 @@ export const reducer = (state = initialState, action: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
             const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
-            return mentor.name;
+            const mentorName =  mentor=== undefined ? mentorId : mentor.name;
+            return mentorName;
           });
           event.organizer = eventMentorArr.join(', ');
+        }
+        if((event.score && event.score>0) || (event.maxScore && event.maxScore>0)){
+          const score = event.score && event.score>0 ? event.score : 0;
+          const maxScore = event.maxScore && event.maxScore>0 ? event.maxScore : 0;
+          event.combineScore =  score+'/'+maxScore;
         }
         return event;
       });
