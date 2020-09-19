@@ -29,6 +29,7 @@ const mapStateToProps = (state: any) => {
   return {
     data: state.data,
     isMentorStatus: state.isMentorStatus,
+    columnsName: state.columnsName,
   };
 };
 

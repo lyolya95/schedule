@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Table, Popconfirm, Form, Button, Tag, Modal} from 'antd';
+import {Table, Form, Button, Tag, Modal} from 'antd';
 import 'antd/dist/antd.css';
 import {IAgeMap} from './TableSchedule.model';
 import EditableCell from './EditableCell';
-import {DeleteTwoTone, EditTwoTone, PlusCircleTwoTone} from '@ant-design/icons';
+import {DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone} from '@ant-design/icons';
 import {TaskPageContainer} from '../TaskPage/TaskPage.container';
 import {switchTypeToColor} from '../utilities/switcher';
 import {MentorFilters} from "../MentorFilters/MentorFilters";
@@ -162,6 +162,7 @@ export const TableSchedule = (props: any) => {
             title: 'Type',
             dataIndex: 'type',
             editable: true,
+
             render: (_: any, record: any) => {
                 return (
                     <Tag key={record.type} color={switchTypeToColor(record.type)}>
@@ -171,31 +172,28 @@ export const TableSchedule = (props: any) => {
             },
         },
         {
-            title: '',
+            title: 'Edit',
             dataIndex: 'operation',
             render: (_: any, record: any) => {
                 // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
                 const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
                 return editable ? (
                     <span>
-            <Button onClick={() => save(record.key)} style={{marginRight: 8}}>
+            <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
               Save
             </Button>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <Button>Cancel</Button>
-            </Popconfirm>
+            <Button onClick={cancel}>Cancel</Button>
           </span>
                 ) : (
-                    <>
-                        <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)}
-                                icon={<EditTwoTone/>}/>
+                    <span>
+                        <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<HighlightTwoTone />}></Button>
                         <Button
                             ghost={true}
                             className="tableSchedule__button_remove"
                             onClick={() => remove(record.key)}
-                            icon={<DeleteTwoTone twoToneColor="#eb2f96"/>}
-                        />
-                    </>
+                            icon={<DeleteTwoTone />}
+                        ></Button>
+                    </span>
                 );
                 //save отправим колбэк с ключем текущей строки что бы сохранить
                 //cancel отправим колбэк с ключем текущей строки что бы отменить
@@ -265,7 +263,7 @@ export const TableSchedule = (props: any) => {
 
     const handleClickRow = (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
         if (isHandlingClickOnRow(event)) {
-            const ind = rowIndex ? rowIndex : 0;
+            const ind = rowIndex ? rowIndex + 1 : 1;
             const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
             const rowClassName = selRow.className;
             let newRowClassName;
@@ -355,6 +353,7 @@ export const TableSchedule = (props: any) => {
                 optionsKeyOfEvents={props.optionsKeyOfEvents}
                 changeColumnsSelect={props.changeColumnsSelect}/>
             <Table
+                size="small"
                 components={{
                     body: {
                         cell: EditableCell,
@@ -364,18 +363,20 @@ export const TableSchedule = (props: any) => {
                 dataSource={visibleData}
                 columns={mergedColumns}
                 rowClassName="editable-row"
+                scroll={{ x: 2500, y: 500 }}
                 pagination={{
                     onChange: cancel,
+                    showSizeChanger: true,
                 }}
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: (event) => {
-                            handleClickRow(record, rowIndex, event)
+                            handleClickRow(record, rowIndex, event);
                         },
                         onDoubleClick: (event) => {
-                            handleDoubleClickRow(record, rowIndex, event)
-                        }// double click row
-                    }
+                            handleDoubleClickRow(record, rowIndex, event);
+                        }, // double click row
+                    };
                 }}
             />
             {clickingRow ?

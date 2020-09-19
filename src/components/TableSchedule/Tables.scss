@@ -1,3 +1,5 @@
+$buttonWidth: 250px;
+
 .select-dropdown-columns {
   margin: 0;
   align-self: flex-start;
@@ -63,4 +65,21 @@
   -khtml-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+}
+
+.ant-btn-primary {
+    position: absolute;
+    width: $buttonWidth;
+    top: 10px;
+    height: 35px;
+    left: calc(50% - #{$buttonWidth}/2);
+}
+
+.ant-collapse-item {
+    background-color: rgb(244, 250, 252);
+    transition: 0.3s ease;
+
+    &:hover {
+        background-color: rgba(232, 246, 248, 0.534);
+    }
 }

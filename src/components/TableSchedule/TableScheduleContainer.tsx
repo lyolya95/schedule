@@ -6,10 +6,8 @@ import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
 
 export const TableScheduleContainer = (props: any) => {
-  const optionsKeyOfEvents = Object.keys(props.data[0]).map((n) => ({
-    // вытаскивает все ключи для записи их в заголовок колонок и для функции скрытия и отображения колонок
-    value: n,
-  }));
+  const columnsNameMap = props.columnsName.map((n: string) => ({ value: n }));
+
   const toUpperCase = (value: string) => value[0].toUpperCase() + value.slice(1);
   const tagRender = (props: any) => {
     const { label, closable, onClose } = props;
@@ -23,7 +21,9 @@ export const TableScheduleContainer = (props: any) => {
   //создал контейнер для поднятия состояния таких как columnsName на верхний уровень, для того что бы он был доступен и таблице и селектуОтображения
   const [columnsName, setColumnsName] = useState([]);
 
+
   const defaultColumns = ['dateTime', 'name', 'course', 'organizer', 'place', 'timeToComplete'];
+
   const changeColumnsSelect = (value: any) => {
     const mapColumns = value.map((n: any) => ({ title: toUpperCase(n), dataIndex: n, editable: true }));
     setColumnsName(mapColumns);
@@ -43,7 +43,7 @@ export const TableScheduleContainer = (props: any) => {
       columnsName={columnsName}
       tagRender={tagRender}
       defaultColumns={defaultColumns}
-      optionsKeyOfEvents={optionsKeyOfEvents}
+      optionsKeyOfEvents={columnsNameMap}
       changeColumnsSelect={changeColumnsSelect}
       data={props.data}
     />
