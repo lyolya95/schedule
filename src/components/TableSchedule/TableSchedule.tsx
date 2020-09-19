@@ -3,7 +3,7 @@ import { Table, Form, Button, Tag, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
-import { DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone, CheckSquareTwoTone, WarningTwoTone  } from '@ant-design/icons';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
@@ -76,7 +76,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
     }
   };
-const editOperationData = {
+const mentorOperationData = {
   title: 'Edit',
   dataIndex: 'operation',
   render: (_: any, record: any) => {
@@ -107,6 +107,42 @@ const editOperationData = {
     //edit отправим колбэк с данными изменяемой в данный момент строкой
   },
 };
+const changeRowClass = (key: React.Key, className:string) => {
+  const selRow = document.querySelector(`[data-row-key=${key}]`);
+  if(selRow){  
+    const rowClassName = selRow.getAttribute('class');
+    let newRowClassName;
+    const classSel = ' '+className;
+    if (rowClassName && rowClassName.indexOf(classSel) !== -1) {
+      newRowClassName = rowClassName.replace(classSel, '');
+    } else {
+      newRowClassName = rowClassName + classSel;
+    }
+    selRow.setAttribute('class',newRowClassName);
+  }
+};
+
+const studentOperationData = {
+  title: '',
+  dataIndex: 'operation',
+  render: (_: any, record: any) => {
+
+     return  (
+      <span>
+        <Button 
+          ghost={true} 
+          onClick={() => changeRowClass(record.key,'ant-table-row-main')} 
+          icon={<WarningTwoTone twoToneColor="red" />}>
+        </Button>
+        <Button
+          ghost={true}
+          onClick={() => changeRowClass(record.key,'ant-table-row-done')}
+          icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
+        ></Button>
+      </span>
+    );
+  },
+};
 const allColumns: IAgeMap[] = 
   columnsName.map((item:any)=>{
     switch( item.dataIndex ){
@@ -128,21 +164,15 @@ const allColumns: IAgeMap[] =
                     title: 'Score/maxScore',
                     dataIndex: 'combineScore',
                     editable: true,
-                  /*  render: (_: any, record: any) => {
-                      return (
-                        <Tag key={record.type} color={switchTypeToColor(record.type)}>
-                          {record.type}
-                        </Tag>
-                      );
-                    },*/
                   };
-                        
-      default:
+        default:
         return item;
     }
   });
     
-  const columns: IAgeMap[] = isMentorStatus? [...allColumns, editOperationData] : allColumns;
+  const columns: IAgeMap[] = isMentorStatus 
+                              ? [...allColumns, mentorOperationData] 
+                              : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {

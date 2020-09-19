@@ -1,44 +1,6 @@
 import { CHANGE_MENTOR_STATUS, setDataEventsAC, SET_DATA_EVENT } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
-// export interface StateModel {
-//   isShowCalendarOrTable: boolean;
-//   data: [
-//     {
-//       id: string;
-//       name: string;
-//       course: string;
-//       dateTime: string;
-//       type: string;
-//       timeZone: string;
-
-//       organizer?: string;
-//       descriptionUrl?: string;
-//       timeToComplete?: string;
-//       place?: string;
-//       week?: number;
-//       maxScore?: number;
-//       taskContent?: string;
-//       isShowFeedback?: boolean;
-//     }
-//   ];
-//   organizers: any;
-// }
-// const initialState: StateModel = {
-//   isShowCalendarOrTable: false,
-//   data: [
-//     {
-//       id: '',
-//       name: '',
-//       course: '',
-//       dateTime: '',
-//       type: '',
-//       timeZone: '',
-//     },
-//   ],
-//   organizers: [],
-// };
-
 export interface StateModel {
   isMentorStatus: boolean;
   data: any;
@@ -49,11 +11,10 @@ const initialState: StateModel = {
   isMentorStatus: false,
   data: [],
   columnsName: [
-    'id',
     'dateTime',
     'timeZone',
     'timeToComplete',
-    'type',   /* удалил так как возникают тогда две колонки с type из-за добавления в TableSchedule.tsx после строчки с "...props.columnsName," */
+    'type',  
     'name',
     'descriptionUrl',
     'course',
@@ -61,8 +22,6 @@ const initialState: StateModel = {
     'place',
     'week',
     'combineScore',
-   // 'taskContent',
-   // 'isShowFeedback',
   ],
   notEditableColumns: [
     'id',
@@ -90,11 +49,12 @@ export const reducer = (state = initialState, action: any) => {
         if((event.score && event.score>0) || (event.maxScore && event.maxScore>0)){
           const score = event.score && event.score>0 ? event.score : 0;
           const maxScore = event.maxScore && event.maxScore>0 ? event.maxScore : 0;
-          event.combineScore =  score+'/'+maxScore;
+          const coefficient = event.coefficient && event.coefficient>0 ? ', coefficient:'+event.coefficient : '';
+          event.combineScore =  score+'/'+maxScore+coefficient;
         }
+        event.key = event.id;
         return event;
       });
-
       return { ...state, data: [...action.events] };
     }
     default:
