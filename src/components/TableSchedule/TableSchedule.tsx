@@ -133,10 +133,14 @@ export const TableSchedule = (props: any) => {
     // при нажатии кнопки сохранить
     try {
       const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
-      const organizer = row.organizer.join(',');
+      let organizer = '';
+      if (row.organizer instanceof Array) {
+        organizer = row.organizer.join(',');
+      }
       const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
       const index = newData.find((item) => id === item.id).id; // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
       if (index.length === 20) {
+        debugger;
         const item = newData.find((item) => index === item.id); // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
         if (row['date-picker']) {
           // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
