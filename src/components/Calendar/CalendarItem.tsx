@@ -19,7 +19,7 @@ export const CalendarItem: FC<CalendarItemProps> = React.memo(({ data, getDataEv
       let listData: { type: string; content: string }[] = [];
       data.map((i: any) => {
         switch (value.date()) {
-          case +i.dateTime.slice(8, 10):
+          case +i?.dateTime?.slice(8, 10):
             listData.push({
               type: i.type,
               content: i.name,
