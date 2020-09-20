@@ -10,7 +10,6 @@ import {
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
-import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
