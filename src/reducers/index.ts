@@ -1,10 +1,10 @@
 import {
   CHANGE_MENTOR_STATUS,
   putDataEventAC,
-  setDataEventsAC,
-  SET_DATA_EVENT,
   PUT_DATA_EVENT,
+  setDataEventsAC,
   setOrganizersAC,
+  SET_DATA_EVENT,
   SET_ORGANIZERS,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
@@ -24,7 +24,7 @@ const initialState: StateModel = {
     'dateTime',
     'timeZone',
     'timeToComplete',
-    'type',  
+    'type',
     'name',
     'descriptionUrl',
     'course',
@@ -33,10 +33,7 @@ const initialState: StateModel = {
     'week',
     'combineScore',
   ],
-  notEditableColumns: [
-    'id',
-    'combineScore'
-  ],
+  notEditableColumns: ['id', 'combineScore'],
   ratingVotes: 0,
   organizers: [],
 };
@@ -59,14 +56,14 @@ export const reducer = (state = initialState, action: any) => {
           });
           event.organizer = eventMentorArr.join(', ');
         }
-        if((event.score && event.score>0) || (event.maxScore && event.maxScore>0)){
-          const score = event.score && event.score>0 ? event.score : 0;
-          const maxScore = event.maxScore && event.maxScore>0 ? event.maxScore : 0;
-          const coefficient = event.coefficient && event.coefficient>0 ? ', coefficient:'+event.coefficient : '';
-          event.combineScore =  score+'/'+maxScore+coefficient;
+        if ((event.score && event.score > 0) || (event.maxScore && event.maxScore > 0)) {
+          const score = event.score && event.score > 0 ? event.score : 0;
+          const maxScore = event.maxScore && event.maxScore > 0 ? event.maxScore : 0;
+          const coefficient = event.coefficient && event.coefficient > 0 ? ', coefficient:' + event.coefficient : '';
+          event.combineScore = score + '/' + maxScore + coefficient;
         }
         event.key = event.id;
-        if(event.rating && event.rating>0){
+        if (event.rating && event.rating > 0) {
           ratingVotes++;
         }
         return event;
