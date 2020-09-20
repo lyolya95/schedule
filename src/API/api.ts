@@ -15,4 +15,7 @@ export const scheduleAPI = {
       return response.data.data;
     });
   },
+  updateDataEvent(eventId: string, bodyData: object) {
+    return instance.put(`event/${eventId}`, bodyData);
+  },
 };

@@ -46,6 +46,8 @@ export const TableScheduleContainer = (props: any) => {
       optionsKeyOfEvents={columnsNameMap}
       changeColumnsSelect={changeColumnsSelect}
       data={props.data}
+      putDataEvent={props.putDataEvent}
+      organizers={props.organizers}
     />
   );
 };
