@@ -1,18 +1,103 @@
-import React, { useState } from 'react';
-import { Table, Form, Button, Tag, Modal } from 'antd';
-import 'antd/dist/antd.css';
-import { IAgeMap } from './TableSchedule.model';
-import EditableCell from './EditableCell';
 import { DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
+import { Button, Form, Modal, Table, Tag } from 'antd';
+import 'antd/dist/antd.css';
+import React, { useEffect, useState } from 'react';
+import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
-import { MentorFilters } from '../MentorFilters/MentorFilters';
+import EditableCell from './EditableCell';
+import { IAgeMap } from './TableSchedule.model';
 
 export const TableSchedule = (props: any) => {
-  const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
+  // localStorage
+  const course = JSON.parse(localStorage['course'] || null);
+  const place = JSON.parse(localStorage['place'] || null);
+  const type = JSON.parse(localStorage['tags'] || null);
+  const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
+  // формируем стартовые данные(добавляем .key = .id для рядов таблицы)
+  const initialData = props.data.map((item: any) => {
+    return {
+      ...item,
+      key: item.id,
+    };
+  });
+
+  // данные для фильтрации
+  const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
+  const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
+  const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
+
+  const hasFilterFlag = (data: any, flags: any): boolean => {
+    const keys = Object.keys(flags);
+    if (keys.length === 0) {
+      return true;
+    }
+    const keysToCheck: string[] = keys
+      .filter((key: string) => flags[key] !== null)
+      .filter((key: string) => flags[key].length > 0);
+    if (keysToCheck.length === 0) {
+      return true;
+    }
+    for (let key of keysToCheck) {
+      if (data[key] === undefined) {
+        return false;
+      }
+    }
+    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+
+    const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
+      for (let item of arr1) {
+        if (arr2.includes(item)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    for (const key of keysToCheck) {
+      if (data[key].split(',').length > 1) {
+        if (!haveAMatch(data[key].split(','), valueToCheck)) {
+          return false;
+        }
+      } else {
+        if (!valueToCheck.includes(data[key])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  const isInDateRange = (date: any, dateRange: any): boolean => {
+    if (dateRange === null) {
+      return true;
+    }
+    if (dateRange.length === 0) {
+      return true;
+    }
+    const compareDate = new Date(date);
+    const firstDate = new Date(dateRange[0]);
+    const lastDate = new Date(dateRange[1]);
+    if (firstDate < compareDate && compareDate < lastDate) {
+      return true;
+    }
+    return false;
+  };
+
+  //временно меняем посмотреть ментора - ставим true, посмотреть студента ставим false
+  const isMentor = true;
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.id === editingId; // указываем (true/false) какое поле сейчас находится в формате редактирования
+
+  const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
+
+  const visibleData = data // формируем отображаемые данные для таблицы
+    .filter((item: any) => hasFilterFlag(item, filerFlags))
+    .filter((item: any) => isInDateRange(item.dateTime, dates))
+    .filter((item: any) => !hiddenData.includes(item.key));
+
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
 
@@ -22,6 +107,7 @@ export const TableSchedule = (props: any) => {
     //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
     setEditingId(record.id); // указывает какая из строк сейчас редактируется
   };
+
   const add = () => {
     //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
     const addData = { ...data[0] }; // создаем копию! данных одной строчки
@@ -37,6 +123,7 @@ export const TableSchedule = (props: any) => {
     newData.splice(index, 1); // удаляем строку под индексем index одну строку 1
     setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
   };
+
   const cancel = () => {
     //при нажатии на кнопку edit
     setEditingId(''); // отменяет редактирование
@@ -149,7 +236,7 @@ export const TableSchedule = (props: any) => {
     };
   });
 
-  const isНandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
+  const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
     let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
@@ -159,64 +246,96 @@ export const TableSchedule = (props: any) => {
   };
 
   const handleDoubleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
-    if (isНandlingClickOnRow(event)) {
+    if (isHandlingClickOnRow(event)) {
       setClickingRow(record);
       setVisibleModal(true);
     }
   };
+  //______добавлена логика клика с зажатым shift__________________________________________________________________________
+  const [hideButton, setHideButton] = useState<boolean>(false);
+  const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
 
-  const handleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
-    if (isНandlingClickOnRow(event)) {
-      const ind = rowIndex ? rowIndex : 0;
+  useEffect(() => {
+    if (hiddenRowKeys.length === 0) setHideButton(false);
+  }, [hiddenRowKeys]);
+
+  const hideRows = () => {
+    setHiddenData((prev) => {
+      return [...prev, ...hiddenRowKeys];
+    });
+    setHideButton(false);
+  };
+
+  const unHideRows = () => {
+    setHiddenRowKeys((prev) => {
+      return prev.filter((key) => !hiddenData.includes(key));
+    });
+    setHiddenData([]);
+  };
+
+  const handleClickRow = (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
+    if (isHandlingClickOnRow(event)) {
+      const ind = rowIndex ? rowIndex + 1 : 1;
       const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
       const rowClassName = selRow.className;
       let newRowClassName;
       const classSel = ' ant-table-row-selected';
+
       if (rowClassName.indexOf(classSel) !== -1) {
         newRowClassName = rowClassName.replace(classSel, '');
+        setHiddenRowKeys((prev) => {
+          return prev.filter((key) => key !== record.key);
+        });
       } else {
-        newRowClassName = rowClassName + classSel;
+        if (event.shiftKey) {
+          if (hiddenRowKeys.length !== 0) {
+            //console.log('Hidden row keys: ', hiddenRowKeys)
+            const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
+            const currentKey = record.key;
+            let clazz = '';
+            visibleData.forEach((item: any) => {
+              const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
+              if (currentSelRow === null) {
+                return;
+              }
+              // @ts-ignore
+              const currentRowClassName = currentSelRow.className;
+              if (currentRowClassName.indexOf(classSel) === -1) {
+                // @ts-ignore
+                currentSelRow.className = currentRowClassName + clazz;
+                if (clazz !== '') {
+                  setHiddenRowKeys((prev) => {
+                    return [...prev, item.key];
+                  });
+                }
+              }
+              if (item.key === lastKey || item.key === currentKey) {
+                if (clazz === '') {
+                  clazz = classSel;
+                } else {
+                  clazz = '';
+                }
+              }
+            });
+            newRowClassName = rowClassName + classSel;
+          } else {
+            newRowClassName = rowClassName + classSel;
+            setHideButton(true);
+            setHiddenRowKeys((prev) => {
+              return [...prev, record.key];
+            });
+          }
+        } else {
+          newRowClassName = rowClassName + classSel;
+          setHideButton(true);
+          setHiddenRowKeys((prev) => {
+            return [...prev, record.key];
+          });
+        }
       }
       selRow.className = newRowClassName;
     }
   };
-
-  // Добавлена логика сортировки данных для таблицы
-  //____________________________________________________________________________________________________________________
-  const [filerFlags, setFilterFlags] = useState({});
-  const [dates, setDates] = useState([]);
-  const hasFilterFlag = (data: any, flags: any): boolean => {
-    const keys = Object.keys(flags);
-    if (keys.length === 0) {
-      return true;
-    }
-    const keysToCheck: string[] = keys.filter((key: string) => flags[key].length > 0);
-    const valueToCheck: string[] = keys.reduce((acc: any[], key: string) => [...acc, flags[key]], []).flat();
-    for (const key of keysToCheck) {
-      if (!valueToCheck.includes(data[key])) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const isInDateRange = (date: any, dateRange: any): boolean => {
-    if (dateRange.length === 0) {
-      return true;
-    }
-    const compareDate = new Date(date);
-    const firstDate = new Date(dateRange[0]);
-    const lastDate = new Date(dateRange[1]);
-    if (firstDate < compareDate && compareDate < lastDate) {
-      return true;
-    }
-    return false;
-  };
-  const visibleData = data
-    .filter((item: any) => hasFilterFlag(item, filerFlags))
-    .filter((item: any) => isInDateRange(item.timestamp, dates));
-
-  //____________________________________________________________________________________________________________________
 
   return (
     <Form form={form} component={false}>
@@ -228,6 +347,18 @@ export const TableSchedule = (props: any) => {
       >
         Add event
       </Button>
+      <div className="hidden-btn-row">
+        {hideButton ? (
+          <Button className="hide-btn" onClick={hideRows}>
+            <EyeInvisibleOutlined className="icon" />
+          </Button>
+        ) : null}
+        {hiddenData.length === 0 ? null : (
+          <Button className="unhide-btn" onClick={unHideRows}>
+            <EyeOutlined className="icon" />
+          </Button>
+        )}
+      </div>
       <MentorFilters
         data={data}
         filterFlag={filerFlags}

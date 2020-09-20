@@ -21,7 +21,9 @@ export const TableScheduleContainer = (props: any) => {
   //создал контейнер для поднятия состояния таких как columnsName на верхний уровень, для того что бы он был доступен и таблице и селектуОтображения
   const [columnsName, setColumnsName] = useState([]);
 
-  const defaultColumns = ['dateTime', 'name', 'organizer', 'place', 'timeToComplete'];
+
+  const defaultColumns = ['dateTime', 'name', 'course', 'organizer', 'place', 'timeToComplete'];
+
   const changeColumnsSelect = (value: any) => {
     const mapColumns = value.map((n: any) => ({ title: toUpperCase(n), dataIndex: n, editable: true }));
     setColumnsName(mapColumns);
