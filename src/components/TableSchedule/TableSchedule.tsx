@@ -33,7 +33,9 @@ export const TableSchedule = (props: any) => {
     if (keys.length === 0) {
       return true;
     }
-    const keysToCheck: string[] = keys.filter((key: string) => flags[key].length > 0);
+    const keysToCheck: string[] = keys
+        .filter((key: string) => flags[key] !== null)
+        .filter((key: string) => flags[key].length > 0);
     if (keysToCheck.length === 0) {
       return true;
     }
@@ -70,6 +72,9 @@ export const TableSchedule = (props: any) => {
   };
 
   const isInDateRange = (date: any, dateRange: any): boolean => {
+    if (dateRange === null) {
+      return true;
+    }
     if (dateRange.length === 0) {
       return true;
     }
