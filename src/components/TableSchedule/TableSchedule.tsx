@@ -1,22 +1,24 @@
 import React, { useState, FC } from 'react';
-import { Table, Form, Button, Tag, Modal } from 'antd';
+import { Table, Form, Button, Tag, Modal, Rate } from 'antd';
 import 'antd/dist/antd.css';
 import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
-import { DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone, CheckSquareTwoTone, WarningTwoTone  } from '@ant-design/icons';
+import { DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone, CheckSquareTwoTone,ExclamationCircleOutlined, CheckOutlined, WarningTwoTone, ExclamationOutlined  } from '@ant-design/icons';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 
 export const TableSchedule: FC<any> = React.memo((props) => {
-  const {columnsName, tagRender, defaultColumns, optionsKeyOfEvents,changeColumnsSelect,isMentorStatus } = props;
+  const {columnsName, tagRender, defaultColumns, optionsKeyOfEvents, changeColumnsSelect, isMentorStatus, ratingVotes } = props;
   const [data, setData] = useState(props.data); // хранятся все данные таблиц которые приходят
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [editingKey, setEditingKey] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.key === editingKey; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
-
+  // надо взять с localstorage первоначальные данные
+  const [eventRating, setEventRating] = useState<any>();
+  
   const edit = (record: any) => {
     //при нажатии на кнопку edit
     form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
@@ -82,24 +84,31 @@ const mentorOperationData = {
   render: (_: any, record: any) => {
     // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
     const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
-    return editable ? (
-      <span>
-        <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-          Save
-        </Button>
-        <Button onClick={cancel}>Cancel</Button>
-      </span>
-    ) : (
-      <span>
-        <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<HighlightTwoTone />}></Button>
-        <Button
-          ghost={true}
-          className="tableSchedule__button_remove"
-          onClick={() => remove(record.key)}
-          icon={<DeleteTwoTone />}
-        ></Button>
-      </span>
-    );
+    if(editable){
+      return (
+        <span>
+          <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+            Save
+          </Button>
+          <Button onClick={cancel}>Cancel</Button>
+        </span>
+      );
+    } 
+    else{
+      const eventRating = data.find((item:any) => record.key === item.key).rating; 
+      return (
+        <span>
+          <Button ghost={true} disabled={editingKey !== ''} onClick={() => edit(record)} icon={<HighlightTwoTone />}></Button>
+          <Button
+            ghost={true}
+            className="tableSchedule__button_remove"
+            onClick={() => remove(record.key)}
+            icon={<DeleteTwoTone />}
+          ></Button>
+           <Rate disabled value={eventRating}/>
+        </span>
+      );
+    }
     //save отправим колбэк с ключем текущей строки что бы сохранить
     //cancel отправим колбэк с ключем текущей строки что бы отменить
     //Popconfirm от ant что бы спросить уверены или нет
@@ -122,23 +131,42 @@ const changeRowClass = (key: React.Key, className:string) => {
   }
 };
 
+const changeRating = (value:number, key:React.Key) => {
+  const currEventRating = data.find((item:any) => key === item.key).rating; 
+  const newRating = currEventRating && currEventRating>0 ? (value+currEventRating)/ratingVotes : value;
+  //@todo save rating to event
+  setEventRating({[key]:{voted:true, value:newRating}});
+}
+
 const studentOperationData = {
   title: '',
   dataIndex: 'operation',
   render: (_: any, record: any) => {
-
-     return  (
+    const key = record.key;
+    const isVoted = eventRating && eventRating[key] && eventRating[key].voted ? true : false;
+    return  (
       <span>
         <Button 
           ghost={true} 
-          onClick={() => changeRowClass(record.key,'ant-table-row-main')} 
-          icon={<WarningTwoTone twoToneColor="red" />}>
+          onClick={() => changeRowClass(key,'ant-table-row-main')} 
+          //icon={<WarningTwoTone twoToneColor="red" />}>
+          className = "mainEvent"
+          //icon={<ExclamationCircleOutlined />}
+          icon={<ExclamationOutlined />}
+         >
         </Button>
         <Button
           ghost={true}
-          onClick={() => changeRowClass(record.key,'ant-table-row-done')}
-          icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
+          onClick={() => changeRowClass(key,'ant-table-row-done')}
+          className = "doneEvent"
+          //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
+          icon={<CheckOutlined />}
         ></Button>
+        <span></span>
+         { isVoted
+            ? <Rate disabled value={eventRating[key].value} />
+            : <Rate onChange = {(value) => changeRating(value,key)}/>
+         }
       </span>
     );
   },

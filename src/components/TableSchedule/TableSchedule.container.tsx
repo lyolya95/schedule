@@ -30,7 +30,8 @@ const mapStateToProps = (state: StateModel) => {
     data: state.data,
     isMentorStatus: state.isMentorStatus,
     columnsName: state.columnsName,
-    notEditableColumns: state.notEditableColumns
+    notEditableColumns: state.notEditableColumns,
+    ratingVotes: state.ratingVotes
   };
 };
 

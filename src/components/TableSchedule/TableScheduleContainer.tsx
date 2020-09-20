@@ -6,20 +6,13 @@ import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
 
 export const TableScheduleContainer = (props: any) => {
-  const { columnsName, notEditableColumns, data, isMentorStatus } = props;
+  const { columnsName, notEditableColumns, data, isMentorStatus, ratingVotes } = props;
   const userColumnsName = isMentorStatus ?  columnsName.filter((item:string) => item!=='combineScore') : columnsName; 
-  console.log(' col='+userColumnsName);
   const columnsNameMap = userColumnsName.map((n: string) => ({ value: n }));
-  console.log('props', columnsName);
-
+  
   //создал контейнер для поднятия состояния таких как columnsName на верхний уровень, для того что бы он был доступен и таблице и селектуОтображения
   const [mapsColumnsName, setMapColumnsName] = useState([]);
   const defaultColumns = userColumnsName;
-  //const [userColumnsName, setUserColumnsName] = useState(columnsName);
- // const defaultColumns = ['dateTime', 'timeToComplete',  'name', 'organizer', 'place'];
- // const toUpperCase = (value: string) => value[0].toUpperCase() + value.slice(1);
- /// const  index= columnsName.findIndex((item:string) => (item==='Score/maxScore'));
- /// const col = [columnsName.slice(0,index),columnsName.slice(index+1)];
   const tagRender = (props: any) => {
     const { label, closable, onClose } = props;
     //то как отображаются списки с отображаемымы колонками
@@ -44,8 +37,7 @@ export const TableScheduleContainer = (props: any) => {
     const userColumns = isMentorStatus ?  mapsColumnsName.filter((item:any) => item.title!=='combineScore')
                                         : mapsColumnsName; 
      setMapColumnsName(userColumns);
-     console.log('use2',userColumns)
-  }, [isMentorStatus]);
+   }, [isMentorStatus]);
 
   useEffect(() => {
     const mapColumns: any = defaultColumns.map((n: any) => ({
@@ -55,14 +47,8 @@ export const TableScheduleContainer = (props: any) => {
       editable: notEditableColumns.findIndex((item:string) => item === n) === -1 ? true : false,
     }));
     setMapColumnsName(mapColumns);
-    console.log('use',mapColumns)
   }, []);
-/*console.log('mapsColumnsName',mapsColumnsName);
-console.log('userColumnsName',userColumnsName);
-console.log('columnsNameMap',columnsNameMap);
-columnsName={mapsColumnsName}
- defaultColumns={userColumnsName}
-*/
+
   return (
     <TableSchedule
       columnsName={mapsColumnsName}
@@ -72,6 +58,7 @@ columnsName={mapsColumnsName}
       changeColumnsSelect={changeColumnsSelect}
       data={data}
       isMentorStatus={isMentorStatus}
+      ratingVotes={ratingVotes}
     />
   );
 };

@@ -6,6 +6,7 @@ export interface StateModel {
   data: any;
   columnsName: string[];
   notEditableColumns: string[];
+  ratingVotes: number;
 }
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -27,6 +28,7 @@ const initialState: StateModel = {
     'id',
     'combineScore'
   ],
+  ratingVotes: 0
 };
 
 export const reducer = (state = initialState, action: any) => {
@@ -37,6 +39,7 @@ export const reducer = (state = initialState, action: any) => {
         isMentorStatus: !state.isMentorStatus,
       };
     case SET_DATA_EVENT: {
+      let ratingVotes = 0;
       action.events.map((event: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
@@ -53,9 +56,12 @@ export const reducer = (state = initialState, action: any) => {
           event.combineScore =  score+'/'+maxScore+coefficient;
         }
         event.key = event.id;
+        if(event.rating && event.rating>0){
+          ratingVotes++;
+        }
         return event;
       });
-      return { ...state, data: [...action.events] };
+      return { ...state, data: [...action.events], ratingVotes: ratingVotes };
     }
     default:
       return state;
