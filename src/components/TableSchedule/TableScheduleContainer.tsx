@@ -21,7 +21,6 @@ export const TableScheduleContainer = (props: any) => {
   //создал контейнер для поднятия состояния таких как columnsName на верхний уровень, для того что бы он был доступен и таблице и селектуОтображения
   const [columnsName, setColumnsName] = useState([]);
 
-
   const defaultColumns = ['dateTime', 'name', 'course', 'organizer', 'place', 'timeToComplete'];
 
   const changeColumnsSelect = (value: any) => {
@@ -48,6 +47,9 @@ export const TableScheduleContainer = (props: any) => {
       data={props.data}
       putDataEvent={props.putDataEvent}
       organizers={props.organizers}
+      getDataEvent={props.getDataEvent}
+      addDataEvent={props.addDataEvent}
+      deleteDataEvent={props.deleteDataEvent}
     />
   );
 };

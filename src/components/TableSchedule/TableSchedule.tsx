@@ -10,18 +10,13 @@ import EditableCell from './EditableCell';
 import { IAgeMap } from './TableSchedule.model';
 
 export const TableSchedule = (props: any) => {
+  const data = props.data; // хранятся все данные таблиц которые приходят
+
   // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
   const type = JSON.parse(localStorage['tags'] || null);
   const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
-  // формируем стартовые данные(добавляем .key = .id для рядов таблицы)
-  const initialData = props.data.map((item: any) => {
-    return {
-      ...item,
-      key: item.id,
-    };
-  });
 
   // данные для фильтрации
   const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
@@ -91,8 +86,6 @@ export const TableSchedule = (props: any) => {
   const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.id === editingId; // указываем (true/false) какое поле сейчас находится в формате редактирования
 
-  const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
-
   const visibleData = data // формируем отображаемые данные для таблицы
     .filter((item: any) => hasFilterFlag(item, filerFlags))
     .filter((item: any) => isInDateRange(item.dateTime, dates))
@@ -108,25 +101,45 @@ export const TableSchedule = (props: any) => {
     setEditingId(record.id); // указывает какая из строк сейчас редактируется
   };
 
-  const add = () => {
+  const add = async () => {
     //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
-    const addData = { ...data[0] }; // создаем копию! данных одной строчки
-    addData.id = String(data.length + 1); // временное решение создания нового уникального ключа
-    const newData = [...data, addData]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание) и наша новая строчка добавляется в конце
-    setData(newData); // все сохранения изменения что мы сделали
-    edit(addData); // запускаем редактирование
+    const addData = {
+      id: '',
+      name: 'string',
+      course: 'string',
+      dateTime: 'string',
+      type: 'string',
+      timeZone: 'string',
+      organizer: 'string',
+      descriptionUrl: 'string',
+      timeToComplete: 'string',
+      place: 'string',
+      week: 123,
+      maxScore: 123,
+      taskContent: 'string',
+      isShowFeedback: false,
+    };
+
+    //______________________________________________ генерация ключа
+    let password: string = '';
+    var symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789№?_';
+    for (let i = 0; i < 20; i++) {
+      password += symbols.charAt(Math.floor(Math.random() * symbols.length));
+    }
+    addData.id = password;
+    //_____________________________________________
+
+    await props.addDataEvent(addData);
+    await props.getDataEvent();
+    edit(props.data[0]); // !!!Временное решение, сразу открывается редактирование первого в массиве данных елемента а нужно именно тот который равен id нового добавленного
   };
-  const remove = (id: React.Key) => {
-    // при нажатии кнопки remove
-    const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
-    const index = newData.findIndex((item) => id === item.id); // Указывает индекс массива пришедших данных
-    newData.splice(index, 1); // удаляем строку под индексем index одну строку 1
-    setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
+  const remove = async (id: React.Key) => {
+    await props.deleteDataEvent(id);
+    props.getDataEvent();
   };
 
   const cancel = () => {
-    //при нажатии на кнопку edit
-    setEditingId(''); // отменяет редактирование
+    setEditingId('');
   };
 
   const save = async (id: React.Key) => {
@@ -140,7 +153,6 @@ export const TableSchedule = (props: any) => {
       const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
       const index = newData.find((item) => id === item.id).id; // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
       if (index.length === 20) {
-        debugger;
         const item = newData.find((item) => index === item.id); // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
         if (row['date-picker']) {
           // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
@@ -157,13 +169,11 @@ export const TableSchedule = (props: any) => {
           organizer,
         });
         // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        props.putDataEvent(index, newData[indexElement]); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        setData(newData);
+        props.putDataEvent(index, newData[indexElement]);
         setEditingId(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
       } else {
         // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
         newData.push(row);
-        setData(newData);
         setEditingId('');
       }
     } catch (errInfo) {
