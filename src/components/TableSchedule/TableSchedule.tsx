@@ -1,9 +1,11 @@
 import {
   CheckOutlined,
-  DeleteTwoTone,
+  CloseOutlined,
+  DeleteOutlined,
   ExclamationOutlined,
   HighlightTwoTone,
   PlusCircleTwoTone,
+  SaveOutlined,
 } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
@@ -126,7 +128,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   };
 
   const add = () => {
-    console.log(data[0]);
     const addData = { ...data[data.length] };
     addData.dateTime = moment();
     addData.type = '';
@@ -200,10 +201,16 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       if (editable) {
         return (
           <span>
-            <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-              Save
-            </Button>
-            <Button onClick={cancel}>Cancel</Button>
+            <Button
+              icon={<SaveOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+              onClick={() => save(record.key)}
+            />
+            <Button
+              onClick={cancel}
+              icon={<CloseOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+            />
           </span>
         );
       } else {
@@ -215,13 +222,14 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               disabled={editingId !== ''}
               onClick={() => edit(record)}
               icon={<HighlightTwoTone />}
-            ></Button>
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+            />
             <Button
               ghost={true}
-              className="tableSchedule__button_remove"
               onClick={() => remove(record.key)}
-              icon={<DeleteTwoTone />}
-            ></Button>
+              icon={<DeleteOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+            />
             <Rate disabled value={eventRating} />
           </span>
         );
