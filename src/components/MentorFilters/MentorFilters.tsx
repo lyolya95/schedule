@@ -49,13 +49,29 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
     const optionCreate = (data: any, tag: string) => {
         const labels: any = [];
         const option: Array<JSX.Element> = data.map((item: any) => {
-            if (labels.includes(item[tag])) {
-                return null;
+            if (item[tag] === undefined) {
+                return;
             }
-            labels.push(item[tag]);
-            return <Option value={item[tag]} key={getKey()}>{item[tag]}</Option>
+            // @ts-ignore
+            if (labels.includes(item[tag]) | item[tag].trim() === '') {
+                return;
+            }
+            const splitItem = item[tag].split(',');
+            if (splitItem.length > 1) {
+                return splitItem.map((item: string) => {
+                    if (labels.includes(item)) {
+                        return;
+                    } else {
+                        labels.push(item);
+                        return <Option value={item} key={getKey()}>{item}</Option>
+                    }
+                })
+            } else {
+                labels.push(item[tag]);
+                return <Option value={item[tag]} key={getKey()}>{item[tag]}</Option>
+            }
         })
-        return option;
+        return option.flat();
     }
 
     const onReset = () => {
