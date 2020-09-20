@@ -1,10 +1,11 @@
-import React from 'react';
-import { Input, InputNumber, Form, DatePicker, Select } from 'antd';
+import { Form, Input, InputNumber, Select, Tag } from 'antd';
 import 'antd/dist/antd.css';
+import React from 'react';
+import { types } from '../utilities/switcher';
 import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
 
-const { Option, OptGroup } = Select;
+const { Option } = Select;
 const EditableCell: React.FC<EditableCellProps> = ({
   organizers,
   editing,
@@ -30,8 +31,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
     case 'organizer':
       inputNode = (
         <Select mode="multiple" showArrow={true}>
-          {organizers.map((n: any) => (
-            <Option key={n.id} value={n.id}>
+          {organizers.map((n: any, index: number) => (
+            <Option key={index} value={n.id}>
               {n.name}
             </Option>
           ))}
@@ -39,42 +40,18 @@ const EditableCell: React.FC<EditableCellProps> = ({
       );
       break;
     case 'type':
+      const options = types.map((item: any, index: number) => {
+        return (
+          <Option value={item.type}>
+            <Tag key={index} color={item.color}>
+              {item.type}
+            </Tag>
+          </Option>
+        );
+      });
       inputNode = (
         <Select defaultValue="lime" style={{ width: 200 }}>
-          <OptGroup label="blue">
-            <Option value="live">live</Option>
-            <Option value="youtube live">youtube live</Option>
-            <Option value="self education">self education</Option>
-            <Option value="html/css academy">html/css academy</Option>
-          </OptGroup>
-          <OptGroup label="magenta">
-            <Option value="deadline">deadline</Option>
-          </OptGroup>
-          <OptGroup label="green">
-            <Option value="выдача таска">выдача таска</Option>
-            <Option value="codewars">codewars</Option>
-            <Option value="CodeJam">CodeJam</Option>
-            <Option value="js task">js task</Option>
-            <Option value="html task">html task</Option>
-            <Option value="task">task</Option>
-          </OptGroup>
-          <OptGroup label="geekblue">
-            <Option value="test">test</Option>
-            <Option value="final test">final test</Option>
-          </OptGroup>
-          <OptGroup label="purple">
-            <Option value="cross-check">cross-check</Option>
-            <Option value="markdown">markdown</Option>
-            <Option value="html">html</Option>
-          </OptGroup>
-          <OptGroup label="gold">
-            <Option value="регистрация">регистрация</Option>
-            <Option value="митап">митап</Option>
-          </OptGroup>
-          <OptGroup label="volcano">
-            <Option value="stage-interview">stage-interview</Option>
-            <Option value="interview">interview</Option>
-          </OptGroup>
+          {options}
         </Select>
       );
       break;

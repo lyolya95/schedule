@@ -40,3 +40,27 @@ export const switchTypeToColor = (typeName: string) => {
   }
   return color;
 };
+
+export const types =[
+  {type:'live', color:'blue'},
+  {type:'youtube live', color: 'blue'},
+  {type:'self education', color: 'blue'},
+  {type:'html/css academy', color: 'blue'},
+  {type:'deadline', color:'magenta'},
+  {type:'выдача таска', color:'green'},
+  {type:'codewars', color:'green'},
+  {type:'CodeJam', color:'green'},
+  {type:'js task', color:'green'},
+  {type: 'html task', color:'green'},
+  {type:'task', color:'green'},
+  {type:'test', color:'geekblue'},
+  {type:'final test', color:'geekblue'},
+  {type:'cross-check', color:'purple'},
+  {type:'markdown', color:'purple'},
+  {type:'html', color:'purple'},
+  {type:'регистрация', color:'gold'},
+  {type:'митап', color:'gold'},
+  {type:'stage-interview', color:'volcano'},
+  {type:'interview', color:'volcano'},
+];
+ 

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { getDataEvent, putDataEvent, getOrganizers, addDataEvent, deleteDataEvent } from '../../reducers';
+import { StateModel, getDataEvent, putDataEvent, getOrganizers, addDataEvent, deleteDataEvent } from '../../reducers';
+
 import { TableScheduleContainer } from './TableScheduleContainer';
 import React, { useEffect, useState } from 'react';
 import { Alert, Spin } from 'antd';
@@ -26,11 +27,13 @@ const Container = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: StateModel) => {
   return {
     data: state.data,
     isMentorStatus: state.isMentorStatus,
     columnsName: state.columnsName,
+    notEditableColumns: state.notEditableColumns,
+    ratingVotes: state.ratingVotes,
     organizers: state.organizers,
   };
 };
