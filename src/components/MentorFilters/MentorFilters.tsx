@@ -1,7 +1,7 @@
-import { Button, Collapse, DatePicker, Divider, Form, Select, Space } from 'antd';
+import { Button, Collapse, DatePicker, Divider, Form, Select } from 'antd';
 import 'antd/dist/antd.css';
 import moment from 'moment';
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { useStickyState } from './hooks/useStickyState';
 import './MentorFilters.scss';
 import { MentorFiltersProps } from './MentorFiltersProps.model';
@@ -19,6 +19,7 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
   const [datesLocalStorage, setDatesLocalStorage] = useStickyState([], 'dates');
 
   const [form] = Form.useForm();
+
   let initialKey = 1;
 
   const getKey = () => {
@@ -40,7 +41,7 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
 
   function handleChange(tag: string, value: Array<string>): void {
     const keys = Object.keys(filterFlag);
-        /*.filter((key) => filterFlag[key] !== null);*/
+    /*.filter((key) => filterFlag[key] !== null);*/
 
     const flag: any = {};
     flag[tag] = value;
@@ -91,14 +92,27 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
     return option.flat();
   };
 
-  const onReset = () => {
+  // очистка, работает на второй клик, так как область видимости, остальные set добавлять пока не стала
+  const onReset = useCallback(() => {
     form.resetFields();
     setFilterFlags({});
-  };
+    setDates([]);
+    setTags([]);
+  }, [setFilterFlags, setDates, form, setTags]);
 
   const filters = (
     <div className="filters">
-      <Form className="filters_select" form={form} name="control-hooks">
+      <Form
+        className="filters_select"
+        form={form}
+        name="control-hooks"
+        initialValues={{
+          type: tags,
+          course,
+          place,
+          datesLocalStorage: [moment(datesLocalStorage[0]), moment(datesLocalStorage[1])],
+        }}
+      >
         <Form.Item name="organizer" className="filters_select_item" key="1">
           <Select
             mode="multiple"
@@ -120,7 +134,6 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
               handleChange('type', value);
             }}
             allowClear
-            defaultValue={tags}
           >
             {optionCreate(data, 'type')}
           </Select>
@@ -134,7 +147,6 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
               handleChange('course', value);
             }}
             allowClear
-            defaultValue={course}
           >
             {optionCreate(data, 'course')}
           </Select>
@@ -148,23 +160,17 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
               handleChange('place', value);
             }}
             allowClear
-            defaultValue={place}
           >
             {optionCreate(data, 'place')}
           </Select>
         </Form.Item>
-        <Form.Item className="filters_select_item_range" key="5">
-          <Space direction="vertical" size={12}>
-            <RangePicker
-              onChange={dateChange}
-              defaultValue={[moment(datesLocalStorage[0]), moment(datesLocalStorage[1])]}
-            />
-          </Space>
+        <Form.Item name="datesLocalStorage" className="filters_select_item_range" key="5">
+          <RangePicker onChange={dateChange} />
         </Form.Item>
       </Form>
       <Form.Item key="6">
         <Button className="filters_btn" onClick={() => onReset()} htmlType="button" danger>
-          Reset
+          Clear
         </Button>
       </Form.Item>
       <Divider orientation="left" plain>

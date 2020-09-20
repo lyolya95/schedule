@@ -1,4 +1,12 @@
-import { CHANGE_MENTOR_STATUS, setDataEventsAC, SET_DATA_EVENT } from './../actions/index';
+import {
+  CHANGE_MENTOR_STATUS,
+  putDataEventAC,
+  setDataEventsAC,
+  SET_DATA_EVENT,
+  PUT_DATA_EVENT,
+  setOrganizersAC,
+  SET_ORGANIZERS,
+} from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 export interface StateModel {
@@ -7,6 +15,7 @@ export interface StateModel {
   columnsName: string[];
   notEditableColumns: string[];
   ratingVotes: number;
+  organizers: string[];
 }
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -28,7 +37,8 @@ const initialState: StateModel = {
     'id',
     'combineScore'
   ],
-  ratingVotes: 0
+  ratingVotes: 0,
+  organizers: [],
 };
 
 export const reducer = (state = initialState, action: any) => {
@@ -42,9 +52,10 @@ export const reducer = (state = initialState, action: any) => {
       let ratingVotes = 0;
       action.events.map((event: any) => {
         if (event.organizer) {
-          const eventMentorArr = event?.organizer?.split(',').map((mentorId: string) => {
-            const mentor = action?.organizers?.find((mentor: any) => mentor.id === mentorId);
-            return mentor?.name;
+          const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
+            const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
+
+            return !mentor ? ' ' : mentor.name; // проверка если ввел имя которого нет в манторах тогда в имени вернется пустая строка
           });
           event.organizer = eventMentorArr.join(', ');
         }
@@ -62,6 +73,12 @@ export const reducer = (state = initialState, action: any) => {
       });
       return { ...state, data: [...action.events], ratingVotes: ratingVotes };
     }
+    case PUT_DATA_EVENT: {
+      return { ...state };
+    }
+    case SET_ORGANIZERS: {
+      return { ...state, organizers: [...action.organizers] };
+    }
     default:
       return state;
   }
@@ -71,4 +88,12 @@ export const getDataEvent = () => async (dispatch: any) => {
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
+};
+export const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
+  await scheduleAPI.updateDataEvent(idEvent, bodyData);
+  dispatch(putDataEventAC(idEvent, bodyData));
+};
+export const getOrganizers = () => async (dispatch: any) => {
+  const organizers = await scheduleAPI.getDataOrganizers();
+  dispatch(setOrganizersAC(organizers));
 };

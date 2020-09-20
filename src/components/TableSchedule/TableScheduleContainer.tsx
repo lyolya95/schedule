@@ -6,7 +6,7 @@ import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
 
 export const TableScheduleContainer = (props: any) => {
-  const { columnsName, notEditableColumns, data, isMentorStatus, ratingVotes } = props;
+  const { columnsName, notEditableColumns, data, isMentorStatus, ratingVotes, putDataEvent, organizers } = props;
   const userColumnsName = isMentorStatus ?  columnsName.filter((item:string) => item!=='combineScore') : columnsName; 
   const columnsNameMap = userColumnsName.map((n: string) => ({ value: n }));
   
@@ -59,6 +59,8 @@ export const TableScheduleContainer = (props: any) => {
       data={data}
       isMentorStatus={isMentorStatus}
       ratingVotes={ratingVotes}
+      putDataEvent={putDataEvent}
+      organizers={organizers}
     />
   );
 };
