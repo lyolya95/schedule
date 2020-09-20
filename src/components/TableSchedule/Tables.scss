@@ -1,41 +1,70 @@
 $buttonWidth: 250px;
 
 .select-dropdown-columns {
-    margin: 0;
-    align-self: flex-start;
-    width: 100%;
+  margin: 0;
+  align-self: flex-start;
+  width: 100%;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 .tableSchedule__button_add {
-    margin-left: 25px;
+  margin-left: 25px;
+}
+
+.hidden-btn-row {
+  display: flex;
+  margin: 10px 0;
+
+  .hide-btn {
+    height: 40px;
+
+    .icon {
+      color: #eb2f96;
+    }
+  }
+
+  .unhide-btn {
+    height: 40px;
+
+    .icon {
+      color: #2596ff;
+    }
+  }
 }
 
 .ant-divider-inner-text {
-    padding: 0 1em 0 0;
-    font-weight: bold;
+  padding: 0 1em 0 0;
+  font-weight: bold;
 }
 
 .ant-divider-horizontal.ant-divider-with-text-left::before {
-    top: 0;
-    width: 0;
+  top: 0;
+  width: 0;
 }
 
 .select-dropdown-columns {
-    .ant-tag {
-        background-color: #e6f7ff;
-    }
+  .ant-tag {
+    background-color: #e6f7ff;
+  }
 
-    .ant-select-selector {
-        padding: 10px;
-    }
+  .ant-select-selector {
+    padding: 1px 4px;
+  }
 
-    .ant-select-arrow {
-        font-size: 26px;
-        color: #1890ff;
-        width: 26px;
-        height: 26px;
-        margin-top: -13px;
-    }
+  .ant-select-arrow {
+    font-size: 18px;
+    color: #1890ff;
+    width: 26px;
+    height: 26px;
+    margin-top: -9px;
+  }
+}
+
+.ant-table-row {
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .ant-btn-primary {

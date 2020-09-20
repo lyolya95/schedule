@@ -75,9 +75,9 @@ export const reducer = (state = initialState, action: any) => {
     case SET_DATA_EVENT: {
       action.events.map((event: any) => {
         if (event.organizer) {
-          const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
-            const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
-            return mentor.name;
+          const eventMentorArr = event?.organizer?.split(',').map((mentorId: string) => {
+            const mentor = action?.organizers?.find((mentor: any) => mentor.id === mentorId);
+            return mentor?.name;
           });
           event.organizer = eventMentorArr.join(', ');
         }

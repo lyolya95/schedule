@@ -1,5 +1,6 @@
 import { Button, Collapse, DatePicker, Divider, Form, Select, Space } from 'antd';
 import 'antd/dist/antd.css';
+import moment from 'moment';
 import React, { FC } from 'react';
 import { useStickyState } from './hooks/useStickyState';
 import './MentorFilters.scss';
@@ -12,10 +13,10 @@ const { Panel } = Collapse;
 export const MentorFilters: FC<MentorFiltersProps> = (props) => {
   const { data, setFilterFlags, filterFlag, setDates } = props;
 
-  const [organizer, setOrganizer] = useStickyState('', 'organizer');
   const [tags, setTags] = useStickyState('', 'tags');
   const [course, setCourse] = useStickyState('', 'course');
   const [place, setPlace] = useStickyState('', 'place');
+  const [datesLocalStorage, setDatesLocalStorage] = useStickyState('', 'dates');
 
   const [form] = Form.useForm();
   let initialKey = 1;
@@ -25,6 +26,17 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
     initialKey++;
     return key;
   };
+
+  function dateChange(value: any): void {
+    if (value === null) {
+      setDates([]);
+      setDatesLocalStorage([]);
+      return;
+    }
+    const dates = value?.map((item: any) => item._d);
+    setDatesLocalStorage(dates);
+    setDates(dates);
+  }
 
   function handleChange(tag: string, value: Array<string>): void {
     const keys = Object.keys(filterFlag);
@@ -41,29 +53,40 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
     setFilterFlags(newFlag);
   }
 
-  function dateChange(value: any): void {
-    if (value === null) {
-      setDates([]);
-      return;
-    }
-    const dates = value.map((item: any) => item._d);
-    setDates(dates);
-  }
-
   const optionCreate = (data: any, tag: string) => {
     const labels: any = [];
     const option: Array<JSX.Element> = data.map((item: any) => {
-      if (labels.includes(item[tag])) {
+      if (item[tag] === undefined) {
         return null;
       }
-      labels.push(item[tag]);
-      return (
-        <Option value={item[tag]} key={getKey()}>
-          {item[tag]}
-        </Option>
-      );
+      // @ts-ignore
+      if (labels.includes(item[tag]) | (item[tag].trim() === '')) {
+        return null;
+      }
+      const splitItem = item[tag].split(',');
+      if (splitItem.length > 1) {
+        return splitItem.map((item: string) => {
+          if (labels.includes(item)) {
+            return null;
+          } else {
+            labels.push(item);
+            return (
+              <Option value={item} key={getKey()}>
+                {item}
+              </Option>
+            );
+          }
+        });
+      } else {
+        labels.push(item[tag]);
+        return (
+          <Option value={item[tag]} key={getKey()}>
+            {item[tag]}
+          </Option>
+        );
+      }
     });
-    return option;
+    return option.flat();
   };
 
   const onReset = () => {
@@ -79,11 +102,9 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
             mode="multiple"
             placeholder="Organizer"
             onChange={(value: string[]) => {
-              setOrganizer(value);
               handleChange('organizer', value);
             }}
             allowClear
-            defaultValue={organizer}
           >
             {optionCreate(data, 'organizer')}
           </Select>
@@ -132,7 +153,10 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
         </Form.Item>
         <Form.Item className="filters_select_item_range" key="5">
           <Space direction="vertical" size={12}>
-            <RangePicker onChange={dateChange} />
+            <RangePicker
+              onChange={dateChange}
+              defaultValue={[moment(datesLocalStorage[0]), moment(datesLocalStorage[1])]}
+            />
           </Space>
         </Form.Item>
       </Form>
