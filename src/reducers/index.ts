@@ -42,10 +42,9 @@ export const reducer = (state = initialState, action: any) => {
       let ratingVotes = 0;
       action.events.map((event: any) => {
         if (event.organizer) {
-          const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
-            const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
-            const mentorName =  mentor=== undefined ? mentorId : mentor.name;
-            return mentorName;
+          const eventMentorArr = event?.organizer?.split(',').map((mentorId: string) => {
+            const mentor = action?.organizers?.find((mentor: any) => mentor.id === mentorId);
+            return mentor?.name;
           });
           event.organizer = eventMentorArr.join(', ');
         }
