@@ -196,6 +196,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const mentorOperationData = {
     title: 'Edit',
     dataIndex: 'operation',
+    fixed: 'right',
     render: (_: any, record: any) => {
       const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
       if (editable) {
@@ -221,8 +222,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               ghost={true}
               disabled={editingId !== ''}
               onClick={() => edit(record)}
-              icon={<HighlightTwoTone />}
-              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+              icon={<HighlightTwoTone twoToneColor="#52c41a" />}
+              style={{ fontSize: '16px', border: '1px solid #b7eb8f', color: '##52c41a' }}
             />
             <Button
               ghost={true}
@@ -266,6 +267,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const studentOperationData = {
     title: '',
     dataIndex: 'operation',
+    fixed: 'right',
     render: (_: any, record: any) => {
       const key = record.key;
       const isVoted = eventRating && eventRating[key] && eventRating[key].voted ? true : false;
@@ -491,7 +493,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 1500, y: 500 }}
+        scroll={{ x: 2500, y: 500 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
