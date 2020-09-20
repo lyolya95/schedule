@@ -18,7 +18,8 @@ export const TableSchedule = (props: any) => {
 
   const edit = (record: any) => {
     //при нажатии на кнопку edit
-    form.setFieldsValue({ ...record }); //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
+    form.setFieldsValue({ ...record });
+    //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
     setEditingId(record.id); // указывает какая из строк сейчас редактируется
   };
   const add = () => {
@@ -45,16 +46,15 @@ export const TableSchedule = (props: any) => {
     // при нажатии кнопки сохранить
     try {
       const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
+      const organizer = row.organizer.join(',');
       const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
       const index = newData.find((item) => id === item.id).id; // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
-
       if (index.length === 20) {
         const item = newData.find((item) => index === item.id); // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
         if (row['date-picker']) {
           // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
-          const selectDate = row['date-picker']._d.toISOString();
+          //const selectDate = row['date-picker']._d.toISOString();
           // item.dateTime = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)} ${}`;
-          debugger;
           item.dateTime = '2020-09-01 23:45';
           //('2020-09-11T19:24:01.734Z');
         }
@@ -63,12 +63,11 @@ export const TableSchedule = (props: any) => {
           //заменяем в массиве элемент под номером index (точнее его сначала удаляем потом добавляем ...item, ...row) который пришел с данными (всеми данными таблицы всех строк проиндексированные)
           ...item, // что было изначально
           ...row, // если что то поменялось то тут мы перезатрем что было в ...item,
+          organizer,
         });
         // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-
-        setData(newData);
-
         props.putDataEvent(index, newData[indexElement]); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
+        setData(newData);
         setEditingId(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
       } else {
         // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
@@ -145,6 +144,7 @@ export const TableSchedule = (props: any) => {
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
+        organizers: props.organizers,
       }),
     };
   });

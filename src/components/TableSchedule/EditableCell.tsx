@@ -6,6 +6,7 @@ import { EditableCellProps } from './TableSchedule.model';
 
 const { Option, OptGroup } = Select;
 const EditableCell: React.FC<EditableCellProps> = ({
+  organizers,
   editing,
   dataIndex,
   title,
@@ -16,12 +17,24 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   let inputNode;
+
   switch (dataIndex) {
     case 'score':
       inputNode = <InputNumber />;
       break;
     case 'dateTime':
       inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
+      break;
+    case 'organizer':
+      inputNode = (
+        <Select defaultValue=" " mode="multiple">
+          {organizers.map((n: any) => (
+            <Option key={n.id} value={n.id}>
+              {n.name}
+            </Option>
+          ))}
+        </Select>
+      );
       break;
     case 'type':
       inputNode = (

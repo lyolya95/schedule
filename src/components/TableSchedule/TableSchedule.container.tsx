@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getDataEvent, putDataEvent } from '../../reducers';
+import { getDataEvent, putDataEvent, getOrganizers } from '../../reducers';
 import { TableScheduleContainer } from './TableScheduleContainer';
 import React, { useEffect, useState } from 'react';
 import { Alert, Spin } from 'antd';
@@ -10,6 +10,7 @@ const Container = (props: any) => {
   useEffect(() => {
     if (props.data.length < 1) {
       props.getDataEvent();
+      props.getOrganizers();
       setPreloader(true);
     } else {
       setPreloader(false);
@@ -30,7 +31,8 @@ const mapStateToProps = (state: any) => {
     data: state.data,
     isMentorStatus: state.isMentorStatus,
     columnsName: state.columnsName,
+    organizers: state.organizers,
   };
 };
 
-export const TableSchedule = connect(mapStateToProps, { getDataEvent, putDataEvent })(Container);
+export const TableSchedule = connect(mapStateToProps, { getDataEvent, putDataEvent, getOrganizers })(Container);
