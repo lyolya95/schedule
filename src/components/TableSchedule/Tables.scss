@@ -55,14 +55,16 @@ $buttonWidth: 250px;
     }
 }
 
-.ant-table-cell{
+/*.ant-table-cell{
     .ant-btn,.ant-btn:hover, .ant-btn:focus,.ant-btn:active{
         border:none;
     }
     .anticon-warning, .anticon-check-square{font-size:26px;}
     .anticon-warning:hover, .anticon-check-square:hover{font-size:30px}
-}
+}*/
 
+.mainEvent{border:1px solid #1890ff; color:#1890ff;}
+.doneEvent{border:1px solid #52c41a;color:#52c41a}
 .ant-table-row-main{background-color:#ff9898;}
 .ant-table-tbody > tr.ant-table-row-main:hover > td{background-color:#ff8686}
 .ant-table-row-done{background-color:#7dc45a}
