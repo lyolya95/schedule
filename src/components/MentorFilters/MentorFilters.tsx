@@ -13,10 +13,10 @@ const { Panel } = Collapse;
 export const MentorFilters: FC<MentorFiltersProps> = (props) => {
   const { data, setFilterFlags, filterFlag, setDates } = props;
 
-  const [tags, setTags] = useStickyState('', 'tags');
-  const [course, setCourse] = useStickyState('', 'course');
-  const [place, setPlace] = useStickyState('', 'place');
-  const [datesLocalStorage, setDatesLocalStorage] = useStickyState('', 'dates');
+  const [tags, setTags] = useStickyState([], 'tags');
+  const [course, setCourse] = useStickyState([], 'course');
+  const [place, setPlace] = useStickyState([], 'place');
+  const [datesLocalStorage, setDatesLocalStorage] = useStickyState([], 'dates');
 
   const [form] = Form.useForm();
   let initialKey = 1;
@@ -40,6 +40,8 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
 
   function handleChange(tag: string, value: Array<string>): void {
     const keys = Object.keys(filterFlag);
+        /*.filter((key) => filterFlag[key] !== null);*/
+
     const flag: any = {};
     flag[tag] = value;
     if (keys.includes(tag)) {
@@ -109,7 +111,7 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
             {optionCreate(data, 'organizer')}
           </Select>
         </Form.Item>
-        <Form.Item name="tags" className="filters_select_item" key="2">
+        <Form.Item name="type" className="filters_select_item" key="2">
           <Select
             mode="multiple"
             placeholder="Type"
