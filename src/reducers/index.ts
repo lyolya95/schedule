@@ -9,69 +9,35 @@ import {
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
-// export interface StateModel {
-//   isShowCalendarOrTable: boolean;
-//   data: [
-//     {
-//       id: string;
-//       name: string;
-//       course: string;
-//       dateTime: string;
-//       type: string;
-//       timeZone: string;
-
-//       organizer?: string;
-//       descriptionUrl?: string;
-//       timeToComplete?: string;
-//       place?: string;
-//       week?: number;
-//       maxScore?: number;
-//       taskContent?: string;
-//       isShowFeedback?: boolean;
-//     }
-//   ];
-//   organizers: any;
-// }
-// const initialState: StateModel = {
-//   isShowCalendarOrTable: false,
-//   data: [
-//     {
-//       id: '',
-//       name: '',
-//       course: '',
-//       dateTime: '',
-//       type: '',
-//       timeZone: '',
-//     },
-//   ],
-//   organizers: [],
-// };
-
 export interface StateModel {
   isMentorStatus: boolean;
   data: any;
   columnsName: string[];
+  notEditableColumns: string[];
+  ratingVotes: number;
   organizers: string[];
 }
 const initialState: StateModel = {
   isMentorStatus: false,
   data: [],
   columnsName: [
-    'id',
-    'name',
-    'course',
     'dateTime',
-    //'type',   /* удалил так как возникают тогда две колонки с type из-за добавления в TableSchedule.tsx после строчки с "...props.columnsName," */
     'timeZone',
-    'organizer',
-    'descriptionUrl',
     'timeToComplete',
+    'type',  
+    'name',
+    'descriptionUrl',
+    'course',
+    'organizer',
     'place',
     'week',
-    'maxScore',
-    'taskContent',
-    'isShowFeedback',
+    'combineScore',
   ],
+  notEditableColumns: [
+    'id',
+    'combineScore'
+  ],
+  ratingVotes: 0,
   organizers: [],
 };
 
@@ -83,6 +49,7 @@ export const reducer = (state = initialState, action: any) => {
         isMentorStatus: !state.isMentorStatus,
       };
     case SET_DATA_EVENT: {
+      let ratingVotes = 0;
       action.events.map((event: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
@@ -92,10 +59,19 @@ export const reducer = (state = initialState, action: any) => {
           });
           event.organizer = eventMentorArr.join(', ');
         }
+        if((event.score && event.score>0) || (event.maxScore && event.maxScore>0)){
+          const score = event.score && event.score>0 ? event.score : 0;
+          const maxScore = event.maxScore && event.maxScore>0 ? event.maxScore : 0;
+          const coefficient = event.coefficient && event.coefficient>0 ? ', coefficient:'+event.coefficient : '';
+          event.combineScore =  score+'/'+maxScore+coefficient;
+        }
+        event.key = event.id;
+        if(event.rating && event.rating>0){
+          ratingVotes++;
+        }
         return event;
       });
-
-      return { ...state, data: [...action.events] };
+      return { ...state, data: [...action.events], ratingVotes: ratingVotes };
     }
     case PUT_DATA_EVENT: {
       return { ...state };
