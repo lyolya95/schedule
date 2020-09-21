@@ -8,7 +8,7 @@ import {
   SaveOutlined,
 } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
-import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
+import { Alert, Button, Form, Modal, Rate, Spin, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
@@ -99,7 +99,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.id === editingId; // указываем (true/false) какое поле сейчас находится в формате редактирования
-
+  const [isLoading, setIsLoading] = useState(false);
   const visibleData = data // формируем отображаемые данные для таблицы
     .filter((item: any) => hasFilterFlag(item, filerFlags))
     .filter((item: any) => isInDateRange(item.dateTime, dates))
@@ -118,6 +118,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   };
 
   const add = async () => {
+    setIsLoading(true);
     //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
     const addData = {
       id: '',
@@ -147,11 +148,13 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
     await props.addDataEvent(addData);
     await props.getDataEvent();
-    edit(props.data[0]); // !!!Временное решение, сразу открывается редактирование первого в массиве данных елемента а нужно именно тот который равен id нового добавленного
+    setIsLoading(false);
   };
   const remove = async (id: React.Key) => {
+    setIsLoading(true);
     await props.deleteDataEvent(id);
-    props.getDataEvent();
+    await props.getDataEvent();
+    setIsLoading(false);
   };
 
   const cancel = () => {
@@ -159,6 +162,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   };
 
   const save = async (id: React.Key) => {
+    setIsLoading(true);
     // при нажатии кнопки сохранить
     try {
       const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
@@ -185,7 +189,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           organizer,
         });
         // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        props.putDataEvent(index, newData[indexElement]);
+        await props.putDataEvent(index, newData[indexElement]);
         setEditingId(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
       } else {
         // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
@@ -196,6 +200,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       // обработка ошибки если нажали на кнопку Save, что то пошло не так, то смотреть, что именно в консоль
       console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
     }
+    setIsLoading(false);
   };
 
   const mentorOperationData = {
@@ -475,6 +480,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         changeColumnsSelect={changeColumnsSelect}
       />
       <Table
+        loading={isLoading}
         size="small"
         components={{
           body: {
