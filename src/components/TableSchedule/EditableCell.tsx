@@ -42,7 +42,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     case 'type':
       const options = types.map((item: any, index: number) => {
         return (
-          <Option value={item.type}>
+          <Option key={index} value={item.type}>
             <Tag key={index} color={item.color}>
               {item.type}
             </Tag>

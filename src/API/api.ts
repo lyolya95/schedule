@@ -18,4 +18,10 @@ export const scheduleAPI = {
   updateDataEvent(eventId: string, bodyData: object) {
     return instance.put(`event/${eventId}`, bodyData);
   },
+  addDataEvent(bodyData: object) {
+    return instance.post('event', bodyData);
+  },
+  deleteDataEvent(eventId: string) {
+    return instance.delete(`event/${eventId}`);
+  },
 };

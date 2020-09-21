@@ -6,10 +6,21 @@ import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
 
 export const TableScheduleContainer = (props: any) => {
-  const { columnsName, notEditableColumns, data, isMentorStatus, ratingVotes, putDataEvent, organizers } = props;
-  const userColumnsName = isMentorStatus ?  columnsName.filter((item:string) => item!=='combineScore') : columnsName; 
+  const {
+    columnsName,
+    notEditableColumns,
+    data,
+    isMentorStatus,
+    ratingVotes,
+    putDataEvent,
+    organizers,
+    getDataEvent,
+    addDataEvent,
+    deleteDataEvent,
+  } = props;
+  const userColumnsName = isMentorStatus ? columnsName.filter((item: string) => item !== 'combineScore') : columnsName;
   const columnsNameMap = userColumnsName.map((n: string) => ({ value: n }));
-  
+
   //создал контейнер для поднятия состояния таких как columnsName на верхний уровень, для того что бы он был доступен и таблице и селектуОтображения
   const [mapsColumnsName, setMapColumnsName] = useState([]);
   const defaultColumns = userColumnsName;
@@ -23,28 +34,30 @@ export const TableScheduleContainer = (props: any) => {
       </Tag>
     );
   };
-  
+
   const changeColumnsSelect = (value: any) => {
-      const mapColumns = value.map((n: any) => ({ title: n, dataIndex: n, editable: notEditableColumns.findIndex((item:string) => item === n) === -1 ? true : false}));
-      //({ title: toUpperCase(n), dataIndex: n, editable: true }));
-      setMapColumnsName(mapColumns);
+    const mapColumns = value.map((n: any) => ({
+      title: n,
+      dataIndex: n,
+      editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
+    }));
+    //({ title: toUpperCase(n), dataIndex: n, editable: true }));
+    setMapColumnsName(mapColumns);
   };
-  
- 
-//@TOdo не убирается после изменения isMentorStatus поле Score в выбранных select
+
+  //@TOdo не убирается после изменения isMentorStatus поле Score в выбранных select
 
   useEffect(() => {
-    const userColumns = isMentorStatus ?  mapsColumnsName.filter((item:any) => item.title!=='combineScore')
-                                        : mapsColumnsName; 
-     setMapColumnsName(userColumns);
-   }, [isMentorStatus]);
+    const userColumns = isMentorStatus ? mapsColumnsName.filter((item: any) => item.title !== 'combineScore') : mapsColumnsName;
+    setMapColumnsName(userColumns);
+  }, [isMentorStatus]);
 
   useEffect(() => {
     const mapColumns: any = defaultColumns.map((n: any) => ({
       //title: toUpperCase(n),
       title: n,
       dataIndex: n,
-      editable: notEditableColumns.findIndex((item:string) => item === n) === -1 ? true : false,
+      editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
     }));
     setMapColumnsName(mapColumns);
   }, []);
@@ -56,6 +69,9 @@ export const TableScheduleContainer = (props: any) => {
       defaultColumns={defaultColumns}
       optionsKeyOfEvents={columnsNameMap}
       changeColumnsSelect={changeColumnsSelect}
+      getDataEvent={getDataEvent}
+      addDataEvent={addDataEvent}
+      deleteDataEvent={deleteDataEvent}
       data={data}
       isMentorStatus={isMentorStatus}
       ratingVotes={ratingVotes}
