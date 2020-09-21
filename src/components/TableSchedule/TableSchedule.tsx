@@ -8,7 +8,7 @@ import {
   SaveOutlined,
 } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
-import { Alert, Button, Form, Modal, Rate, Spin, Table, Tag } from 'antd';
+import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
@@ -27,6 +27,11 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     changeColumnsSelect,
     isMentorStatus,
     ratingVotes,
+    addDataEvent,
+    getDataEvent,
+    deleteDataEvent,
+    putDataEvent,
+    organizers,
   } = props;
   // localStorage
   const course = JSON.parse(localStorage['course'] || null);
@@ -96,74 +101,56 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     return false;
   };
 
+  // QWES ______________________________________________________
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
   const isEditing = (record: any) => record.id === editingId; // указываем (true/false) какое поле сейчас находится в формате редактирования
   const [isLoading, setIsLoading] = useState(false);
-  const visibleData = data // формируем отображаемые данные для таблицы
-    .filter((item: any) => hasFilterFlag(item, filerFlags))
-    .filter((item: any) => isInDateRange(item.dateTime, dates))
-    .filter((item: any) => !hiddenData.includes(item.key));
-
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [clickingRow, setClickingRow] = useState<any | null>();
-  // надо взять с localstorage первоначальные данные
-  const [eventRating, setEventRating] = useState<any>();
-
   const edit = (record: any) => {
-    //при нажатии на кнопку edit
     form.setFieldsValue({ ...record });
     //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
     setEditingId(record.id); // указывает какая из строк сейчас редактируется
   };
-
   const add = async () => {
     setIsLoading(true);
-    //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
     const addData = {
       id: '',
-      name: 'string',
-      course: 'string',
-      dateTime: 'string',
-      type: 'string',
-      timeZone: 'string',
-      organizer: 'string',
-      descriptionUrl: 'string',
-      timeToComplete: 'string',
-      place: 'string',
-      week: 123,
-      maxScore: 123,
-      taskContent: 'string',
+      name: '',
+      course: '',
+      dateTime: '2020-09-01 00:00',
+      type: '',
+      timeZone: '+0',
+      organizer: '',
+      descriptionUrl: '',
+      timeToComplete: '1 day',
+      place: 'online',
+      week: 2,
+      maxScore: 10,
+      taskContent: '',
       isShowFeedback: false,
     };
-
-    //______________________________________________ генерация ключа
     let password: string = '';
     var symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789№?_';
     for (let i = 0; i < 20; i++) {
       password += symbols.charAt(Math.floor(Math.random() * symbols.length));
     }
     addData.id = password;
-    //_____________________________________________
-
-    await props.addDataEvent(addData);
-    await props.getDataEvent();
+    await addDataEvent(addData);
+    await getDataEvent();
     setIsLoading(false);
   };
   const remove = async (id: React.Key) => {
     setIsLoading(true);
-    await props.deleteDataEvent(id);
-    await props.getDataEvent();
+    await deleteDataEvent(id);
+    await getDataEvent();
     setIsLoading(false);
   };
 
   const cancel = () => {
     setEditingId('');
   };
-
   const save = async (id: React.Key) => {
     setIsLoading(true);
-    // при нажатии кнопки сохранить
     try {
       const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
       let organizer = '';
@@ -189,7 +176,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           organizer,
         });
         // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        await props.putDataEvent(index, newData[indexElement]);
+        await putDataEvent(index, newData[indexElement]);
         setEditingId(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
       } else {
         // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
@@ -202,6 +189,17 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     }
     setIsLoading(false);
   };
+  //QWES______________________________________________________________________________________________________________
+
+  const visibleData = data // формируем отображаемые данные для таблицы
+    .filter((item: any) => hasFilterFlag(item, filerFlags))
+    .filter((item: any) => isInDateRange(item.dateTime, dates))
+    .filter((item: any) => !hiddenData.includes(item.key));
+
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [clickingRow, setClickingRow] = useState<any | null>();
+  // надо взять с localstorage первоначальные данные
+  const [eventRating, setEventRating] = useState<any>();
 
   const mentorOperationData = {
     title: 'Edit',
@@ -346,7 +344,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
-        organizers: props.organizers,
+        organizers,
       }),
     };
   });
