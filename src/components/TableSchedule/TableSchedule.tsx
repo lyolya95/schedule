@@ -27,11 +27,16 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     changeColumnsSelect,
     isMentorStatus,
     ratingVotes,
-    addDataEvent,
-    getDataEvent,
-    deleteDataEvent,
-    putDataEvent,
     organizers,
+    form,
+    editingId,
+    isEditing,
+    isLoading,
+    edit,
+    cancel,
+    add,
+    remove,
+    save,
   } = props;
   // localStorage
   const course = JSON.parse(localStorage['course'] || null);
@@ -100,96 +105,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     }
     return false;
   };
-
-  // QWES ______________________________________________________
-  const [form] = Form.useForm(); // хранится общий объект для формы ant
-  const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
-  const isEditing = (record: any) => record.id === editingId; // указываем (true/false) какое поле сейчас находится в формате редактирования
-  const [isLoading, setIsLoading] = useState(false);
-  const edit = (record: any) => {
-    form.setFieldsValue({ ...record });
-    //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
-    setEditingId(record.id); // указывает какая из строк сейчас редактируется
-  };
-  const add = async () => {
-    setIsLoading(true);
-    const addData = {
-      id: '',
-      name: '',
-      course: '',
-      dateTime: '2020-09-01 00:00',
-      type: '',
-      timeZone: '+0',
-      organizer: '',
-      descriptionUrl: '',
-      timeToComplete: '1 day',
-      place: 'online',
-      week: 2,
-      maxScore: 10,
-      taskContent: '',
-      isShowFeedback: false,
-    };
-    let password: string = '';
-    var symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789№?_';
-    for (let i = 0; i < 20; i++) {
-      password += symbols.charAt(Math.floor(Math.random() * symbols.length));
-    }
-    addData.id = password;
-    await addDataEvent(addData);
-    await getDataEvent();
-    setIsLoading(false);
-  };
-  const remove = async (id: React.Key) => {
-    setIsLoading(true);
-    await deleteDataEvent(id);
-    await getDataEvent();
-    setIsLoading(false);
-  };
-
-  const cancel = () => {
-    setEditingId('');
-  };
-  const save = async (id: React.Key) => {
-    setIsLoading(true);
-    try {
-      const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
-      let organizer = '';
-      if (row.organizer instanceof Array) {
-        organizer = row.organizer.join(',');
-      }
-      const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
-      const index = newData.find((item) => id === item.id).id; // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
-      if (index.length === 20) {
-        const item = newData.find((item) => index === item.id); // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
-        if (row['date-picker']) {
-          // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
-          //const selectDate = row['date-picker']._d.toISOString();
-          // item.dateTime = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)} ${}`;
-          item.dateTime = '2020-09-01 23:45';
-          //('2020-09-11T19:24:01.734Z');
-        }
-        const indexElement = newData.findIndex((n) => index === n.id);
-        newData.splice(indexElement, 1, {
-          //заменяем в массиве элемент под номером index (точнее его сначала удаляем потом добавляем ...item, ...row) который пришел с данными (всеми данными таблицы всех строк проиндексированные)
-          ...item, // что было изначально
-          ...row, // если что то поменялось то тут мы перезатрем что было в ...item,
-          organizer,
-        });
-        // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        await putDataEvent(index, newData[indexElement]);
-        setEditingId(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
-      } else {
-        // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
-        newData.push(row);
-        setEditingId('');
-      }
-    } catch (errInfo) {
-      // обработка ошибки если нажали на кнопку Save, что то пошло не так, то смотреть, что именно в консоль
-      console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
-    }
-    setIsLoading(false);
-  };
-  //QWES______________________________________________________________________________________________________________
 
   const visibleData = data // формируем отображаемые данные для таблицы
     .filter((item: any) => hasFilterFlag(item, filerFlags))
