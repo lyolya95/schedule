@@ -1,31 +1,50 @@
-import React, { useState, useEffect, FC } from 'react';
-import { Table, Form, Button, Tag, Modal, Rate } from 'antd';
-import 'antd/dist/antd.css';
-import { IAgeMap } from './TableSchedule.model';
-import EditableCell from './EditableCell';
-import { DeleteTwoTone, HighlightTwoTone, PlusCircleTwoTone, CheckSquareTwoTone,ExclamationCircleOutlined, CheckOutlined, WarningTwoTone, ExclamationOutlined  } from '@ant-design/icons';
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  ExclamationOutlined,
+  HighlightTwoTone,
+  PlusCircleTwoTone,
+  SaveOutlined,
+} from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
+import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
+import 'antd/dist/antd.css';
+import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
 import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";
 import moment from "moment";
+import {IAgeMap} from "./TableSchedule.model";
+import EditableCell from "./EditableCell";
 
 export const TableSchedule: FC<any> = React.memo((props) => {
-  const {columnsName, tagRender, defaultColumns, optionsKeyOfEvents, changeColumnsSelect, isMentorStatus, ratingVotes } = props;
-  console.log('Data', props.data);
- // localStorage
+  const {
+    initialData,
+    columnsName,
+    tagRender,
+    defaultColumns,
+    optionsKeyOfEvents,
+    changeColumnsSelect,
+    isMentorStatus,
+    ratingVotes,
+    organizers,
+    form,
+    editingId,
+    isEditing,
+    isLoading,
+    edit,
+    cancel,
+    add,
+    remove,
+    save,
+  } = props;
+  // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
   const type = JSON.parse(localStorage['tags'] || null);
   const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
-  // формируем стартовые данные(добавляем .key = .id для рядов таблицы)
-  const initialData = props.data.map((item: any) => {
-    return {
-      ...item,
-      key: item.id,
-    };
-  });
 
   // данные для фильтрации
   const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
@@ -84,9 +103,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       return true;
     }
     const compareDate = moment(date);
-    //console.log('Moment', compareDate.format("DD.MM.YYYY HH:mm"));
     const firstDate = moment(dateRange[0]);
-    //console.log('Moment range1', firstDate.format("DD.MM.YYYY HH:mm"));
     const lastDate = moment(dateRange[1]);
     if (firstDate < compareDate && compareDate < lastDate) {
       return true;
@@ -94,13 +111,14 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     return false;
   };
 
+
   const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
       return moment(time).add(timeGap).add(timezone).format(format);
   }
 
-  const [form] = Form.useForm(); // хранится общий объект для формы ant
-  const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
-  const isEditing = (record: any) => record.id === editingId; // указываем (true/false) какое поле сейчас находится в формате редактирования
+  //const [form] = Form.useForm(); // хранится общий объект для формы ant
+  //const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
+  //const isEditing = (record: any) => record.id === editingId; // указываем (true/false) какое поле сейчас находится в формате редактирования
 
   const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
 
@@ -119,205 +137,136 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const [clickingRow, setClickingRow] = useState<any | null>();
   // надо взять с localstorage первоначальные данные
   const [eventRating, setEventRating] = useState<any>();
-  
-  const edit = (record: any) => {
-    //при нажатии на кнопку edit
-    form.setFieldsValue({ ...record });
-    //(при редактировании) заполняет поля input в форме значениями, что хранились ранее
-    setEditingId(record.id); // указывает какая из строк сейчас редактируется
-  };
 
-  const add = () => {
-    //!!! есть баг нужно првильно придумать создание нового ключа что бы не указывались которые сейчас уже имеются
-    const addData = { ...data[0] }; // создаем копию! данных одной строчки
-    addData.id = String(data.length + 1); // временное решение создания нового уникального ключа
-    const newData = [...data, addData]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание) и наша новая строчка добавляется в конце
-    setData(newData); // все сохранения изменения что мы сделали
-    edit(addData); // запускаем редактирование
-  };
-  const remove = (id: React.Key) => {
-    // при нажатии кнопки remove
-    const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
-    const index = newData.findIndex((item) => id === item.id); // Указывает индекс массива пришедших данных
-    newData.splice(index, 1); // удаляем строку под индексем index одну строку 1
-    setData(newData); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-  };
-
-  const cancel = () => {
-    //при нажатии на кнопку edit
-    setEditingId(''); // отменяет редактирование
-  };
-
-  const save = async (id: React.Key) => {
-    // при нажатии кнопки сохранить
-    try {
-      const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
-      let organizer = '';
-      if (row.organizer instanceof Array) {
-        organizer = row.organizer.join(',');
-      }
-      const newData = [...data]; // хранятся все данные всех строк таблиц (дата, урок, адрес, задание)
-      const index = newData.find((item) => id === item.id).id; // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
-      if (index.length === 20) {
-        debugger;
-        const item = newData.find((item) => index === item.id); // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
-        if (row['date-picker']) {
-          // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
-          //const selectDate = row['date-picker']._d.toISOString();
-          // item.dateTime = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)} ${}`;
-          item.dateTime = '2020-09-01 23:45';
-          //('2020-09-11T19:24:01.734Z');
-        }
-        const indexElement = newData.findIndex((n) => index === n.id);
-        newData.splice(indexElement, 1, {
-          //заменяем в массиве элемент под номером index (точнее его сначала удаляем потом добавляем ...item, ...row) который пришел с данными (всеми данными таблицы всех строк проиндексированные)
-          ...item, // что было изначально
-          ...row, // если что то поменялось то тут мы перезатрем что было в ...item,
-          organizer,
-        });
-        // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        props.putDataEvent(index, newData[indexElement]); // все сохранения изменения что мы сделали при помощи splice "сэтаем" в originData (наши данные) которые хронятся уже в data
-        setData(newData);
-        setEditingId(''); // указываем (устанавливаем) что в режиме редактирования ни какое поле сейчас не учавствует
+  const mentorOperationData = {
+    title: 'Edit',
+    dataIndex: 'operation',
+    fixed: 'right',
+    render: (_: any, record: any) => {
+      const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
+      if (editable) {
+        return (
+          <span>
+            <Button
+              icon={<SaveOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+              onClick={() => save(record.key)}
+            />
+            <Button
+              onClick={cancel}
+              icon={<CloseOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+            />
+          </span>
+        );
       } else {
-        // (своеобразная обработка ошибки) если каким то образом редактируем элемент массива index <= -1, то ошибка не падает но ни один из элементов не будет перезатерт всё сохраняю
-        newData.push(row);
-        setData(newData);
-        setEditingId('');
+        const eventRating = data.find((item: any) => record.key === item.key).rating;
+        return (
+          <span>
+            <Button
+              ghost={true}
+              disabled={editingId !== ''}
+              onClick={() => edit(record)}
+              icon={<HighlightTwoTone twoToneColor="#52c41a" />}
+              style={{ fontSize: '16px', border: '1px solid #b7eb8f', color: '##52c41a' }}
+            />
+            <Button
+              ghost={true}
+              onClick={() => remove(record.key)}
+              icon={<DeleteOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+            />
+            <Rate disabled value={eventRating} />
+          </span>
+        );
       }
-    } catch (errInfo) {
-      // обработка ошибки если нажали на кнопку Save, что то пошло не так, то смотреть, что именно в консоль
-      console.log('Validate Failed:', errInfo); // вывод ошибки в консоль при сохранении
+      //save отправим колбэк с ключем текущей строки что бы сохранить
+      //cancel отправим колбэк с ключем текущей строки что бы отменить
+      //Popconfirm от ant что бы спросить уверены или нет
+      //disabled={editingKey !== ""} отключаем все кнопки Edit на других строках на других строках во время редактирования
+      //edit отправим колбэк с данными изменяемой в данный момент строкой
+    },
+  };
+  const changeRowClass = (key: React.Key, className: string) => {
+    const selRow = document.querySelector(`[data-row-key=${key}]`);
+    if (selRow) {
+      const rowClassName = selRow.getAttribute('class');
+      let newRowClassName;
+      const classSel = ' ' + className;
+      if (rowClassName && rowClassName.indexOf(classSel) !== -1) {
+        newRowClassName = rowClassName.replace(classSel, '');
+      } else {
+        newRowClassName = rowClassName + classSel;
+      }
+      selRow.setAttribute('class', newRowClassName);
     }
   };
-const mentorOperationData = {
-  title: 'Edit',
-  dataIndex: 'operation',
-  render: (_: any, record: any) => {
-    // _ заглушка что бы брать record вторым параметром для render (первый парамент зарезервирован React)
-    const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
-    if(editable){
+
+  const changeRating = (value: number, key: React.Key) => {
+    const currEventRating = data.find((item: any) => key === item.key).rating;
+    const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
+    //@todo save rating to event
+    setEventRating({ [key]: { voted: true, value: newRating } });
+  };
+
+  const studentOperationData = {
+    title: '',
+    dataIndex: 'operation',
+    fixed: 'right',
+    render: (_: any, record: any) => {
+      const key = record.key;
+      const isVoted = eventRating && eventRating[key] && eventRating[key].voted ? true : false;
       return (
         <span>
-          <Button onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-            Save
-          </Button>
-          <Button onClick={cancel}>Cancel</Button>
-        </span>
-      );
-    } 
-    else{
-      const eventRating = data.find((item:any) => record.key === item.key).rating; 
-      return (
-        <span>
-          <Button 
-            ghost={true} 
-            disabled={editingId !== ''} 
-            onClick={() => edit(record)} 
-            icon={<HighlightTwoTone />}>
-          </Button>
           <Button
             ghost={true}
-            className="tableSchedule__button_remove"
-            onClick={() => remove(record.key)}
-            icon={<DeleteTwoTone />}
+            onClick={() => changeRowClass(key, 'ant-table-row-main')}
+            //icon={<WarningTwoTone twoToneColor="red" />}>
+            className="mainEvent"
+            //icon={<ExclamationCircleOutlined />}
+            icon={<ExclamationOutlined />}
           ></Button>
-           <Rate disabled value={eventRating}/>
+          <Button
+            ghost={true}
+            onClick={() => changeRowClass(key, 'ant-table-row-done')}
+            className="doneEvent"
+            //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
+            icon={<CheckOutlined />}
+          ></Button>
+          <span></span>
+          {isVoted ? <Rate disabled value={eventRating[key].value} /> : <Rate onChange={(value) => changeRating(value, key)} />}
         </span>
       );
-    }
-    //save отправим колбэк с ключем текущей строки что бы сохранить
-    //cancel отправим колбэк с ключем текущей строки что бы отменить
-    //Popconfirm от ant что бы спросить уверены или нет
-    //disabled={editingKey !== ""} отключаем все кнопки Edit на других строках на других строках во время редактирования
-    //edit отправим колбэк с данными изменяемой в данный момент строкой
-  },
-};
-const changeRowClass = (key: React.Key, className:string) => {
-  const selRow = document.querySelector(`[data-row-key=${key}]`);
-  if(selRow){  
-    const rowClassName = selRow.getAttribute('class');
-    let newRowClassName;
-    const classSel = ' '+className;
-    if (rowClassName && rowClassName.indexOf(classSel) !== -1) {
-      newRowClassName = rowClassName.replace(classSel, '');
-    } else {
-      newRowClassName = rowClassName + classSel;
-    }
-    selRow.setAttribute('class',newRowClassName);
-  }
-};
+    },
+  };
+  const allColumns: IAgeMap[] = columnsName.map((item: any) => {
+    switch (item.dataIndex) {
+      case 'type':
+        return {
+          title: 'Type',
+          dataIndex: 'type',
+          editable: true,
+          render: (_: any, record: any) => {
+            return (
+              <Tag key={record.type} color={switchTypeToColor(record.type)}>
+                {record.type}
+              </Tag>
+            );
+          },
+        };
 
-const changeRating = (value:number, key:React.Key) => {
-  const currEventRating = data.find((item:any) => key === item.key).rating; 
-  const newRating = currEventRating && currEventRating>0 ? (value+currEventRating)/ratingVotes : value;
-  //@todo save rating to event
-  setEventRating({[key]:{voted:true, value:newRating}});
-}
-
-const studentOperationData = {
-  title: '',
-  dataIndex: 'operation',
-  render: (_: any, record: any) => {
-    const key = record.key;
-    const isVoted = eventRating && eventRating[key] && eventRating[key].voted ? true : false;
-    return  (
-      <span>
-        <Button 
-          ghost={true} 
-          onClick={() => changeRowClass(key,'ant-table-row-main')} 
-          //icon={<WarningTwoTone twoToneColor="red" />}>
-          className = "mainEvent"
-          //icon={<ExclamationCircleOutlined />}
-          icon={<ExclamationOutlined />}
-         >
-        </Button>
-        <Button
-          ghost={true}
-          onClick={() => changeRowClass(key,'ant-table-row-done')}
-          className = "doneEvent"
-          //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
-          icon={<CheckOutlined />}
-        ></Button>
-        <span></span>
-         { isVoted
-            ? <Rate disabled value={eventRating[key].value} />
-            : <Rate onChange = {(value) => changeRating(value,key)}/>
-         }
-      </span>
-    );
-  },
-};
-const allColumns: IAgeMap[] = 
-  columnsName.map((item:any)=>{
-    switch( item.dataIndex ){
-       case 'type':
-        return  {title: 'Type',
-                  dataIndex: 'type',
-                  editable: true,
-                  render: (_: any, record: any) => {
-                    return (
-                      <Tag key={record.type} color={switchTypeToColor(record.type)}>
-                        {record.type}
-                      </Tag>
-                    );
-                  },
-                };
-                     
-        case 'combineScore':
-          return  {
-                    title: 'Score/maxScore',
-                    dataIndex: 'combineScore',
-                    editable: true,
-                  };
-        default:
+      case 'combineScore':
+        return {
+          title: 'Score/maxScore',
+          dataIndex: 'combineScore',
+          editable: true,
+        };
+      default:
         return item;
     }
   });
-    
-  const columns: IAgeMap[] = isMentorStatus 
-                              ? [...allColumns, mentorOperationData] 
-                              : [...allColumns, studentOperationData];
+
+  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -332,7 +281,7 @@ const allColumns: IAgeMap[] =
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
-        organizers: props.organizers,
+        organizers,
       }),
     };
   });
@@ -440,12 +389,7 @@ const allColumns: IAgeMap[] =
 
   return (
     <Form form={form} component={false}>
-      <Button
-        type="primary"
-        disabled={editingId !== ''}
-        onClick={() => add()}
-        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}
-      >
+      <Button type="primary" disabled={editingId !== ''} onClick={add} icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}>
         Add event
       </Button>
       <div className="hidden-btn-row">
@@ -473,6 +417,7 @@ const allColumns: IAgeMap[] =
         isMentorStatus={isMentorStatus}
       />
       <Table
+        loading={isLoading}
         size="small"
         components={{
           body: {
@@ -480,10 +425,11 @@ const allColumns: IAgeMap[] =
           },
         }}
         bordered
+        rowKey="uid"
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 1500, y: 500 }}
+        scroll={{ x: 2500, y: 500 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
@@ -495,7 +441,7 @@ const allColumns: IAgeMap[] =
             },
             onDoubleClick: (event) => {
               handleDoubleClickRow(record, rowIndex, event);
-            }, 
+            },
           };
         }}
       />

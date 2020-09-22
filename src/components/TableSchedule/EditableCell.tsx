@@ -1,12 +1,11 @@
-import React from 'react';
-import { Input, InputNumber, Form, DatePicker, Select, Tag } from 'antd';
+import { Form, Input, InputNumber, Select, Tag } from 'antd';
 import 'antd/dist/antd.css';
+import React from 'react';
+import { types } from '../utilities/switcher';
 import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
-import { types } from '../utilities/switcher';
 
 const { Option } = Select;
-;
 const EditableCell: React.FC<EditableCellProps> = ({
   organizers,
   editing,
@@ -32,8 +31,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
     case 'organizer':
       inputNode = (
         <Select mode="multiple" showArrow={true}>
-          {organizers.map((n: any) => (
-            <Option key={n.id} value={n.id}>
+          {organizers.map((n: any, index: number) => (
+            <Option key={index} value={n.id}>
               {n.name}
             </Option>
           ))}
@@ -41,13 +40,14 @@ const EditableCell: React.FC<EditableCellProps> = ({
       );
       break;
     case 'type':
-      const options = types.map((item:any) => {
-       return ( <Option value={item.type}>
-                <Tag key={item.type} color={item.color}>
-                    {item.type}
-                </Tag>
-              </Option>
-              );
+      const options = types.map((item: any, index: number) => {
+        return (
+          <Option key={index} value={item.type}>
+            <Tag key={index} color={item.color}>
+              {item.type}
+            </Tag>
+          </Option>
+        );
       });
       inputNode = (
         <Select defaultValue="lime" style={{ width: 200 }}>
