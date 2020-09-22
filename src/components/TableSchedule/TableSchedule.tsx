@@ -128,7 +128,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             <Button
               icon={<SaveOutlined />}
               style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
-              onClick={() => save(record.key)}
+              onClick={() => save(record.id)}
             />
             <Button
               onClick={cancel}
@@ -150,7 +150,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             />
             <Button
               ghost={true}
-              onClick={() => remove(record.key)}
+              onClick={() => remove(record.id)}
               icon={<DeleteOutlined />}
               style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
             />

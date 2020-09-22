@@ -39,23 +39,23 @@ export const TableScheduleContainer = (props: any) => {
   //Add
   const add = async () => {
     setIsLoading(true);
-    const newId = await addDataEvent();
+    debugger;
+    const newId = await addDataEvent({});
     await getDataEvent();
-    //data приходит старая даже после getDataEvent(), а мне нужна новая уже с только что созданным addDataEvent() елементом с id newId
-    const newEvent = data.find((event: any) => event.id === newId);
     setIsLoading(false);
-    //edit(newEvent);
+    edit(newId.data);
   };
-
   //Remove
   const remove = async (id: React.Key) => {
     setIsLoading(true);
+
     await deleteDataEvent(id);
     await getDataEvent();
     setIsLoading(false);
   };
   //Save
   const save = async (id: React.Key) => {
+    debugger;
     setIsLoading(true);
     try {
       const row = (await form.validateFields()) as any; // хранятся все данные формы (input'ов) из одной строки таблицы (дата, урок, адрес, задание)
@@ -67,13 +67,15 @@ export const TableScheduleContainer = (props: any) => {
       const index = newData.find((item) => id === item.id).id; // Указывает индекс массива пришедших данных, какой из них сейчас находится под редактированием
       if (index.length === 20) {
         const item = newData.find((item) => index === item.id); // хранится строка с данными (вся: дата, время, название) которая сейчас будет редактироваться
-        if (row['date-picker']) {
-          // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
-          //const selectDate = row['date-picker']._d.toISOString();
-          // item.dateTime = `${selectDate.slice(8, 10)}-${selectDate.slice(5, 7)}-${selectDate.slice(0, 4)} ${}`;
-          item.dateTime = '2020-09-01 23:45';
-          //('2020-09-11T19:24:01.734Z');
-        }
+        // if (row['date-picker']) {
+        //   // ant <DatePicker /> для него зарезервированно имя date-picker, мы читаем с формы только date, по этому перевожу если такая найдется
+        //   const selectDate = row['date-picker']._d.toISOString();
+        //   item.dateTime = `${selectDate.slice(0, 4)}-${selectDate.slice(5, 7)}-${selectDate.slice(8, 10)} ${selectDate.slice(
+        //     11,
+        //     16
+        //   )}`;
+        //   //('2020-09-11T19:24:01.734Z');
+        // }
         const indexElement = newData.findIndex((n) => index === n.id);
         newData.splice(indexElement, 1, {
           //заменяем в массиве элемент под номером index (точнее его сначала удаляем потом добавляем ...item, ...row) который пришел с данными (всеми данными таблицы всех строк проиндексированные)
