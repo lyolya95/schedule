@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
-import moment from 'moment';
 import { Tag } from 'antd';
 import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
@@ -55,7 +54,6 @@ export const TableScheduleContainer = (props: any) => {
       organizer = row.organizer.join(',');
     }
     const newData = [...data];
-    debugger;
     const item = newData.find((item) => id === item.id);
     !!row['date-picker'] && (item.dateTime = row['date-picker'].format('YYYY-MM-DD hh:mm'));
     delete row['date-picker'];
