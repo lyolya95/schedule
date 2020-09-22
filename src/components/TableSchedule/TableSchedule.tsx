@@ -121,7 +121,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     dataIndex: 'operation',
     fixed: 'right',
     render: (_: any, record: any) => {
-      const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
+      const editable = isEditing(record);
       if (editable) {
         return (
           <span>
@@ -158,11 +158,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </span>
         );
       }
-      //save отправим колбэк с ключем текущей строки что бы сохранить
-      //cancel отправим колбэк с ключем текущей строки что бы отменить
-      //Popconfirm от ant что бы спросить уверены или нет
-      //disabled={editingKey !== ""} отключаем все кнопки Edit на других строках на других строках во время редактирования
-      //edit отправим колбэк с данными изменяемой в данный момент строкой
     },
   };
   const changeRowClass = (key: React.Key, className: string) => {

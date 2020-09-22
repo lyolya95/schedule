@@ -24,9 +24,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       inputNode = <InputNumber />;
       break;
     case 'dateTime':
-      //inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
-      inputNode = <Input />; // поставил временно так как не отображается
-
+      inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" allowClear={false} style={{ minWidth: 150 }} />;
       break;
     case 'organizer':
       inputNode = (
@@ -67,7 +65,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           style={{ margin: 0 }}
           rules={[
             {
-              required: false, // Добавление проверки формы конкретной ячейки dataIndex
+              required: false,
               message: `Please Input ${title}!`,
             },
           ]}
