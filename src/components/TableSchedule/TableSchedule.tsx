@@ -8,9 +8,12 @@ import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
+import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";
+import moment from "moment";
 
 export const TableSchedule: FC<any> = React.memo((props) => {
   const {columnsName, tagRender, defaultColumns, optionsKeyOfEvents, changeColumnsSelect, isMentorStatus, ratingVotes } = props;
+  console.log('Data', props.data);
  // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
@@ -28,6 +31,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
   const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
   const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
+  const [timeZone, setTimeZone] = useState<string>("+00:00") // Time Zone выбранный пользователем
+  const format = "DD.MM.YYYY HH:mm"; //Формат даты и времени для выведения в таблицу
 
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
@@ -45,7 +50,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+    const valueToCheck: string[] = keysToCheck
+        .map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -77,14 +83,20 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     if (dateRange.length === 0) {
       return true;
     }
-    const compareDate = new Date(date);
-    const firstDate = new Date(dateRange[0]);
-    const lastDate = new Date(dateRange[1]);
+    const compareDate = moment(date);
+    //console.log('Moment', compareDate.format("DD.MM.YYYY HH:mm"));
+    const firstDate = moment(dateRange[0]);
+    //console.log('Moment range1', firstDate.format("DD.MM.YYYY HH:mm"));
+    const lastDate = moment(dateRange[1]);
     if (firstDate < compareDate && compareDate < lastDate) {
       return true;
     }
     return false;
   };
+
+  const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
+      return moment(time).add(timeGap).add(timezone).format(format);
+  }
 
   const [form] = Form.useForm(); // хранится общий объект для формы ant
   const [editingId, setEditingId] = useState(''); // храним какое поле(строку таблыцы) сейчас редактируем
@@ -95,7 +107,13 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const visibleData = data // формируем отображаемые данные для таблицы
     .filter((item: any) => hasFilterFlag(item, filerFlags))
     .filter((item: any) => isInDateRange(item.dateTime, dates))
-    .filter((item: any) => !hiddenData.includes(item.key));
+    .filter((item: any) => !hiddenData.includes(item.key))
+    .map((item: any) => {
+      return {
+          ...item,
+        dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone)
+      }
+    });
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
@@ -441,6 +459,7 @@ const allColumns: IAgeMap[] =
             <EyeOutlined className="icon" />
           </Button>
         )}
+        <SelectTimeZone setTimeZone={setTimeZone} />
       </div>
       <MentorFilters
         data={data}
@@ -451,6 +470,7 @@ const allColumns: IAgeMap[] =
         defaultColumns={defaultColumns}
         optionsKeyOfEvents={optionsKeyOfEvents}
         changeColumnsSelect={changeColumnsSelect}
+        isMentorStatus={isMentorStatus}
       />
       <Table
         size="small"
