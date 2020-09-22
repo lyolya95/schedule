@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Select, Tag } from 'antd';
+import { DatePicker, Form, Input, InputNumber, Select, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import React from 'react';
 import { types } from '../utilities/switcher';
@@ -24,7 +24,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       inputNode = <InputNumber />;
       break;
     case 'dateTime':
-      // inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
+      //inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
       inputNode = <Input />; // поставил временно так как не отображается
 
       break;
