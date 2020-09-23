@@ -6,6 +6,24 @@ export const SET_DATA_EVENT = 'SET_DATA_EVENT';
 export const SET_ORGANIZERS = 'SET_ORGANIZERS';
 export const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 
+export interface IEvent {
+  id?: string;
+  name: string;
+  course: string;
+  dateTime: string;
+  type: string;
+  timeZone: string;
+  organizer: string | undefined;
+  descriptionUrl: string;
+  timeToComplete: string;
+  place: string;
+  week: string;
+  studentScore: string;
+  maxScore: string;
+  taskContent: string;
+  isShowFeedback: string;
+  rating: string;
+}
 export interface StateModel {
   isMentorStatus: boolean;
   data: any;
@@ -13,6 +31,7 @@ export interface StateModel {
   notEditableColumns: string[];
   ratingVotes: number;
   organizers: string[];
+  initialEventData: IEvent;
 }
 
 const initialState: StateModel = {
@@ -34,6 +53,23 @@ const initialState: StateModel = {
   notEditableColumns: ['id', 'combineScore'],
   ratingVotes: 0,
   organizers: [],
+  initialEventData: {
+    course: '',
+    dateTime: '',
+    descriptionUrl: '',
+    isShowFeedback: '',
+    maxScore: '',
+    name: '',
+    organizer: undefined,
+    place: '',
+    rating: '',
+    studentScore: '',
+    taskContent: '',
+    timeToComplete: '',
+    timeZone: '',
+    type: '',
+    week: '',
+  },
 };
 
 export const reducer = (state = initialState, action: any) => {

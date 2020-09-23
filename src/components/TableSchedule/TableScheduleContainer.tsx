@@ -17,6 +17,7 @@ export const TableScheduleContainer = (props: any) => {
     getDataEvent,
     addDataEvent,
     deleteDataEvent,
+    initialEventData,
   } = props;
   const userColumnsName = isMentorStatus ? columnsName.filter((item: string) => item !== 'combineScore') : columnsName;
   const columnsNameMap = userColumnsName.map((n: string) => ({ value: n }));
@@ -25,7 +26,7 @@ export const TableScheduleContainer = (props: any) => {
   const [editingId, setEditingId] = useState('');
   const isEditing = (record: any) => record.id === editingId;
   const [isLoading, setIsLoading] = useState(false);
-
+  const dateAndTimeFormat = 'DD.MM.YYYY hh:mm'; //Формат даты и времени для выведения в таблицу
   const edit = (record: any) => {
     form.setFieldsValue({ ...record });
     setEditingId(record.id);
@@ -35,7 +36,7 @@ export const TableScheduleContainer = (props: any) => {
   };
   const add = async () => {
     setIsLoading(true);
-    const newId = await addDataEvent({});
+    const newId = await addDataEvent(initialEventData);
     await getDataEvent();
     setIsLoading(false);
     edit(newId.data);
@@ -55,7 +56,7 @@ export const TableScheduleContainer = (props: any) => {
     }
     const newData = [...data];
     const item = newData.find((item) => id === item.id);
-    !!row['date-picker'] && (item.dateTime = row['date-picker'].format('YYYY-MM-DD hh:mm'));
+    !!row['date-picker'] && (item.dateTime = row['date-picker'].format(dateAndTimeFormat));
     delete row['date-picker'];
     const indexElement = newData.findIndex((n) => item.id === n.id);
     newData.splice(indexElement, 1, {
@@ -125,6 +126,7 @@ export const TableScheduleContainer = (props: any) => {
       add={add}
       remove={remove}
       save={save}
+      dateAndTimeFormat={dateAndTimeFormat}
     />
   );
 };
