@@ -7,4 +7,5 @@ export interface MentorFiltersProps {
   defaultColumns: string[];
   optionsKeyOfEvents: any;
   changeColumnsSelect(value: any): void;
+  isMentorStatus: boolean;
 }
