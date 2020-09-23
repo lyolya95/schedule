@@ -3,19 +3,21 @@ import {
   CloseOutlined,
   DeleteOutlined,
   ExclamationOutlined,
+  EyeInvisibleTwoTone,
+  EyeTwoTone,
   HighlightTwoTone,
   PlusCircleTwoTone,
   SaveOutlined,
 } from '@ant-design/icons';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
-import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
+import { EyeOutlined } from '@ant-design/icons/lib';
+import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
+import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
 import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
-import moment from 'moment';
 import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
 
@@ -393,15 +395,10 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         Add event
       </Button>
       <div className="hidden-btn-row">
-        {hideButton ? (
-          <Button className="hide-btn" onClick={hideRows}>
-            <EyeInvisibleOutlined className="icon" />
-          </Button>
-        ) : null}
-        {hiddenData.length === 0 ? null : (
-          <Button className="unhide-btn" onClick={unHideRows}>
-            <EyeOutlined className="icon" />
-          </Button>
+        {hiddenData.length === 0 ? (
+          <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
+        ) : (
+          <Button onClick={unHideRows} icon={<EyeTwoTone />} />
         )}
         <SelectTimeZone setTimeZone={setTimeZone} />
       </div>
