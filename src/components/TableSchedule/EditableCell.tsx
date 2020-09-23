@@ -47,11 +47,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           </Option>
         );
       });
-      inputNode = (
-        <Select defaultValue="lime" style={{ width: 200 }}>
-          {options}
-        </Select>
-      );
+      inputNode = <Select style={{ width: 200 }}>{options}</Select>;
       break;
     default:
       inputNode = <Input />;
