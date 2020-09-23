@@ -9,17 +9,17 @@ import {
   PlusCircleTwoTone,
   SaveOutlined,
 } from '@ant-design/icons';
-import 'antd/dist/antd.css';
 import { EyeOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
+import 'antd/dist/antd.css';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
+import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
-import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
-import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
+import { IAgeMap } from './TableSchedule.model';
 
 export const TableSchedule: FC<any> = React.memo((props) => {
   const {
@@ -43,7 +43,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     save,
   } = props;
 
-  console.log(data);
   // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
@@ -73,7 +72,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+    const valueToCheck: string[] = keysToCheck
+      .map((key: string) => flags[key].map((value: string) => value.split(',')))
+      .flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -115,7 +116,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   };
 
   const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
-    console.log('timezone', timeGap);
     return moment(time).subtract(timeGap, 'h').add(timezone).format(format);
   };
 
@@ -134,7 +134,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       return { ...item, key: item.id };
     })
     .filter((item: any) => !hiddenData.includes(item.key));
-  console.log('visible', visibleData);
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
@@ -267,7 +266,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     }
   });
 
-  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+  const columns: IAgeMap[] = isMentorStatus
+    ? [...allColumns, mentorOperationData]
+    : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -289,7 +290,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
   const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName =
+      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
@@ -346,7 +348,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             let clazz = '';
             visibleData.forEach((item: any) => {
               const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
-              console.log('SHIFT key', currentSelRow);
               if (currentSelRow === null) {
                 return;
               }
@@ -391,12 +392,21 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
   return (
     <Form form={form} component={false}>
-      <Button type="primary" disabled={editingId !== ''} onClick={add} icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}>
+      <Button
+        type="primary"
+        disabled={editingId !== ''}
+        onClick={add}
+        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}
+      >
         Add event
       </Button>
       <div className="hidden-btn-row">
         {hiddenData.length === 0 ? (
-          <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
+          <Button
+            onClick={hideRows}
+            disabled={!hideButton}
+            icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />}
+          />
         ) : (
           <Button onClick={unHideRows} icon={<EyeTwoTone />} />
         )}

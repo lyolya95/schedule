@@ -9,7 +9,7 @@ import { CalendarItemProps } from './CalendarItem.model';
 
 export const CalendarItem: FC<CalendarItemProps> = React.memo(({ data, getDataEvent }) => {
   const isRowBased = useMediaQuery('(min-width: 800px)');
-  console.log(data);
+
   useEffect(() => {
     getDataEvent();
   }, [getDataEvent]);

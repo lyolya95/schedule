@@ -1,10 +1,11 @@
-import { setDataEventsAC, setOrganizersAC } from './../actions/index';
+import { setDataEventsAC, setModalSettings, setOrganizersAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 export const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
 export const SET_DATA_EVENT = 'SET_DATA_EVENT';
 export const SET_ORGANIZERS = 'SET_ORGANIZERS';
 export const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
+export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
 
 export interface IEvent {
   id?: string;
@@ -32,6 +33,7 @@ export interface StateModel {
   ratingVotes: number;
   organizers: string[];
   initialEventData: IEvent;
+  isShowSettingsModal: boolean;
 }
 
 const initialState: StateModel = {
@@ -70,6 +72,7 @@ const initialState: StateModel = {
     type: '',
     week: '',
   },
+  isShowSettingsModal: false,
 };
 
 export const reducer = (state = initialState, action: any) => {
@@ -110,6 +113,9 @@ export const reducer = (state = initialState, action: any) => {
     case ADD_DATA_EVENT: {
       return state;
     }
+    case SET_MODAL_SETTINGS: {
+      return { ...state, isShowSettingsModal: action.value };
+    }
     default:
       return state;
   }
@@ -135,4 +141,8 @@ export const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
 };
 export const addDataEvent = (newEvent: any) => async (dispatch: any) => {
   return await scheduleAPI.addDataEvent(newEvent);
+};
+
+export const setShowModalSettings = (value: boolean) => (dispatch: any) => {
+  dispatch(setModalSettings(value));
 };
