@@ -19,6 +19,10 @@ export const Header: FC<HeaderProps> = React.memo(
       history.push('/calendar');
     }, [history]);
 
+    if (JSON.parse(localStorage.getItem('DARK_MODE') || '{}') === true) {
+      document.body.classList.add('dark-mode');
+    }
+
     return (
       <>
         <div className="header">
