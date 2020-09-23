@@ -40,6 +40,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         remove,
         save,
     } = props;
+
+    console.log(data)
     // localStorage
     const course = JSON.parse(localStorage['course'] || null);
     const place = JSON.parse(localStorage['place'] || null);
@@ -113,24 +115,27 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
 
     const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
-        return moment(time).add(timeGap).add(timezone).format(format);
+        console.log('timezone', timeGap)
+        return moment(time).add(timeGap, 'h').add(timezone).format(format);
     }
 
     //const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
 
     const visibleData = data // формируем отображаемые данные для таблицы
         .filter((item: any) => hasFilterFlag(item, filerFlags))
-        .filter((item: any) => isInDateRange(item.dateTime, dates))
-        .map((item: any) => {
-            return {...item, key: item.id}
-        })
-        .filter((item: any) => !hiddenData.includes(item.key))
         .map((item: any) => {
             return {
                 ...item,
                 dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone)
             }
-        });
+        })
+        .filter((item: any) => isInDateRange(item.dateTime, dates))
+        .map((item: any) => {
+            return {...item, key: item.id}
+        })
+        .filter((item: any) => !hiddenData.includes(item.key));
+    console.log('visible', visibleData)
+
 
     const [visibleModal, setVisibleModal] = useState(false);
     const [clickingRow, setClickingRow] = useState<any | null>();
@@ -147,9 +152,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 return (
                     <span>
             <Button
-                icon={<SaveOutlined/>}
-                style={{fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff'}}
-                onClick={() => save(record.key)}
+              icon={<SaveOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+              onClick={() => save(record.id)}
             />
             <Button
                 onClick={cancel}
@@ -170,10 +175,10 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 style={{fontSize: '16px', border: '1px solid #b7eb8f', color: '##52c41a'}}
             />
             <Button
-                ghost={true}
-                onClick={() => remove(record.key)}
-                icon={<DeleteOutlined/>}
-                style={{fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff'}}
+              ghost={true}
+              onClick={() => remove(record.id)}
+              icon={<DeleteOutlined />}
+              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
             />
             <Rate disabled value={eventRating}/>
           </span>

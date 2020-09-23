@@ -1,6 +1,10 @@
-import { CHANGE_MENTOR_STATUS, setDataEventsAC, SET_DATA_EVENT, setOrganizersAC, SET_ORGANIZERS } from './../actions/index';
-
+import { setDataEventsAC, setOrganizersAC, addDataEventAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
+
+export const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
+export const SET_DATA_EVENT = 'SET_DATA_EVENT';
+export const SET_ORGANIZERS = 'SET_ORGANIZERS';
+export const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 
 export interface StateModel {
   isMentorStatus: boolean;
@@ -9,8 +13,8 @@ export interface StateModel {
   notEditableColumns: string[];
   ratingVotes: number;
   organizers: string[];
-  defaultEvent: object;
 }
+
 const initialState: StateModel = {
   isMentorStatus: false,
   data: [],
@@ -30,22 +34,6 @@ const initialState: StateModel = {
   notEditableColumns: ['id', 'combineScore'],
   ratingVotes: 0,
   organizers: [],
-  defaultEvent: {
-    id: '',
-    name: '',
-    course: '',
-    dateTime: '2020-09-01 00:00',
-    type: '',
-    timeZone: '+0',
-    organizer: '',
-    descriptionUrl: '',
-    timeToComplete: '1 day',
-    place: 'online',
-    week: 2,
-    maxScore: 100,
-    taskContent: '',
-    isShowFeedback: false,
-  },
 };
 
 export const reducer = (state = initialState, action: any) => {
@@ -72,7 +60,7 @@ export const reducer = (state = initialState, action: any) => {
           const coefficient = event.coefficient && event.coefficient > 0 ? ', coefficient:' + event.coefficient : '';
           event.combineScore = score + '/' + maxScore + coefficient;
         }
-        event.key = event.id;
+        //event.key = event.id;
         if (event.rating && event.rating > 0) {
           ratingVotes++;
         }
@@ -82,6 +70,9 @@ export const reducer = (state = initialState, action: any) => {
     }
     case SET_ORGANIZERS: {
       return { ...state, organizers: [...action.organizers] };
+    }
+    case ADD_DATA_EVENT: {
+      return state;
     }
     default:
       return state;
@@ -103,17 +94,9 @@ export const getOrganizers = () => async (dispatch: any) => {
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setOrganizersAC(organizers));
 };
-
-export const addDataEvent = () => async (dispatch: any) => {
-  let newId: string = '';
-  var symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789№?_';
-  for (let i = 0; i < 20; i++) {
-    newId += symbols.charAt(Math.floor(Math.random() * symbols.length));
-  }
-  await scheduleAPI.addDataEvent({ ...initialState.defaultEvent, id: newId });
-  return newId;
-};
-
 export const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
   await scheduleAPI.deleteDataEvent(idEvent);
+};
+export const addDataEvent = (newEvent: any) => async (dispatch: any) => {
+  return await scheduleAPI.addDataEvent(newEvent);
 };
