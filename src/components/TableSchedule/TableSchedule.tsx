@@ -3,19 +3,23 @@ import {
   CloseOutlined,
   DeleteOutlined,
   ExclamationOutlined,
+  EyeInvisibleTwoTone,
+  EyeTwoTone,
   HighlightTwoTone,
   PlusCircleTwoTone,
   SaveOutlined,
 } from '@ant-design/icons';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons/lib';
-import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
+import { EyeOutlined } from '@ant-design/icons/lib';
+import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
+import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities/switcher';
-import EditableCell from './EditableCell';
+import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { IAgeMap } from './TableSchedule.model';
+import EditableCell from './EditableCell';
 
 export const TableSchedule: FC<any> = React.memo((props) => {
   const {
@@ -38,6 +42,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     remove,
     save,
   } = props;
+
+  console.log(data);
   // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
@@ -48,6 +54,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
   const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
   const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
+  const [timeZone, setTimeZone] = useState<string>('+00:00'); // Time Zone выбранный пользователем
+  const format = 'DD.MM.YYYY HH:mm'; //Формат даты и времени для выведения в таблицу
 
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
@@ -97,19 +105,36 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     if (dateRange.length === 0) {
       return true;
     }
-    const compareDate = new Date(date);
-    const firstDate = new Date(dateRange[0]);
-    const lastDate = new Date(dateRange[1]);
+    const compareDate = moment(date);
+    const firstDate = moment(dateRange[0]);
+    const lastDate = moment(dateRange[1]);
     if (firstDate < compareDate && compareDate < lastDate) {
       return true;
     }
     return false;
   };
 
+  const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
+    console.log('timezone', timeGap);
+    return moment(time).subtract(timeGap, 'h').add(timezone).format(format);
+  };
+
+  //const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
+
   const visibleData = data // формируем отображаемые данные для таблицы
     .filter((item: any) => hasFilterFlag(item, filerFlags))
+    .map((item: any) => {
+      return {
+        ...item,
+        dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone),
+      };
+    })
     .filter((item: any) => isInDateRange(item.dateTime, dates))
+    .map((item: any) => {
+      return { ...item, key: item.id };
+    })
     .filter((item: any) => !hiddenData.includes(item.key));
+  console.log('visible', visibleData);
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
@@ -121,14 +146,14 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     dataIndex: 'operation',
     fixed: 'right',
     render: (_: any, record: any) => {
-      const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
+      const editable = isEditing(record);
       if (editable) {
         return (
           <span>
             <Button
               icon={<SaveOutlined />}
               style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
-              onClick={() => save(record.key)}
+              onClick={() => save(record.id)}
             />
             <Button
               onClick={cancel}
@@ -138,7 +163,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </span>
         );
       } else {
-        const eventRating = data.find((item: any) => record.key === item.key).rating;
+        const eventRating = data.find((item: any) => record.id === item.id).rating;
         return (
           <span>
             <Button
@@ -150,7 +175,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             />
             <Button
               ghost={true}
-              onClick={() => remove(record.key)}
+              onClick={() => remove(record.id)}
               icon={<DeleteOutlined />}
               style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
             />
@@ -158,11 +183,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </span>
         );
       }
-      //save отправим колбэк с ключем текущей строки что бы сохранить
-      //cancel отправим колбэк с ключем текущей строки что бы отменить
-      //Popconfirm от ant что бы спросить уверены или нет
-      //disabled={editingKey !== ""} отключаем все кнопки Edit на других строках на других строках во время редактирования
-      //edit отправим колбэк с данными изменяемой в данный момент строкой
     },
   };
   const changeRowClass = (key: React.Key, className: string) => {
@@ -181,7 +201,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   };
 
   const changeRating = (value: number, key: React.Key) => {
-    const currEventRating = data.find((item: any) => key === item.key).rating;
+    const currEventRating = data.find((item: any) => key === item.id).rating;
     const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
     //@todo save rating to event
     setEventRating({ [key]: { voted: true, value: newRating } });
@@ -192,13 +212,12 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     dataIndex: 'operation',
     fixed: 'right',
     render: (_: any, record: any) => {
-      const key = record.key;
-      const isVoted = eventRating && eventRating[key] && eventRating[key].voted ? true : false;
+      const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
         <span>
           <Button
             ghost={true}
-            onClick={() => changeRowClass(key, 'ant-table-row-main')}
+            onClick={() => changeRowClass(record.id, 'ant-table-row-main')}
             //icon={<WarningTwoTone twoToneColor="red" />}>
             className="mainEvent"
             //icon={<ExclamationCircleOutlined />}
@@ -206,13 +225,17 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           ></Button>
           <Button
             ghost={true}
-            onClick={() => changeRowClass(key, 'ant-table-row-done')}
+            onClick={() => changeRowClass(record.id, 'ant-table-row-done')}
             className="doneEvent"
             //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
             icon={<CheckOutlined />}
           ></Button>
           <span></span>
-          {isVoted ? <Rate disabled value={eventRating[key].value} /> : <Rate onChange={(value) => changeRating(value, key)} />}
+          {isVoted ? (
+            <Rate disabled value={eventRating[record.id].value} />
+          ) : (
+            <Rate onChange={(value) => changeRating(value, record.id)} />
+          )}
         </span>
       );
     },
@@ -323,6 +346,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             let clazz = '';
             visibleData.forEach((item: any) => {
               const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
+              console.log('SHIFT key', currentSelRow);
               if (currentSelRow === null) {
                 return;
               }
@@ -371,16 +395,12 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         Add event
       </Button>
       <div className="hidden-btn-row">
-        {hideButton ? (
-          <Button className="hide-btn" onClick={hideRows}>
-            <EyeInvisibleOutlined className="icon" />
-          </Button>
-        ) : null}
-        {hiddenData.length === 0 ? null : (
-          <Button className="unhide-btn" onClick={unHideRows}>
-            <EyeOutlined className="icon" />
-          </Button>
+        {hiddenData.length === 0 ? (
+          <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
+        ) : (
+          <Button onClick={unHideRows} icon={<EyeTwoTone />} />
         )}
+        <SelectTimeZone setTimeZone={setTimeZone} />
       </div>
       <MentorFilters
         data={data}
@@ -391,6 +411,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         defaultColumns={defaultColumns}
         optionsKeyOfEvents={optionsKeyOfEvents}
         changeColumnsSelect={changeColumnsSelect}
+        isMentorStatus={isMentorStatus}
       />
       <Table
         loading={isLoading}
@@ -401,7 +422,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           },
         }}
         bordered
-        rowKey="uid"
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
