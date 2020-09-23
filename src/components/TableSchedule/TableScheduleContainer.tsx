@@ -144,7 +144,7 @@ export const TableScheduleContainer = (props: any) => {
       defaultColumns={defaultColumns}
       optionsKeyOfEvents={columnsNameMap}
       changeColumnsSelect={changeColumnsSelect}
-      initialData={data}
+      data={data}
       isMentorStatus={isMentorStatus}
       ratingVotes={ratingVotes}
       organizers={organizers}
