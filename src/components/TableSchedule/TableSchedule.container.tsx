@@ -35,6 +35,7 @@ const mapStateToProps = (state: StateModel) => {
     notEditableColumns: state.notEditableColumns,
     ratingVotes: state.ratingVotes,
     organizers: state.organizers,
+    initialEventData: state.initialEventData,
   };
 };
 

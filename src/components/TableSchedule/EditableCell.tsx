@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Select, Tag } from 'antd';
+import { DatePicker, Form, Input, InputNumber, Select, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import React from 'react';
 import { types } from '../utilities/switcher';
@@ -24,9 +24,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       inputNode = <InputNumber />;
       break;
     case 'dateTime':
-      // inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" autoFocus={true} allowClear={false} style={{ minWidth: 150 }} />;
-      inputNode = <Input />; // поставил временно так как не отображается
-
+      inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" allowClear={false} style={{ minWidth: 150 }} />;
       break;
     case 'organizer':
       inputNode = (
@@ -49,11 +47,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           </Option>
         );
       });
-      inputNode = (
-        <Select defaultValue="lime" style={{ width: 200 }}>
-          {options}
-        </Select>
-      );
+      inputNode = <Select style={{ width: 200 }}>{options}</Select>;
       break;
     default:
       inputNode = <Input />;
@@ -67,7 +61,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           style={{ margin: 0 }}
           rules={[
             {
-              required: false, // Добавление проверки формы конкретной ячейки dataIndex
+              required: false,
               message: `Please Input ${title}!`,
             },
           ]}
