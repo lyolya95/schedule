@@ -1,4 +1,4 @@
-import { setDataEventsAC, setOrganizersAC, addDataEventAC } from './../actions/index';
+import { setDataEventsAC, setOrganizersAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 export const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';

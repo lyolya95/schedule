@@ -142,15 +142,15 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     // надо взять с localstorage первоначальные данные
     const [eventRating, setEventRating] = useState<any>();
 
-    const mentorOperationData = {
-        title: 'Edit',
-        dataIndex: 'operation',
-        fixed: 'right',
-        render: (_: any, record: any) => {
-            const editable = isEditing(record); // (render вызывается всякий раз как изменяется что то на странице, или создается новая строка с данными) каждый раз проверяем record (строка целиком, они приходят по порядку) пришла если с возможностью редактирования тогда показываем кнопки "Save" и "Cancel" иначе кнопку с "Edit"
-            if (editable) {
-                return (
-                    <span>
+  const mentorOperationData = {
+    title: 'Edit',
+    dataIndex: 'operation',
+    fixed: 'right',
+    render: (_: any, record: any) => {
+      const editable = isEditing(record);
+      if (editable) {
+        return (
+          <span>
             <Button
               icon={<SaveOutlined />}
               style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
@@ -182,29 +182,25 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             />
             <Rate disabled value={eventRating}/>
           </span>
-                );
-            }
-            //save отправим колбэк с ключем текущей строки что бы сохранить
-            //cancel отправим колбэк с ключем текущей строки что бы отменить
-            //Popconfirm от ant что бы спросить уверены или нет
-            //disabled={editingKey !== ""} отключаем все кнопки Edit на других строках на других строках во время редактирования
-            //edit отправим колбэк с данными изменяемой в данный момент строкой
-        },
-    };
-    const changeRowClass = (key: React.Key, className: string) => {
-        const selRow = document.querySelector(`[data-row-key=${key}]`);
-        if (selRow) {
-            const rowClassName = selRow.getAttribute('class');
-            let newRowClassName;
-            const classSel = ' ' + className;
-            if (rowClassName && rowClassName.indexOf(classSel) !== -1) {
-                newRowClassName = rowClassName.replace(classSel, '');
-            } else {
-                newRowClassName = rowClassName + classSel;
-            }
-            selRow.setAttribute('class', newRowClassName);
-        }
-    };
+        );
+      }
+    },
+  };
+  const changeRowClass = (key: React.Key, className: string) => {
+    const selRow = document.querySelector(`[data-row-key=${key}]`);
+    if (selRow) {
+      const rowClassName = selRow.getAttribute('class');
+      let newRowClassName;
+      const classSel = ' ' + className;
+      if (rowClassName && rowClassName.indexOf(classSel) !== -1) {
+        newRowClassName = rowClassName.replace(classSel, '');
+      } else {
+        newRowClassName = rowClassName + classSel;
+      }
+      selRow.setAttribute('class', newRowClassName);
+    }
+  };
+
 
     const changeRating = (value: number, key: React.Key) => {
         const currEventRating = data.find((item: any) => key === item.key).rating;
