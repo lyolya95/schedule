@@ -116,7 +116,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
     const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
         console.log('timezone', timeGap)
-        return moment(time).add(timeGap, 'h').add(timezone).format(format);
+        return moment(time).subtract(timeGap, 'h').add(timezone).format(format);
     }
 
     //const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
