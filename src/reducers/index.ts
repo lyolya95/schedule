@@ -6,7 +6,7 @@ export const SET_DATA_EVENT = 'SET_DATA_EVENT';
 export const SET_ORGANIZERS = 'SET_ORGANIZERS';
 export const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 
-export interface IEvent {
+export interface EventOfInterface {
   id?: string;
   name: string;
   course: string;
@@ -26,17 +26,35 @@ export interface IEvent {
 }
 export interface StateModel {
   isMentorStatus: boolean;
-  data: any;
+  data: EventOfInterface[];
   columnsName: string[];
   notEditableColumns: string[];
   ratingVotes: number;
   organizers: string[];
-  initialEventData: IEvent;
+  initialEventData: EventOfInterface;
 }
 
 const initialState: StateModel = {
   isMentorStatus: false,
-  data: [],
+  data: [
+    {
+      course: '',
+      dateTime: '',
+      descriptionUrl: '',
+      isShowFeedback: '',
+      maxScore: '',
+      name: '',
+      organizer: undefined,
+      place: '',
+      rating: '',
+      studentScore: '',
+      taskContent: '',
+      timeToComplete: '',
+      timeZone: '',
+      type: '',
+      week: '',
+    },
+  ],
   columnsName: [
     'dateTime',
     'timeZone',
@@ -80,7 +98,7 @@ export const reducer = (state = initialState, action: any) => {
         isMentorStatus: !state.isMentorStatus,
       };
     case SET_DATA_EVENT: {
-      let ratingVotes = 0;
+      let ratingVotes: number = 0;
       action.events.map((event: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
@@ -133,6 +151,6 @@ export const getOrganizers = () => async (dispatch: any) => {
 export const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
   await scheduleAPI.deleteDataEvent(idEvent);
 };
-export const addDataEvent = (newEvent: any) => async (dispatch: any) => {
+export const addDataEvent = (newEvent: object) => async (dispatch: any) => {
   return await scheduleAPI.addDataEvent(newEvent);
 };

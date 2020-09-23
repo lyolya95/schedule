@@ -7,16 +7,15 @@ import { Alert, Spin } from 'antd';
 
 const Container = (props: any) => {
   const [preloader, setPreloader] = useState(true);
-
   useEffect(() => {
-    if (props.data.length < 1) {
-      props.getDataEvent();
-      props.getOrganizers();
+    const firstLoadTable = async () => {
       setPreloader(true);
-    } else {
+      await props.getDataEvent();
+      await props.getOrganizers();
       setPreloader(false);
-    }
-  }, [props]);
+    };
+    firstLoadTable();
+  }, []);
 
   return preloader ? (
     <Spin tip="Loading...">

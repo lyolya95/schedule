@@ -16,11 +16,11 @@ import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
-import { switchTypeToColor } from '../utilities/switcher';
+import { switchTypeToColor } from '../utilities';
 import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { IAgeMap } from './TableSchedule.model';
 import EditableCell from './EditableCell';
-
+import { dateAndTimeFormat } from '../utilities';
 export const TableSchedule: FC<any> = React.memo((props) => {
   const {
     data,
@@ -55,7 +55,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
   const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
   const [timeZone, setTimeZone] = useState<string>('+00:00'); // Time Zone выбранный пользователем
-  const format = 'DD.MM.YYYY HH:mm'; //Формат даты и времени для выведения в таблицу
 
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
@@ -116,7 +115,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
   const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
     console.log('timezone', timeGap);
-    return moment(time).subtract(timeGap, 'h').add(timezone).format(format);
+    return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
   };
 
   //const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
