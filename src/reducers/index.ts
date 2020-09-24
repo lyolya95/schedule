@@ -30,7 +30,6 @@ const initialState: StateModel = {
   ],
   columnsName: [
     'dateTime',
-    'timeZone',
     'timeToComplete',
     'type',
     'name',
@@ -110,16 +109,13 @@ const getDataEvent = () => async (dispatch: any) => {
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
+  dispatch(setOrganizersAC(organizers));
 };
 const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
   await scheduleAPI.updateDataEvent(idEvent, bodyData);
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
-};
-const getOrganizers = () => async (dispatch: any) => {
-  const organizers = await scheduleAPI.getDataOrganizers();
-  dispatch(setOrganizersAC(organizers));
 };
 const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
   await scheduleAPI.deleteDataEvent(idEvent);
@@ -129,4 +125,4 @@ const addDataEvent = (newEvent: object) => async (dispatch: any) => {
 };
 
 export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
-export { reducer, getDataEvent, putDataEvent, getOrganizers, deleteDataEvent, addDataEvent };
+export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent };

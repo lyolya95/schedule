@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getDataEvent, putDataEvent, getOrganizers, addDataEvent, deleteDataEvent } from '../../reducers';
+import { getDataEvent, putDataEvent, addDataEvent, deleteDataEvent } from '../../reducers';
 import { TableScheduleContainer } from './TableScheduleContainer';
 import React, { useEffect, useState } from 'react';
 import { Alert, Spin } from 'antd';
@@ -11,7 +11,6 @@ const Container = (props: any) => {
     const firstLoadTable = async () => {
       setPreloader(true);
       await props.getDataEvent();
-      await props.getOrganizers();
       setPreloader(false);
     };
     firstLoadTable();
@@ -42,7 +41,6 @@ const mapStateToProps = (state: StateModel) => {
 const TableSchedule = connect(mapStateToProps, {
   getDataEvent,
   putDataEvent,
-  getOrganizers,
   addDataEvent,
   deleteDataEvent,
 })(Container);
