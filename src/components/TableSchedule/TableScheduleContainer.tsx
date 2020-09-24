@@ -102,6 +102,7 @@ const TableScheduleContainer = (props: any) => {
       //title: toUpperCase(n),
       title: n,
       dataIndex: n,
+      width: n === 'descriptionUrl' ? '250px' : 'auto',
       editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
     }));
     setMapColumnsName(mapColumns);
