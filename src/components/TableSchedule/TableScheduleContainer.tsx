@@ -7,7 +7,7 @@ import './Tables.scss';
 import { Form } from 'antd';
 import { dateAndTimeFormat } from '../utilities';
 
-export const TableScheduleContainer = (props: any) => {
+const TableScheduleContainer = (props: any) => {
   const {
     columnsName,
     notEditableColumns,
@@ -130,3 +130,5 @@ export const TableScheduleContainer = (props: any) => {
     />
   );
 };
+
+export { TableScheduleContainer };

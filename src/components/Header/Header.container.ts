@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import  {StateModel}  from '../../reducers';
+import { StateModel } from '../../reducers/reducers.model';
 import { Header } from './Header';
-import {changeMentorStatus} from '../../actions';
+import { changeMentorStatus } from '../../actions';
 
 const mapStateToProps = (state: StateModel) => {
   return {
@@ -9,9 +9,9 @@ const mapStateToProps = (state: StateModel) => {
   };
 };
 
-const mapDispatchToProps = (dispatch:any) =>{
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    changeMentorStatus: () => dispatch(changeMentorStatus())
-  }
-}
-export const HeaderContainer = connect(mapStateToProps,mapDispatchToProps)(Header);
+    changeMentorStatus: () => dispatch(changeMentorStatus()),
+  };
+};
+export const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header);

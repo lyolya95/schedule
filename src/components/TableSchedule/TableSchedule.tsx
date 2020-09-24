@@ -19,9 +19,10 @@ import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { switchTypeToColor } from '../utilities';
 import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { IAgeMap } from './TableSchedule.model';
-import EditableCell from './EditableCell';
+import { EditableCell } from './EditableCell';
 import { dateAndTimeFormat } from '../utilities';
-export const TableSchedule: FC<any> = React.memo((props) => {
+
+const TableSchedule: FC<any> = React.memo((props) => {
   const {
     data,
     columnsName,
@@ -466,3 +467,5 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     </Form>
   );
 });
+
+export { TableSchedule };

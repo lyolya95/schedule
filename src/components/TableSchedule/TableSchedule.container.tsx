@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { StateModel, getDataEvent, putDataEvent, getOrganizers, addDataEvent, deleteDataEvent } from '../../reducers';
-
+import { getDataEvent, putDataEvent, getOrganizers, addDataEvent, deleteDataEvent } from '../../reducers';
 import { TableScheduleContainer } from './TableScheduleContainer';
 import React, { useEffect, useState } from 'react';
 import { Alert, Spin } from 'antd';
+import { StateModel } from '../../reducers/reducers.model';
 
 const Container = (props: any) => {
   const [preloader, setPreloader] = useState(true);
@@ -15,6 +15,7 @@ const Container = (props: any) => {
       setPreloader(false);
     };
     firstLoadTable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return preloader ? (
@@ -38,10 +39,12 @@ const mapStateToProps = (state: StateModel) => {
   };
 };
 
-export const TableSchedule = connect(mapStateToProps, {
+const TableSchedule = connect(mapStateToProps, {
   getDataEvent,
   putDataEvent,
   getOrganizers,
   addDataEvent,
   deleteDataEvent,
 })(Container);
+
+export { TableSchedule };

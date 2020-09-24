@@ -1,4 +1,4 @@
-export const switchTypeToColor = (typeName: string) => {
+const switchTypeToColor = (typeName: string) => {
   let color = typeName;
   switch (typeName) {
     case 'live':
@@ -41,7 +41,7 @@ export const switchTypeToColor = (typeName: string) => {
   return color;
 };
 
-export const types = [
+const typesTag = [
   { type: 'live', color: 'blue' },
   { type: 'youtube live', color: 'blue' },
   { type: 'self education', color: 'blue' },
@@ -64,4 +64,6 @@ export const types = [
   { type: 'interview', color: 'volcano' },
 ];
 
-export const dateAndTimeFormat = 'YYYY.MM.DD hh:mm';
+const dateAndTimeFormat = 'YYYY.MM.DD hh:mm';
+
+export { switchTypeToColor, typesTag, dateAndTimeFormat };

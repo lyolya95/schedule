@@ -1,38 +1,11 @@
+import { StateModel } from './reducers.model';
 import { setDataEventsAC, setOrganizersAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
-export const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
-export const SET_DATA_EVENT = 'SET_DATA_EVENT';
-export const SET_ORGANIZERS = 'SET_ORGANIZERS';
-export const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
-
-export interface EventOfInterface {
-  id?: string;
-  name: string;
-  course: string;
-  dateTime: string;
-  type: string;
-  timeZone: string;
-  organizer: string | undefined;
-  descriptionUrl: string;
-  timeToComplete: string;
-  place: string;
-  week: string;
-  studentScore: string;
-  maxScore: string;
-  taskContent: string;
-  isShowFeedback: string;
-  rating: string;
-}
-export interface StateModel {
-  isMentorStatus: boolean;
-  data: EventOfInterface[];
-  columnsName: string[];
-  notEditableColumns: string[];
-  ratingVotes: number;
-  organizers: string[];
-  initialEventData: EventOfInterface;
-}
+const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
+const SET_DATA_EVENT = 'SET_DATA_EVENT';
+const SET_ORGANIZERS = 'SET_ORGANIZERS';
+const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -90,7 +63,7 @@ const initialState: StateModel = {
   },
 };
 
-export const reducer = (state = initialState, action: any) => {
+const reducer = (state = initialState, action: any): StateModel => {
   switch (action.type) {
     case CHANGE_MENTOR_STATUS:
       return {
@@ -114,9 +87,9 @@ export const reducer = (state = initialState, action: any) => {
           const coefficient = event.coefficient && event.coefficient > 0 ? ', coefficient:' + event.coefficient : '';
           event.combineScore = score + '/' + maxScore + coefficient;
         }
-        //event.key = event.id;
         if (event.rating && event.rating > 0) {
           ratingVotes++;
+          console.log(ratingVotes);
         }
         return event;
       });
@@ -133,24 +106,27 @@ export const reducer = (state = initialState, action: any) => {
   }
 };
 
-export const getDataEvent = () => async (dispatch: any) => {
+const getDataEvent = () => async (dispatch: any) => {
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
 };
-export const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
+const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
   await scheduleAPI.updateDataEvent(idEvent, bodyData);
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
 };
-export const getOrganizers = () => async (dispatch: any) => {
+const getOrganizers = () => async (dispatch: any) => {
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setOrganizersAC(organizers));
 };
-export const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
+const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
   await scheduleAPI.deleteDataEvent(idEvent);
 };
-export const addDataEvent = (newEvent: object) => async (dispatch: any) => {
+const addDataEvent = (newEvent: object) => async (dispatch: any) => {
   return await scheduleAPI.addDataEvent(newEvent);
 };
+
+export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
+export { reducer, getDataEvent, putDataEvent, getOrganizers, deleteDataEvent, addDataEvent };
