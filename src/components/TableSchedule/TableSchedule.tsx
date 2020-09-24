@@ -55,7 +55,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
   const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
   const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
   const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
-  const [timeZone, setTimeZone] = useState<string>('+00:00'); // Time Zone выбранный пользователем
+  const [timeZone, setTimeZone] = useState<string>('+0:00'); // Time Zone выбранный пользователем
 
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
@@ -391,10 +391,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
 
   return (
     <Form form={form} component={false}>
-      <Button type="primary" disabled={editingId !== ''} onClick={add} icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}>
-        Add event
-      </Button>
       <div className="hidden-btn-row">
+        <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
         {hiddenData.length === 0 ? (
           <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
         ) : (
