@@ -145,6 +145,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     title: 'Edit',
     dataIndex: 'operation',
     fixed: 'right',
+    width: '250px',
     render: (_: any, record: any) => {
       const editable = isEditing(record);
       if (editable) {
@@ -211,6 +212,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     title: '',
     dataIndex: 'operation',
     fixed: 'right',
+    width: '250px',
     render: (_: any, record: any) => {
       const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
@@ -388,7 +390,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
       selRow.className = newRowClassName;
     }
   };
-
   return (
     <Form form={form} component={false}>
       <div className="hidden-btn-row">
@@ -423,10 +424,13 @@ const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 2500, y: 500 }}
+        scroll={{ x: 2000, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
+          defaultPageSize: 20,
+          defaultCurrent: 1,
+          showTotal: (total: number) => `Total ${total} items`,
         }}
         onRow={(record, rowIndex) => {
           return {

@@ -66,4 +66,24 @@ const typesTag = [
 
 const dateAndTimeFormat = 'YYYY.MM.DD hh:mm';
 
-export { switchTypeToColor, typesTag, dateAndTimeFormat };
+const columnSetWidth = (columnName: string) => {
+  switch (columnName) {
+    case 'course':
+      return '180px';
+    case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone' || 'type':
+      return '150px';
+    case 'name':
+      return '280px';
+    case 'descriptionUrl':
+      return '400px';
+    case 'organizer':
+      return '200px';
+    case 'timeToComplete':
+      return '120px';
+    case 'week':
+      return '80px';
+    default:
+      return 'auto';
+  }
+};
+export { switchTypeToColor, typesTag, dateAndTimeFormat, columnSetWidth };

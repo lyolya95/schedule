@@ -5,7 +5,7 @@ import { Tag } from 'antd';
 import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
 import { Form } from 'antd';
-import { dateAndTimeFormat } from '../utilities';
+import { dateAndTimeFormat, columnSetWidth } from '../utilities';
 
 const TableScheduleContainer = (props: any) => {
   const {
@@ -81,12 +81,11 @@ const TableScheduleContainer = (props: any) => {
   };
 
   const changeColumnsSelect = (value: any) => {
-    const mapColumns = value.map((n: any) => ({
+    const mapColumns = value.map((n: string) => ({
       title: n,
       dataIndex: n,
       editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
     }));
-    //({ title: toUpperCase(n), dataIndex: n, editable: true }));
     setMapColumnsName(mapColumns);
   };
 
@@ -98,10 +97,10 @@ const TableScheduleContainer = (props: any) => {
   }, [isMentorStatus]);
 
   useEffect(() => {
-    const mapColumns: any = defaultColumns.map((n: any) => ({
-      //title: toUpperCase(n),
+    const mapColumns: any = defaultColumns.map((n: string) => ({
       title: n,
       dataIndex: n,
+      width: columnSetWidth(n),
       editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
     }));
     setMapColumnsName(mapColumns);
