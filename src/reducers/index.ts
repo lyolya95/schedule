@@ -1,4 +1,5 @@
-import { setDataEventsAC, setModalSettings, setOrganizersAC } from './../actions/index';
+import { types } from '../components/utilities/switcher';
+import { setColorTypes, setDataEventsAC, setModalSettings, setOrganizersAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 
 export const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
@@ -6,6 +7,7 @@ export const SET_DATA_EVENT = 'SET_DATA_EVENT';
 export const SET_ORGANIZERS = 'SET_ORGANIZERS';
 export const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
+export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
 
 export interface IEvent {
   id?: string;
@@ -34,6 +36,10 @@ export interface StateModel {
   organizers: string[];
   initialEventData: IEvent;
   isShowSettingsModal: boolean;
+  types: {
+    type: string;
+    color: string;
+  }[];
 }
 
 const initialState: StateModel = {
@@ -73,6 +79,7 @@ const initialState: StateModel = {
     week: '',
   },
   isShowSettingsModal: false,
+  types: types,
 };
 
 export const reducer = (state = initialState, action: any) => {
@@ -116,6 +123,9 @@ export const reducer = (state = initialState, action: any) => {
     case SET_MODAL_SETTINGS: {
       return { ...state, isShowSettingsModal: action.value };
     }
+    case SET_TYPES_COLOR: {
+      return { ...state, types: action.value };
+    }
     default:
       return state;
   }
@@ -145,4 +155,8 @@ export const addDataEvent = (newEvent: any) => async (dispatch: any) => {
 
 export const setShowModalSettings = (value: boolean) => (dispatch: any) => {
   dispatch(setModalSettings(value));
+};
+
+export const setColorType = (value: any) => (dispatch: any) => {
+  dispatch(setColorTypes(value));
 };

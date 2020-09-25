@@ -7,7 +7,7 @@ import { switchTypeToColor } from '../utilities/switcher';
 import './Calendar.scss';
 import { CalendarItemProps } from './CalendarItem.model';
 
-export const CalendarItem: FC<CalendarItemProps> = React.memo(({ data, getDataEvent }) => {
+export const CalendarItem: FC<CalendarItemProps> = React.memo(({ data, getDataEvent, types }) => {
   const isRowBased = useMediaQuery('(min-width: 800px)');
 
   useEffect(() => {

@@ -17,7 +17,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
-import { switchTypeToColor } from '../utilities/switcher';
 import EditableCell from './EditableCell';
 import { IAgeMap } from './TableSchedule.model';
 
@@ -41,6 +40,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     add,
     remove,
     save,
+    types,
   } = props;
 
   // localStorage
@@ -247,8 +247,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           dataIndex: 'type',
           editable: true,
           render: (_: any, record: any) => {
+            console.log(types);
             return (
-              <Tag key={record.type} color={switchTypeToColor(record.type)}>
+              <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
                 {record.type}
               </Tag>
             );

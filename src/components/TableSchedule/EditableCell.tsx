@@ -1,7 +1,6 @@
 import { DatePicker, Form, Input, InputNumber, Select, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import React from 'react';
-import { types } from '../utilities/switcher';
 import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
 
@@ -15,9 +14,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
   record,
   index,
   children,
+  types,
   ...restProps
 }) => {
   let inputNode;
+  console.log(types);
 
   switch (dataIndex) {
     case 'score':
@@ -38,7 +39,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       );
       break;
     case 'type':
-      const options = types.map((item: any, index: number) => {
+      const options = types?.map((item: any, index: number) => {
         return (
           <Option key={index} value={item.type}>
             <Tag key={index} color={item.color}>
