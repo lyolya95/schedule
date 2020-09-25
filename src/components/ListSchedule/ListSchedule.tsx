@@ -34,10 +34,6 @@ export const ListSchedule: FC<ListScheduleProps> = React.memo(({ data, getDataEv
       );
     }
 
-    const changePage = (page:number, pageSize:number|undefined) =>{
-      console.log('page='+page+' size'+pageSize);
-    }
-        
     return (
         <List
           grid={{ gutter: 16, column: 4 }}
