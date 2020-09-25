@@ -158,8 +158,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
   const mentorOperationData = {
     title: 'Edit',
     dataIndex: 'operation',
-    fixed: 'right',
-    width: `${widthScreen / 4}px`,
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const editable = isEditing(record);
       if (editable) {
@@ -225,8 +225,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
   const studentOperationData = {
     title: '',
     dataIndex: 'operation',
-    fixed: 'right',
-    width: `${widthScreen / 4}px`,
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
@@ -443,7 +443,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 2000, y: 600 }}
+        scroll={{ x: 2500, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,

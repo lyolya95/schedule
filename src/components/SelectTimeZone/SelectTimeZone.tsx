@@ -12,7 +12,7 @@ export const SelectTimeZone: FC<SelectTimeZoneModelProps> = ({ setTimeZone, widt
 
   return (
     <div className="timezone">
-      <Select defaultValue="+00:00" style={{ width: widthScreen / 2 }} onChange={changeTimeZone}>
+      <Select defaultValue="+00:00" style={{ width: widthScreen > 800 ? 400 : widthScreen / 2 }} onChange={changeTimeZone}>
         <Option value="-12:00">(GMT -12:00) Eniwetok, Kwajalein</Option>
         <Option value="-11:00">(GMT -11:00) Midway Island, Samoa</Option>
         <Option value="-10:00">(GMT -10:00) Hawaii</Option>
