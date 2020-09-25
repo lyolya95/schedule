@@ -8,16 +8,24 @@ import { switchTypeToColor } from '../utilities';
 export const ListSchedule: FC<ListScheduleProps> = React.memo(({ data, getDataEvent }) => {
     
   const [currPageSize, setCurrPageSize] = useState(20);
+  const [selItem, setSelItem] = useState('');
 
   useEffect(() => {
       getDataEvent();
     }, [getDataEvent]);
-      
-      
+    
   const getListData = (item:any) => {
-        return (
-          <List.Item>
-            <Card  title={item.name}>
+    const classNameItem =  selItem === item.id ? "list-item-selected" : "";
+    
+    return (
+          <List.Item
+            key={item.id}
+            className = {classNameItem}
+            onClick={()=>setSelItem(item.id)}
+           >
+            <Card  title={item.name}
+            
+            >
                   <div>Course: <b>{item.course}</b></div>
                   {item.type 
                   ?<div>Type: <Tag color={switchTypeToColor(item.type)} className="size">

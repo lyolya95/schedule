@@ -12,6 +12,15 @@
     .place{
         color: rgb(135, 208, 104);
     }
+
+    .list-item-selected>div{
+        border-color:rgb(24, 144, 255);
+        background:rgb(230, 247, 255);
+    }
+
+    .list-item-selected .ant-card-head{
+        border-bottom-color:rgb(24, 144, 255);
+    }
 }
 
 
