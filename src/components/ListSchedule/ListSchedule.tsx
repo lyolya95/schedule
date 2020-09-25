@@ -18,42 +18,47 @@ export const ListSchedule: FC<ListScheduleProps> = React.memo(({ data, getDataEv
     const classNameItem =  selItem === item.id ? "list-item-selected" : "";
     
     return (
-          <List.Item
-            key={item.id}
-            className = {classNameItem}
-            onClick={()=>setSelItem(item.id)}
-           >
-            <Card  title={item.name}
-            
-            >
-                  <div>Course: <b>{item.course}</b></div>
-                  {item.type 
-                  ?<div>Type: <Tag color={switchTypeToColor(item.type)} className="size">
-                          {item.type}
-                      </Tag>
-                  </div>
-                  : null
-                  }
-                  <div>Date: <b>{item.dateTime+item.timeZone}</b></div>
-                  { item.place ? <div>Place: <span className="place">{item.place}</span></div> : null }
-                  { item.organizer ? <div>Organizer: <b>{item.organizer}</b></div> : null }
-              </Card>
-          </List.Item>
-      );
-    }
-
-    return (
-        <List
-          grid={{ gutter: 16, column: 4 }}
-          dataSource={data}
-          renderItem={item => getListData(item) }
-          pagination={{
-            onShowSizeChange: (current, size) => {
-              setCurrPageSize(size)
-            },
-            pageSize: currPageSize,
-            showSizeChanger: true,
-          }}
-        />       
+      <List.Item
+        key={item.id}
+        className = {classNameItem}
+        onClick={()=>setSelItem(item.id)}
+      >
+        <Card  title={item.name}>
+          <div>Course: <b>{item.course}</b></div>
+          {item.type 
+          ?<div>Type: <Tag color={switchTypeToColor(item.type)} className="size">
+                  {item.type}
+              </Tag>
+          </div>
+          : null
+          }
+          <div>Date: <b>{item.dateTime+item.timeZone}</b></div>
+          { item.place ? <div>Place: <span className="place">{item.place}</span></div> : null }
+          { item.organizer ? <div>Organizer: <b>{item.organizer}</b></div> : null }
+      </Card>
+    </List.Item>
     );
+  }
+
+  return (
+      <List
+        grid={{ 
+          gutter: 16,
+          xs: 1,
+          sm: 2,
+          md: 3,
+          lg: 4,
+          xl: 4,
+          xxl: 6, }}
+        dataSource={data}
+        renderItem={item => getListData(item) }
+        pagination={{
+          onShowSizeChange: (current, size) => {
+            setCurrPageSize(size)
+          },
+          pageSize: currPageSize,
+          showSizeChanger: true,
+        }}
+      />       
+  );
 });
