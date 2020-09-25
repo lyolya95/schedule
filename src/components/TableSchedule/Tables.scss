@@ -66,16 +66,8 @@ $buttonWidth: 250px;
   -webkit-user-select: none;
   user-select: none;
 }
-
 .ant-btn-primary {
-  position: absolute;
-  width: $buttonWidth;
-  top: 10px;
-  height: 35px;
-  left: calc(50% - #{$buttonWidth}/ 2);
-}
-.ant-picker-ok .ant-btn-primary {
-  position: relative;
+  margin: 0;
 }
 .ant-collapse-item {
   background-color: rgb(244, 250, 252);
@@ -98,19 +90,24 @@ $buttonWidth: 250px;
   border: 1px solid #1890ff;
   color: #1890ff;
 }
+
 .doneEvent {
   border: 1px solid #52c41a;
   color: #52c41a;
 }
+
 .ant-table-row-main {
   background-color: #ff9898;
 }
+
 .ant-table-tbody > tr.ant-table-row-main:hover > td {
   background-color: #ff8686;
 }
+
 .ant-table-row-done {
   background-color: #7dc45a;
 }
+
 .ant-table-tbody > tr.ant-table-row-done:hover > td {
   background-color: #68c43b;
 }

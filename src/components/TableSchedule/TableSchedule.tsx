@@ -16,12 +16,13 @@ import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
-import { switchTypeToColor } from '../utilities/switcher';
+import { switchTypeToColor } from '../utilities';
 import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { IAgeMap } from './TableSchedule.model';
-import EditableCell from './EditableCell';
+import { EditableCell } from './EditableCell';
+import { dateAndTimeFormat } from '../utilities';
 
-export const TableSchedule: FC<any> = React.memo((props) => {
+const TableSchedule: FC<any> = React.memo((props) => {
   const {
     data,
     columnsName,
@@ -54,8 +55,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
   const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
   const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
-  const [timeZone, setTimeZone] = useState<string>('+00:00'); // Time Zone выбранный пользователем
-  const format = 'DD.MM.YYYY HH:mm'; //Формат даты и времени для выведения в таблицу
+  const [timeZone, setTimeZone] = useState<string>('+0:00'); // Time Zone выбранный пользователем
 
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
@@ -116,7 +116,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
   const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
     console.log('timezone', timeGap);
-    return moment(time).subtract(timeGap, 'h').add(timezone).format(format);
+    return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
   };
 
   //const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
@@ -391,10 +391,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
   return (
     <Form form={form} component={false}>
-      <Button type="primary" disabled={editingId !== ''} onClick={add} icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}>
-        Add event
-      </Button>
       <div className="hidden-btn-row">
+        <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
         {hiddenData.length === 0 ? (
           <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
         ) : (
@@ -467,3 +465,5 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     </Form>
   );
 });
+
+export { TableSchedule };

@@ -5,7 +5,9 @@ import { Tag } from 'antd';
 import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
 import { Form } from 'antd';
-export const TableScheduleContainer = (props: any) => {
+import { dateAndTimeFormat } from '../utilities';
+
+const TableScheduleContainer = (props: any) => {
   const {
     columnsName,
     notEditableColumns,
@@ -26,7 +28,6 @@ export const TableScheduleContainer = (props: any) => {
   const [editingId, setEditingId] = useState('');
   const isEditing = (record: any) => record.id === editingId;
   const [isLoading, setIsLoading] = useState(false);
-  const dateAndTimeFormat = 'DD.MM.YYYY hh:mm'; //Формат даты и времени для выведения в таблицу
   const edit = (record: any) => {
     form.setFieldsValue({ ...record });
     setEditingId(record.id);
@@ -126,7 +127,8 @@ export const TableScheduleContainer = (props: any) => {
       add={add}
       remove={remove}
       save={save}
-      dateAndTimeFormat={dateAndTimeFormat}
     />
   );
 };
+
+export { TableScheduleContainer };
