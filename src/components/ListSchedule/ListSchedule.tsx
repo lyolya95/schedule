@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import React, { FC, useState, useEffect } from 'react';
 import './ListSchedule.scss';
 import { ListScheduleProps } from './ListSchedule.model';
-import { switchTypeToColor } from '../utilities/switcher';
+import { switchTypeToColor } from '../utilities';
 
 export const ListSchedule: FC<ListScheduleProps> = React.memo(({ data, getDataEvent }) => {
     
