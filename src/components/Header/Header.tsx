@@ -17,6 +17,11 @@ export const Header: FC<HeaderProps> = React.memo(({ isMentorStatus, changeMento
     history.push('/calendar');
   }, [history]);
 
+  const handleShowList = useCallback(() => {
+    history.push('/list');
+  }, [history]);
+
+
   return (
     <div className="header">
       <FirstLogo />
@@ -28,7 +33,8 @@ export const Header: FC<HeaderProps> = React.memo(({ isMentorStatus, changeMento
         <Button onClick={handleShowCalendar}>
           <CalendarOutlined />
         </Button>
-        <Button>
+        <Button
+          onClick={handleShowList}>
           <UnorderedListOutlined />
         </Button>
         <Button onClick={changeMentorStatus}>{isMentorStatus ? 'To Student App' : 'To Mentor App'}</Button>
