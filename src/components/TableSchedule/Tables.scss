@@ -67,13 +67,14 @@ $buttonWidth: 250px;
   user-select: none;
 }
 
-.ant-btn-primary {
+.add-event-btn {
   position: absolute;
   width: $buttonWidth;
   top: 10px;
   height: 35px;
   left: calc(50% - #{$buttonWidth}/ 2);
 }
+
 .ant-picker-ok .ant-btn-primary {
   position: relative;
 }

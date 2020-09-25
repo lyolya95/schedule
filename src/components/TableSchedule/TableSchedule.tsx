@@ -18,6 +18,7 @@ import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";
 import moment from "moment";
 import {IAgeMap} from "./TableSchedule.model";
 import EditableCell from "./EditableCell";
+import {SaveToFile} from "../SaveToFile/SaveToFile";
 
 export const TableSchedule: FC<any> = React.memo((props) => {
     const {
@@ -164,7 +165,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </span>
                 );
             } else {
-                const eventRating = data.find((item: any) => record.key === item.key).rating;
+                const eventRating = data.find((item: any) => record.id === item.id).rating;
                 return (
                     <span>
             <Button
@@ -389,12 +390,13 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         }
     };
 
+    // @ts-ignore
     return (
         <Form form={form} component={false}>
-            <Button type="primary" disabled={editingId !== ''} onClick={add}
-                    icon={<PlusCircleTwoTone style={{fontSize: '16px'}}/>}>
+            {isMentorStatus ? <Button className="add-event-btn" type="primary" disabled={editingId !== ''} onClick={add}
+                                      icon={<PlusCircleTwoTone style={{fontSize: '16px'}}/>}>
                 Add event
-            </Button>
+            </Button> : null}
             <div className="hidden-btn-row">
                 {hideButton ? (
                     <Button className="hide-btn" onClick={hideRows}>
@@ -407,6 +409,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                     </Button>
                 )}
                 <SelectTimeZone setTimeZone={setTimeZone}/>
+                <SaveToFile data={visibleData} columns={mergedColumns}/>
             </div>
             <MentorFilters
                 data={data}
