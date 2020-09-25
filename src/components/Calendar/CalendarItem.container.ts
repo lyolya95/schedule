@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { getDataEvent } from '../../reducers';
-import { StateModel } from './../../reducers/index';
+import { StateModel } from '../../reducers/reducers.model';
 import { CalendarItem } from './CalendarItem';
 
 const mapStateToProps = (state: StateModel) => {

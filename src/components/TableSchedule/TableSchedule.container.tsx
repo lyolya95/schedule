@@ -1,21 +1,21 @@
 import { Alert, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { addDataEvent, deleteDataEvent, getDataEvent, getOrganizers, putDataEvent, StateModel } from '../../reducers';
+import { addDataEvent, deleteDataEvent, getDataEvent, putDataEvent } from '../../reducers';
+import { StateModel } from '../../reducers/reducers.model';
 import { TableScheduleContainer } from './TableScheduleContainer';
 
 const Container = (props: any) => {
   const [preloader, setPreloader] = useState(true);
-
   useEffect(() => {
-    if (props.data.length < 1) {
-      props.getDataEvent();
-      props.getOrganizers();
+    const firstLoadTable = async () => {
       setPreloader(true);
-    } else {
+      await props.getDataEvent();
       setPreloader(false);
-    }
-  }, [props]);
+    };
+    firstLoadTable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return preloader ? (
     <Spin tip="Loading...">
@@ -39,10 +39,11 @@ const mapStateToProps = (state: StateModel) => {
   };
 };
 
-export const TableSchedule = connect(mapStateToProps, {
+const TableSchedule = connect(mapStateToProps, {
   getDataEvent,
   putDataEvent,
-  getOrganizers,
   addDataEvent,
   deleteDataEvent,
 })(Container);
+
+export { TableSchedule };

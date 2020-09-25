@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { changeMentorStatus } from '../../actions';
-import { setShowModalSettings, StateModel } from '../../reducers';
+import { setShowModalSettings } from '../../reducers';
+import { StateModel } from '../../reducers/reducers.model';
 import { Header } from './Header';
 
 const mapStateToProps = (state: StateModel) => {

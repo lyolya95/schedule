@@ -1,53 +1,38 @@
-import { types } from '../components/utilities/switcher';
+import { typesTag } from '../components/utilities';
 import { setColorTypes, setDataEventsAC, setModalSettings, setOrganizersAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
+import { StateModel } from './reducers.model';
 
-export const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
-export const SET_DATA_EVENT = 'SET_DATA_EVENT';
-export const SET_ORGANIZERS = 'SET_ORGANIZERS';
-export const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
+const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
+const SET_DATA_EVENT = 'SET_DATA_EVENT';
+const SET_ORGANIZERS = 'SET_ORGANIZERS';
+const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
 export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
 
-export interface IEvent {
-  id?: string;
-  name: string;
-  course: string;
-  dateTime: string;
-  type: string;
-  timeZone: string;
-  organizer: string | undefined;
-  descriptionUrl: string;
-  timeToComplete: string;
-  place: string;
-  week: string;
-  studentScore: string;
-  maxScore: string;
-  taskContent: string;
-  isShowFeedback: string;
-  rating: string;
-}
-export interface StateModel {
-  isMentorStatus: boolean;
-  data: any;
-  columnsName: string[];
-  notEditableColumns: string[];
-  ratingVotes: number;
-  organizers: string[];
-  initialEventData: IEvent;
-  isShowSettingsModal: boolean;
-  types: {
-    type: string;
-    color: string;
-  }[];
-}
-
 const initialState: StateModel = {
   isMentorStatus: false,
-  data: [],
+  data: [
+    {
+      course: '',
+      dateTime: '',
+      descriptionUrl: '',
+      isShowFeedback: '',
+      maxScore: '',
+      name: '',
+      organizer: undefined,
+      place: '',
+      rating: '',
+      studentScore: '',
+      taskContent: '',
+      timeToComplete: '',
+      timeZone: '',
+      type: '',
+      week: '',
+    },
+  ],
   columnsName: [
     'dateTime',
-    'timeZone',
     'timeToComplete',
     'type',
     'name',
@@ -79,10 +64,10 @@ const initialState: StateModel = {
     week: '',
   },
   isShowSettingsModal: false,
-  types: types,
+  types: typesTag,
 };
 
-export const reducer = (state = initialState, action: any) => {
+const reducer = (state = initialState, action: any): StateModel => {
   switch (action.type) {
     case CHANGE_MENTOR_STATUS:
       return {
@@ -90,7 +75,7 @@ export const reducer = (state = initialState, action: any) => {
         isMentorStatus: !state.isMentorStatus,
       };
     case SET_DATA_EVENT: {
-      let ratingVotes = 0;
+      let ratingVotes: number = 0;
       action.events.map((event: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
@@ -106,13 +91,13 @@ export const reducer = (state = initialState, action: any) => {
           const coefficient = event.coefficient && event.coefficient > 0 ? ', coefficient:' + event.coefficient : '';
           event.combineScore = score + '/' + maxScore + coefficient;
         }
-        //event.key = event.id;
         if (event.rating && event.rating > 0) {
           ratingVotes++;
+          console.log(ratingVotes);
         }
         return event;
       });
-      return { ...state, data: action.events };
+      return { ...state, data: action.events, ratingVotes: ratingVotes };
     }
     case SET_ORGANIZERS: {
       return { ...state, organizers: [...action.organizers] };
@@ -131,25 +116,22 @@ export const reducer = (state = initialState, action: any) => {
   }
 };
 
-export const getDataEvent = () => async (dispatch: any) => {
+const getDataEvent = () => async (dispatch: any) => {
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
+  dispatch(setOrganizersAC(organizers));
 };
-export const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
+const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
   await scheduleAPI.updateDataEvent(idEvent, bodyData);
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
 };
-export const getOrganizers = () => async (dispatch: any) => {
-  const organizers = await scheduleAPI.getDataOrganizers();
-  dispatch(setOrganizersAC(organizers));
-};
-export const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
+const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
   await scheduleAPI.deleteDataEvent(idEvent);
 };
-export const addDataEvent = (newEvent: any) => async (dispatch: any) => {
+const addDataEvent = (newEvent: object) => async (dispatch: any) => {
   return await scheduleAPI.addDataEvent(newEvent);
 };
 
@@ -160,3 +142,5 @@ export const setShowModalSettings = (value: boolean) => (dispatch: any) => {
 export const setColorType = (value: any) => (dispatch: any) => {
   dispatch(setColorTypes(value));
 };
+export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
+export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent };

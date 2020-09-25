@@ -1,6 +1,7 @@
 import { DatePicker, Form, Input, InputNumber, Select, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import React from 'react';
+import { dateAndTimeFormat, typesTag } from '../utilities';
 import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
 
@@ -25,7 +26,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
       inputNode = <InputNumber />;
       break;
     case 'dateTime':
-      inputNode = <DatePicker showTime format="YYYY-MM-DD hh:mm" allowClear={false} style={{ minWidth: 150 }} />;
+      inputNode = (
+        <DatePicker autoFocus={true} showTime format={dateAndTimeFormat} allowClear={false} style={{ minWidth: 150 }} />
+      );
       break;
     case 'organizer':
       inputNode = (
@@ -39,7 +42,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       );
       break;
     case 'type':
-      const options = types?.map((item: any, index: number) => {
+      const options = typesTag.map((item: any, index: number) => {
         return (
           <Option key={index} value={item.type}>
             <Tag key={index} color={item.color}>
@@ -48,7 +51,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           </Option>
         );
       });
-      inputNode = <Select style={{ width: 200 }}>{options}</Select>;
+      inputNode = <Select style={{ width: '160px' }}>{options}</Select>;
       break;
     default:
       inputNode = <Input />;
@@ -75,4 +78,4 @@ const EditableCell: React.FC<EditableCellProps> = ({
     </td>
   );
 };
-export default EditableCell;
+export { EditableCell };

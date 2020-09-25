@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { setColorType, setShowModalSettings, StateModel } from '../../reducers';
+import { setColorType, setShowModalSettings } from '../../reducers';
+import { StateModel } from '../../reducers/reducers.model';
 import { SettingsModal } from './SettingsModal';
 
 const mapStateToProps = (state: StateModel) => {

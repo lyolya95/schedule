@@ -5,7 +5,9 @@ import { Tag } from 'antd';
 import { TableSchedule } from './TableSchedule';
 import './Tables.scss';
 import { Form } from 'antd';
-export const TableScheduleContainer = (props: any) => {
+import { dateAndTimeFormat, columnSetWidth } from '../utilities';
+
+const TableScheduleContainer = (props: any) => {
   const {
     columnsName,
     notEditableColumns,
@@ -26,7 +28,6 @@ export const TableScheduleContainer = (props: any) => {
   const [editingId, setEditingId] = useState('');
   const isEditing = (record: any) => record.id === editingId;
   const [isLoading, setIsLoading] = useState(false);
-  const dateAndTimeFormat = 'DD.MM.YYYY hh:mm'; //Формат даты и времени для выведения в таблицу
   const edit = (record: any) => {
     form.setFieldsValue({ ...record });
     setEditingId(record.id);
@@ -80,12 +81,11 @@ export const TableScheduleContainer = (props: any) => {
   };
 
   const changeColumnsSelect = (value: any) => {
-    const mapColumns = value.map((n: any) => ({
+    const mapColumns = value.map((n: string) => ({
       title: n,
       dataIndex: n,
       editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
     }));
-    //({ title: toUpperCase(n), dataIndex: n, editable: true }));
     setMapColumnsName(mapColumns);
   };
 
@@ -97,10 +97,10 @@ export const TableScheduleContainer = (props: any) => {
   }, [isMentorStatus]);
 
   useEffect(() => {
-    const mapColumns: any = defaultColumns.map((n: any) => ({
-      //title: toUpperCase(n),
+    const mapColumns: any = defaultColumns.map((n: string) => ({
       title: n,
       dataIndex: n,
+      width: columnSetWidth(n),
       editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
     }));
     setMapColumnsName(mapColumns);
@@ -126,7 +126,8 @@ export const TableScheduleContainer = (props: any) => {
       add={add}
       remove={remove}
       save={save}
-      dateAndTimeFormat={dateAndTimeFormat}
     />
   );
 };
+
+export { TableScheduleContainer };

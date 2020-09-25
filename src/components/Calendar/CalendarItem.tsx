@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import moment from 'moment';
 import React, { FC, useCallback, useEffect } from 'react';
 import { useMediaQuery } from '../MediaQuery/MediaQuery';
-import { switchTypeToColor } from '../utilities/switcher';
+import { switchTypeToColor } from '../utilities';
 import './Calendar.scss';
 import { CalendarItemProps } from './CalendarItem.model';
 
