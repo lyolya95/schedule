@@ -92,7 +92,7 @@ const reducer = (state = initialState, action: any): StateModel => {
         }
         return event;
       });
-      return { ...state, data: action.events };
+      return { ...state, data: action.events, ratingVotes: ratingVotes  };
     }
     case SET_ORGANIZERS: {
       return { ...state, organizers: [...action.organizers] };
