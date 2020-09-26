@@ -70,17 +70,21 @@ const columnSetWidth = (columnName: string) => {
   switch (columnName) {
     case 'course':
       return '180px';
-    case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone' || 'type':
-      return '150px';
+    case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone':
+      return '140px';
     case 'name':
-      return '280px';
+      return '250px';
+    case 'Type':
+      return '250px';
     case 'descriptionUrl':
-      return '400px';
+      return '350px';
     case 'organizer':
       return '200px';
     case 'timeToComplete':
       return '120px';
     case 'week':
+      return '60px';
+    case 'Score/maxScore':
       return '80px';
     default:
       return 'auto';
