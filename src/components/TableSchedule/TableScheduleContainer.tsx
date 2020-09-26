@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { Form, Tag } from 'antd';
 import 'antd/dist/antd.css';
-import { Tag } from 'antd';
-import { TableSchedule } from './TableSchedule';
+import React, { useEffect, useState } from 'react';
+import { columnSetWidth, dateAndTimeFormat } from '../utilities';
 import './Tables.scss';
-import { Form } from 'antd';
-import { dateAndTimeFormat, columnSetWidth } from '../utilities';
+import { TableSchedule } from './TableSchedule';
 
 const TableScheduleContainer = (props: any) => {
   const {
@@ -20,7 +19,9 @@ const TableScheduleContainer = (props: any) => {
     addDataEvent,
     deleteDataEvent,
     initialEventData,
+    types,
   } = props;
+
   const userColumnsName = isMentorStatus ? columnsName.filter((item: string) => item !== 'combineScore') : columnsName;
   const columnsNameMap = userColumnsName.map((n: string) => ({ value: n }));
 
@@ -92,7 +93,9 @@ const TableScheduleContainer = (props: any) => {
   //@TOdo не убирается после изменения isMentorStatus поле Score в выбранных select
 
   useEffect(() => {
-    const userColumns = isMentorStatus ? mapsColumnsName.filter((item: any) => item.title !== 'combineScore') : mapsColumnsName;
+    const userColumns = isMentorStatus
+      ? mapsColumnsName.filter((item: any) => item.title !== 'combineScore')
+      : mapsColumnsName;
     setMapColumnsName(userColumns);
   }, [isMentorStatus]);
 
@@ -126,6 +129,7 @@ const TableScheduleContainer = (props: any) => {
       add={add}
       remove={remove}
       save={save}
+      types={types}
     />
   );
 };

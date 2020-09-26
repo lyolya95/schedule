@@ -1,14 +1,4 @@
-import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  ExclamationOutlined,
-  EyeInvisibleTwoTone,
-  EyeTwoTone,
-  HighlightTwoTone,
-  PlusCircleTwoTone,
-  SaveOutlined,
-} from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, DeleteOutlined, ExclamationOutlined, EyeInvisibleTwoTone, EyeTwoTone, HighlightTwoTone, PlusCircleTwoTone, SaveOutlined } from '@ant-design/icons';
 import { EyeOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
@@ -116,7 +106,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
   };
 
   const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
-    console.log('timezone', timeGap);
     return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
   };
 
@@ -491,3 +480,4 @@ const TableSchedule: FC<any> = React.memo((props) => {
 });
 
 export { TableSchedule };
+
