@@ -1,7 +1,7 @@
 import { Alert, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { addDataEvent, deleteDataEvent, getDataEvent, putDataEvent } from '../../reducers';
+import { addDataEvent, deleteDataEvent, getDataEvent, putDataEvent, setWidthScreen } from '../../reducers';
 import { StateModel } from '../../reducers/reducers.model';
 import { TableScheduleContainer } from './TableScheduleContainer';
 
@@ -36,6 +36,7 @@ const mapStateToProps = (state: StateModel) => {
     organizers: state.organizers,
     initialEventData: state.initialEventData,
     types: state.types,
+    widthScreen: state.widthScreen,
   };
 };
 
@@ -44,6 +45,7 @@ const TableSchedule = connect(mapStateToProps, {
   putDataEvent,
   addDataEvent,
   deleteDataEvent,
+  setWidthScreen,
 })(Container);
 
 export { TableSchedule };

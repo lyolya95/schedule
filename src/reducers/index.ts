@@ -6,6 +6,7 @@ import {
   setModalSettings,
   setModalViewEvent,
   setOrganizersAC,
+  setwidthScreenAC,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
@@ -17,6 +18,7 @@ const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
 export const SET_MODAL_VIEW_EVENT: string = 'SET_MODAL_VIEW_EVENT';
 export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
+export const SET_WIDTH_SCREEN: string = 'SET_WIDTH_SCREEN';
 
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -76,6 +78,7 @@ const initialState: StateModel = {
   isShowSettingsModal: false,
   types: typesTag,
   isShowModalViewEvents: false,
+  widthScreen: 1920,
 };
 
 const reducer = (state = initialState, action: any): StateModel => {
@@ -124,6 +127,9 @@ const reducer = (state = initialState, action: any): StateModel => {
     case SET_MODAL_VIEW_EVENT: {
       return { ...state, isShowModalViewEvents: action.value };
     }
+    case SET_WIDTH_SCREEN: {
+      return { ...state, widthScreen: action.value };
+    }
     default:
       return state;
   }
@@ -159,5 +165,8 @@ export const setShowModaViewEvent = (value: boolean) => (dispatch: Dispatch) => 
 export const setColorType = (value: any) => (dispatch: Dispatch) => {
   dispatch(setColorTypes(value));
 };
+const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
+  dispatch(setwidthScreenAC(value));
+};
 export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
-export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent };
+export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent, setWidthScreen };

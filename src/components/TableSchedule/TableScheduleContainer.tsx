@@ -20,6 +20,8 @@ const TableScheduleContainer = (props: any) => {
     deleteDataEvent,
     initialEventData,
     types,
+    widthScreen,
+    setWidthScreen,
   } = props;
 
   const userColumnsName = isMentorStatus ? columnsName.filter((item: string) => item !== 'combineScore') : columnsName;
@@ -97,7 +99,6 @@ const TableScheduleContainer = (props: any) => {
     setMapColumnsName(userColumns);
   }, [isMentorStatus]);
   // width ___
-  const [widthScreen, setWidthScreen] = useState(1366);
   const updateDimensions = () => {
     setWidthScreen(window.innerWidth);
   };
