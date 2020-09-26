@@ -16,8 +16,9 @@ export const MentorTaskForm:FC<MentorTaskFormProps> = (props) => {
     setEditStatus(true);
   }
 
-  const handleSave = async (text:string) => {
+  const handleSave = async (text:string, coords:number[]) => {
     eventData.taskContent = text;
+    eventData.coordinates = coords;
     await putDataEvent(eventData.id, eventData);
     setEditStatus(false);
   }
@@ -46,6 +47,7 @@ export const MentorTaskForm:FC<MentorTaskFormProps> = (props) => {
               ? <div className="task-description">
                   <TaskEditor 
                     currTaskContent={eventData.taskContent}
+                    chosenCoordinates={eventData.coordinates}
                     handleSave={handleSave}
                     handleCancel={handleCancel}
                   />
