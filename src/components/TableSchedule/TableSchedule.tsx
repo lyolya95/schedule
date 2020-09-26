@@ -72,9 +72,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck
-      .map((key: string) => flags[key].map((value: string) => value.split(',')))
-      .flat(2);
+    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -282,9 +280,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     }
   });
 
-  const columns: IAgeMap[] = isMentorStatus
-    ? [...allColumns, mentorOperationData]
-    : [...allColumns, studentOperationData];
+  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -306,8 +302,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
 
   const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName =
-      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
@@ -407,32 +402,15 @@ const TableSchedule: FC<any> = React.memo((props) => {
   };
   return (
     <Form form={form} component={false}>
-      <Button
-        type="primary"
-        disabled={editingId !== ''}
-        onClick={add}
-        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}
-      >
-        Add event
-      </Button>
       <div className="hidden-btn-row">
         {isMentorStatus ? (
-          <Button
-            type="primary"
-            disabled={editingId !== '' || !isMentorStatus}
-            onClick={add}
-            icon={<PlusCircleTwoTone />}
-          />
+          <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
         ) : (
           ''
         )}
 
         {hiddenData.length === 0 ? (
-          <Button
-            onClick={hideRows}
-            disabled={!hideButton}
-            icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />}
-          />
+          <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
         ) : (
           <Button onClick={unHideRows} icon={<EyeTwoTone />} />
         )}
