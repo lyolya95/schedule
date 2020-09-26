@@ -1,7 +1,7 @@
 import { DatePicker, Form, Input, InputNumber, Select, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import React from 'react';
-import { dateAndTimeFormat, typesTag } from '../utilities';
+import { dateAndTimeFormat } from '../utilities';
 import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
 
@@ -41,7 +41,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       );
       break;
     case 'type':
-      const options = typesTag.map((item: any, index: number) => {
+      const options = types.map((item: any, index: number) => {
         return (
           <Option key={index} value={item.type}>
             <Tag key={index} color={item.color}>

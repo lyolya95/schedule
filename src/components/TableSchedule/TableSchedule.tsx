@@ -148,6 +148,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     if (widthScreen !== window.innerWidth) {
       window.addEventListener('resize', updateDimensions);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.addEventListener]);
 
   //_________________________
@@ -296,6 +297,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         title: col.title,
         editing: isEditing(record),
         organizers,
+        types,
       }),
     };
   });
