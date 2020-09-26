@@ -42,6 +42,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     remove,
     save,
     types,
+    widthScreen,
   } = props;
 
   // localStorage
@@ -139,17 +140,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
   const [eventRating, setEventRating] = useState<any>();
 
   //____________________
-  const [widthScreen, setWidthScreen] = useState(1366);
-  const updateDimensions = () => {
-    setWidthScreen(window.innerWidth);
-  };
-  useEffect(() => {
-    setWidthScreen(window.innerWidth);
-    if (widthScreen !== window.innerWidth) {
-      window.addEventListener('resize', updateDimensions);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.addEventListener]);
 
   //_________________________
 
@@ -441,7 +431,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 2500, y: 600 }}
+        scroll={{ x: widthScreen < 700 ? 1500 : 2300, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
