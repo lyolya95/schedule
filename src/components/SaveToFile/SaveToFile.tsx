@@ -99,7 +99,7 @@ export const SaveToFile: FC<SaveToFileProps> = (props) => {
                     <Button onClick={createPDFtable}>PDF/table</Button>,
                     <Button onClick={onCancel} danger>Cancel</Button>,
                 ]}>
-                <Table id="table-to-file" size="middle" columns={columns} dataSource={props.data} />
+                <Table id="table-to-file" size="small" columns={columns} dataSource={props.data} />
             </Modal>
         </>
     )

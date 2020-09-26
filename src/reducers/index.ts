@@ -1,5 +1,5 @@
 import { typesTag } from '../components/utilities';
-import { setColorTypes, setDataEventsAC, setModalSettings, setOrganizersAC } from './../actions/index';
+import { setColorTypes, setDataEventsAC, setModalSettings, setOrganizersAC, setTimeZones } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
 
@@ -9,6 +9,7 @@ const SET_ORGANIZERS = 'SET_ORGANIZERS';
 const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
 export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
 export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
+export const SET_TIME_ZONE: string = 'SET_TIME_ZONE';
 
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -65,6 +66,7 @@ const initialState: StateModel = {
   },
   isShowSettingsModal: false,
   types: typesTag,
+  timeZone: "+00:00"
 };
 
 const reducer = (state = initialState, action: any): StateModel => {
@@ -110,6 +112,9 @@ const reducer = (state = initialState, action: any): StateModel => {
     case SET_TYPES_COLOR: {
       return { ...state, types: action.value };
     }
+    case SET_TIME_ZONE: {
+      return {...state, timeZone: action.value}
+    }
     default:
       return state;
   }
@@ -140,6 +145,10 @@ export const setShowModalSettings = (value: boolean) => (dispatch: any) => {
 
 export const setColorType = (value: any) => (dispatch: any) => {
   dispatch(setColorTypes(value));
+};
+
+export const setTimeZone = (value: any) => (dispatch: any) => {
+  dispatch(setTimeZones(value));
 };
 export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
 export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent };

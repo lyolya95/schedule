@@ -71,18 +71,6 @@ $buttonWidth: 250px;
   user-select: none;
 }
 
-/*<<<<<<< HEAD
-.add-event-btn {
-  position: absolute;
-  width: $buttonWidth;
-  top: 10px;
-  height: 35px;
-  left: calc(50% - #{$buttonWidth}/ 2);
-}
-
-.ant-picker-ok .ant-btn-primary {
-  position: relative;
-=======*/
 .ant-btn-primary {
   margin: 0;
 }
@@ -95,14 +83,6 @@ $buttonWidth: 250px;
     background-color: rgba(232, 246, 248, 0.534);
   }
 }
-
-/*.ant-table-cell{
-    .ant-btn,.ant-btn:hover, .ant-btn:focus,.ant-btn:active{
-        border:none;
-    }
-    .anticon-warning, .anticon-check-square{font-size:26px;}
-    .anticon-warning:hover, .anticon-check-square:hover{font-size:30px}
-}*/
 
 .mainEvent {
   border: 1px solid #1890ff;

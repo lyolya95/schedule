@@ -33,4 +33,5 @@ export interface StateModel {
     type: string;
     color: string;
   }[];
+  timeZone: string;
 }

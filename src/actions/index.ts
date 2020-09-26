@@ -3,7 +3,7 @@ import {
   CHANGE_MENTOR_STATUS,
   SET_DATA_EVENT,
   SET_MODAL_SETTINGS,
-  SET_ORGANIZERS,
+  SET_ORGANIZERS, SET_TIME_ZONE,
   SET_TYPES_COLOR,
 } from '../reducers';
 import { EventOfInterface, MentorInterface } from './../reducers/reducers.model';
@@ -27,5 +27,6 @@ const setOrganizersAC = (organizers: MentorInterface[]): SetOrganizersActionInte
 const addDataEventAC = (): AddDataEventActionInterface => ({ type: ADD_DATA_EVENT });
 const setModalSettings = (value: boolean) => ({ type: SET_MODAL_SETTINGS, value });
 const setColorTypes = (value: any) => ({ type: SET_TYPES_COLOR, value });
+const setTimeZones = (value: any) => ({ type: SET_TIME_ZONE, value });
 
-export { setModalSettings, setColorTypes, changeMentorStatus, setDataEventsAC, setOrganizersAC, addDataEventAC };
+export { setModalSettings, setColorTypes, changeMentorStatus, setDataEventsAC, setOrganizersAC, addDataEventAC, setTimeZones };

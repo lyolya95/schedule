@@ -41,7 +41,6 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
 
   function handleChange(tag: string, value: Array<string>): void {
     const keys = Object.keys(filterFlag);
-    /*.filter((key) => filterFlag[key] !== null);*/
 
     const flag: any = {};
     flag[tag] = value;

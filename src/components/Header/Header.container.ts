@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { changeMentorStatus } from '../../actions';
-import { setColorType, setShowModalSettings } from '../../reducers';
+import { setColorType, setShowModalSettings, setTimeZone } from '../../reducers';
 import { StateModel } from '../../reducers/reducers.model';
 import { Header } from './Header';
 

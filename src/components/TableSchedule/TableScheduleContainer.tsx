@@ -20,6 +20,7 @@ const TableScheduleContainer = (props: any) => {
     deleteDataEvent,
     initialEventData,
     types,
+    timeZone,
   } = props;
 
   const userColumnsName = isMentorStatus ? columnsName.filter((item: string) => item !== 'combineScore') : columnsName;
@@ -130,6 +131,7 @@ const TableScheduleContainer = (props: any) => {
       remove={remove}
       save={save}
       types={types}
+      timeZone={timeZone}
     />
   );
 };
