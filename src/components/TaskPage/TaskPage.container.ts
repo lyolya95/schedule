@@ -6,6 +6,7 @@ import { TaskPage } from './TaskPage';
 const mapStateToProps = (state: StateModel) => {
   return {
     isMentorStatus: state.isMentorStatus,
+    types: state.types,
   };
 };
 const TaskPageContainer = connect(mapStateToProps, {putDataEvent})(TaskPage);

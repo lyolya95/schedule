@@ -3,9 +3,8 @@ import 'antd/dist/antd.css';
 import React, { FC, useState, useEffect } from 'react';
 import './ListSchedule.scss';
 import { ListScheduleProps } from './ListSchedule.model';
-import { switchTypeToColor } from '../utilities';
 
-export const ListSchedule: FC<ListScheduleProps> = React.memo(({ data, getDataEvent }) => {
+export const ListSchedule: FC<ListScheduleProps> = React.memo(({ data, getDataEvent, types }) => {
     
   const [currPageSize, setCurrPageSize] = useState(20);
   const [selItem, setSelItem] = useState('');
@@ -26,9 +25,9 @@ export const ListSchedule: FC<ListScheduleProps> = React.memo(({ data, getDataEv
         <Card  title={item.name}>
           <div>Course: <b>{item.course}</b></div>
           {item.type 
-          ?<div>Type: <Tag color={switchTypeToColor(item.type)} className="size">
-                  {item.type}
-              </Tag>
+          ?<div>Type: <Tag className="size" key={item.type} color={types?.filter((i: any) => i.type === item.type)[0]?.color}>
+              {item.type}
+            </Tag>
           </div>
           : null
           }
