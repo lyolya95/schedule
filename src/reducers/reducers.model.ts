@@ -29,6 +29,7 @@ export interface StateModel {
   organizers: MentorInterface[];
   initialEventData: EventOfInterface;
   isShowSettingsModal: boolean;
+  isShowModalViewEvents: boolean;
   types: {
     type: string;
     color: string;
