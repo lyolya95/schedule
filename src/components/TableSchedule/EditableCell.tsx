@@ -15,6 +15,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   record,
   index,
   children,
+  types,
   ...restProps
 }) => {
   let inputNode;

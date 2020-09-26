@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 import { getDataEvent } from '../../reducers';
+import { StateModel } from '../../reducers/reducers.model';
 import { CalendarItem } from './CalendarItem';
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: StateModel) => {
   return {
     isMentorStatus: state.isMentorStatus,
     data: state.data,
+    types: state.types,
   };
 };
 

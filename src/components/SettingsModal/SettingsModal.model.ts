@@ -1,6 +1,4 @@
-export interface HeaderProps {
-  isMentorStatus: boolean;
-  changeMentorStatus(): void;
+export interface SettingsModalProps {
   setShowModalSetting: (value: boolean) => void;
   isShowSettingsModal: boolean;
   types: {
