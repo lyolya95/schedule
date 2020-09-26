@@ -9,18 +9,17 @@ import {
   PlusCircleTwoTone,
   SaveOutlined,
 } from '@ant-design/icons';
-import 'antd/dist/antd.css';
 import { EyeOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
+import 'antd/dist/antd.css';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
-import { TaskPageContainer } from '../TaskPage/TaskPage.container';
-import { switchTypeToColor } from '../utilities';
 import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
-import { IAgeMap } from './TableSchedule.model';
-import { EditableCell } from './EditableCell';
+import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { dateAndTimeFormat } from '../utilities';
+import { EditableCell } from './EditableCell';
+import { IAgeMap } from './TableSchedule.model';
 
 const TableSchedule: FC<any> = React.memo((props) => {
   const {
@@ -42,9 +41,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
     add,
     remove,
     save,
+    types,
   } = props;
 
-  console.log(data);
   // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
@@ -73,7 +72,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+    const valueToCheck: string[] = keysToCheck
+      .map((key: string) => flags[key].map((value: string) => value.split(',')))
+      .flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -115,7 +116,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
   };
 
   const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
-    console.log('timezone', timeGap);
     return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
   };
 
@@ -134,18 +134,31 @@ const TableSchedule: FC<any> = React.memo((props) => {
       return { ...item, key: item.id };
     })
     .filter((item: any) => !hiddenData.includes(item.key));
-  console.log('visible', visibleData);
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
   // надо взять с localstorage первоначальные данные
   const [eventRating, setEventRating] = useState<any>();
 
+  //____________________
+  const [widthScreen, setWidthScreen] = useState(1366);
+  const updateDimensions = () => {
+    setWidthScreen(window.innerWidth);
+  };
+  useEffect(() => {
+    setWidthScreen(window.innerWidth);
+    if (widthScreen !== window.innerWidth) {
+      window.addEventListener('resize', updateDimensions);
+    }
+  }, [window.addEventListener]);
+
+  //_________________________
+
   const mentorOperationData = {
     title: 'Edit',
     dataIndex: 'operation',
-    fixed: 'right',
-    width: '250px',
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const editable = isEditing(record);
       if (editable) {
@@ -211,8 +224,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
   const studentOperationData = {
     title: '',
     dataIndex: 'operation',
-    fixed: 'right',
-    width: '250px',
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
@@ -251,7 +264,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           editable: true,
           render: (_: any, record: any) => {
             return (
-              <Tag key={record.type} color={switchTypeToColor(record.type)}>
+              <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
                 {record.type}
               </Tag>
             );
@@ -269,7 +282,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
     }
   });
 
-  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+  const columns: IAgeMap[] = isMentorStatus
+    ? [...allColumns, mentorOperationData]
+    : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -291,7 +306,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
 
   const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName =
+      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
@@ -348,7 +364,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
             let clazz = '';
             visibleData.forEach((item: any) => {
               const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
-              console.log('SHIFT key', currentSelRow);
               if (currentSelRow === null) {
                 return;
               }
@@ -392,14 +407,36 @@ const TableSchedule: FC<any> = React.memo((props) => {
   };
   return (
     <Form form={form} component={false}>
+      <Button
+        type="primary"
+        disabled={editingId !== ''}
+        onClick={add}
+        icon={<PlusCircleTwoTone style={{ fontSize: '16px' }} />}
+      >
+        Add event
+      </Button>
       <div className="hidden-btn-row">
-        <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
+        {isMentorStatus ? (
+          <Button
+            type="primary"
+            disabled={editingId !== '' || !isMentorStatus}
+            onClick={add}
+            icon={<PlusCircleTwoTone />}
+          />
+        ) : (
+          ''
+        )}
+
         {hiddenData.length === 0 ? (
-          <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
+          <Button
+            onClick={hideRows}
+            disabled={!hideButton}
+            icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />}
+          />
         ) : (
           <Button onClick={unHideRows} icon={<EyeTwoTone />} />
         )}
-        <SelectTimeZone setTimeZone={setTimeZone} />
+        <SelectTimeZone setTimeZone={setTimeZone} widthScreen={widthScreen} />
       </div>
       <MentorFilters
         data={data}
@@ -424,7 +461,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 2000, y: 600 }}
+        scroll={{ x: 2500, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,

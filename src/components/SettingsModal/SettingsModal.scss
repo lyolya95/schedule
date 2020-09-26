@@ -1,0 +1,58 @@
+.color-picker-events {
+  display: flex;
+  margin: 10px;
+  padding: 10px;
+
+  align-items: center;
+
+  .events-type {
+    margin-left: 13px;
+    font-size: 16px;
+    text-align: left;
+    text-transform: uppercase;
+    text-decoration: underline;
+  }
+}
+
+.color-scroll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.switch-theme {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  font-size: 20px;
+
+  span {
+    margin-right: 10px;
+  }
+}
+
+.ant-switch-inner {
+  display: flex;
+  align-items: center;
+}
+
+.setting-picker {
+  margin: 10px;
+  div {
+    font-size: 20px;
+    text-align: center;
+  }
+}
+
+.settings-button {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+
+  button {
+    width: 150px;
+    &:first-child {
+      background-color: rgba(179, 179, 212, 0.438);
+    }
+  }
+}
