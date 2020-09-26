@@ -14,6 +14,7 @@ $buttonWidth: 250px;
 .hidden-btn-row {
   display: flex;
   margin: 10px 0;
+  justify-content: normal;
 
   .hide-btn {
     height: 40px;
@@ -29,6 +30,9 @@ $buttonWidth: 250px;
     .icon {
       color: #2596ff;
     }
+  }
+  .save-to-file-btn{
+    justify-self: end;
   }
 }
 
@@ -67,6 +71,7 @@ $buttonWidth: 250px;
   user-select: none;
 }
 
+/*<<<<<<< HEAD
 .add-event-btn {
   position: absolute;
   width: $buttonWidth;
@@ -77,7 +82,11 @@ $buttonWidth: 250px;
 
 .ant-picker-ok .ant-btn-primary {
   position: relative;
+=======*/
+.ant-btn-primary {
+  margin: 0;
 }
+
 .ant-collapse-item {
   background-color: rgb(244, 250, 252);
   transition: 0.3s ease;
@@ -99,19 +108,24 @@ $buttonWidth: 250px;
   border: 1px solid #1890ff;
   color: #1890ff;
 }
+
 .doneEvent {
   border: 1px solid #52c41a;
   color: #52c41a;
 }
+
 .ant-table-row-main {
   background-color: #ff9898;
 }
-.ant-table-tbody > tr.ant-table-row-main:hover > td {
+
+.ant-table-tbody>tr.ant-table-row-main:hover>td {
   background-color: #ff8686;
 }
+
 .ant-table-row-done {
   background-color: #7dc45a;
 }
-.ant-table-tbody > tr.ant-table-row-done:hover > td {
+
+.ant-table-tbody>tr.ant-table-row-done:hover>td {
   background-color: #68c43b;
 }

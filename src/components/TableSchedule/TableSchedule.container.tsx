@@ -1,22 +1,21 @@
 import { connect } from 'react-redux';
-import { StateModel, getDataEvent, putDataEvent, getOrganizers, addDataEvent, deleteDataEvent } from '../../reducers';
-
+import { getDataEvent, putDataEvent, addDataEvent, deleteDataEvent } from '../../reducers';
 import { TableScheduleContainer } from './TableScheduleContainer';
 import React, { useEffect, useState } from 'react';
 import { Alert, Spin } from 'antd';
+import { StateModel } from '../../reducers/reducers.model';
 
 const Container = (props: any) => {
   const [preloader, setPreloader] = useState(true);
-
   useEffect(() => {
-    if (props.data.length < 1) {
-      props.getDataEvent();
-      props.getOrganizers();
+    const firstLoadTable = async () => {
       setPreloader(true);
-    } else {
+      await props.getDataEvent();
       setPreloader(false);
-    }
-  }, [props]);
+    };
+    firstLoadTable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return preloader ? (
     <Spin tip="Loading...">
@@ -35,13 +34,15 @@ const mapStateToProps = (state: StateModel) => {
     notEditableColumns: state.notEditableColumns,
     ratingVotes: state.ratingVotes,
     organizers: state.organizers,
+    initialEventData: state.initialEventData,
   };
 };
 
-export const TableSchedule = connect(mapStateToProps, {
+const TableSchedule = connect(mapStateToProps, {
   getDataEvent,
   putDataEvent,
-  getOrganizers,
   addDataEvent,
   deleteDataEvent,
 })(Container);
+
+export { TableSchedule };

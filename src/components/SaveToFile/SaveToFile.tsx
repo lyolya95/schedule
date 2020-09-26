@@ -19,7 +19,6 @@ export const SaveToFile: FC<SaveToFileProps> = (props) => {
         return result;
     })
 
-    console.log("DataArr", dataArr);
     const [visibleModal, setVisibleModal] = useState(false);
     const showModal = () => {
         setVisibleModal(true);
@@ -88,7 +87,7 @@ export const SaveToFile: FC<SaveToFileProps> = (props) => {
 
     return (
         <>
-            <Button onClick={showModal}>Save to file</Button>
+            <Button className="save-to-file-btn" onClick={showModal}>Save to file</Button>
             <Modal
                 title="Create PDF"
                 visible={visibleModal}
