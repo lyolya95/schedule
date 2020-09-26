@@ -15,12 +15,16 @@ export const SettingsModal: FC<SettingsModalProps> = ({
   setColorType,
 }) => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
-  const [displayColorPicker, setDisplayColorPicker] = useState(false);
+  const [displayColorDeadline, setDisplayColorDeadline] = useState(false);
   const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
-  const [colorsLocalStorage, setColorsLocalStorage] = useStickyState('', 'colorDeadline');
+  const [, setColorsDeadlineLocalStorage] = useStickyState('', 'colorDeadline');
+  const [displayColorTask, setDisplayColorTask] = useState(false);
+  const [colorTask, setColorTask] = useState<string>('#00FF56');
+  const [, setColorsTaskLocalStorage] = useStickyState('', 'colorTask');
 
   const newColorDeadline = types.filter((i) => i.type === 'deadline').map((i) => ({ ...i, color: colorDeadline }));
-  const filteredType = types.filter((i) => i.type !== 'deadline');
+  const filteredType = types.filter((i) => i.type !== 'deadline' && !i.type.includes('task'));
+  const newColorTask = types.filter((i) => i.type.includes('task')).map((i) => ({ ...i, color: colorTask }));
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('colorDeadline')!)) {
@@ -28,6 +32,9 @@ export const SettingsModal: FC<SettingsModalProps> = ({
     }
     if (JSON.parse(localStorage.getItem('DARK_MODE')!)) {
       setDarkMode(JSON.parse(localStorage.getItem('DARK_MODE')!));
+    }
+    if (JSON.parse(localStorage.getItem('colorTask')!)) {
+      setColorTask(JSON.parse(localStorage.getItem('colorTask')!));
     }
   }, []);
 
@@ -49,20 +56,36 @@ export const SettingsModal: FC<SettingsModalProps> = ({
     setShowModalSetting(false);
   }, [setShowModalSetting]);
 
-  const handleClick = useCallback(() => {
-    setDisplayColorPicker((prev) => !prev);
+  const handleClickDeadline = useCallback(() => {
+    setDisplayColorDeadline((prev) => !prev);
   }, []);
 
-  const handleClose = useCallback(() => {
-    setDisplayColorPicker(false);
+  const handleClickTask = useCallback(() => {
+    setDisplayColorTask((prev) => !prev);
   }, []);
 
-  const handleChange = useCallback(
+  const handleCloseDeadline = useCallback(() => {
+    setDisplayColorDeadline(false);
+  }, []);
+
+  const handleCloseTask = useCallback(() => {
+    setDisplayColorTask(false);
+  }, []);
+
+  const handleChangeDeadline = useCallback(
     (color: any) => {
-      setColorsLocalStorage(color?.hex);
+      setColorsDeadlineLocalStorage(color?.hex);
       setColorDeadline(color?.hex);
     },
-    [setColorsLocalStorage]
+    [setColorsDeadlineLocalStorage]
+  );
+
+  const handleChangeTask = useCallback(
+    (color: any) => {
+      setColorsTaskLocalStorage(color?.hex);
+      setColorTask(color?.hex);
+    },
+    [setColorsTaskLocalStorage]
   );
 
   const styles: any = reactCSS({
@@ -85,8 +108,9 @@ export const SettingsModal: FC<SettingsModalProps> = ({
   });
 
   const handleOk = useCallback(() => {
-    setColorType([...filteredType, ...newColorDeadline]);
-  }, [filteredType, newColorDeadline, setColorType]);
+    setColorType([...filteredType, ...newColorDeadline, ...newColorTask]);
+    setShowModalSetting(false);
+  }, [filteredType, newColorDeadline, setColorType, newColorTask, setShowModalSetting]);
 
   return (
     <Modal visible={isShowSettingsModal} onCancel={handleCancelModal} title="Settings" footer={null} width={1000}>
@@ -106,17 +130,31 @@ export const SettingsModal: FC<SettingsModalProps> = ({
           <div className="color-scroll">
             <div className="color-picker-events">
               <div>
-                <div style={styles.swatch} onClick={handleClick}>
-                  <div style={{ background: `${colorDeadline}`, width: '30px', height: '30px', borderRadius: '50%' }} />
+                <div style={styles.swatch} onClick={handleClickDeadline}>
+                  <div style={{ background: `${colorDeadline}`, width: '40px', height: '40px', borderRadius: '50%' }} />
                 </div>
-                {displayColorPicker ? (
+                {displayColorDeadline ? (
                   <div style={styles.popover}>
-                    <div style={styles.cover} onClick={handleClose} />
-                    <SketchPicker color={colorDeadline} onChange={handleChange} />
+                    <div style={styles.cover} onClick={handleCloseDeadline} />
+                    <SketchPicker color={colorDeadline} onChange={handleChangeDeadline} />
                   </div>
                 ) : null}
               </div>
               <div className="events-type">deadline</div>
+            </div>
+            <div className="color-picker-events">
+              <div>
+                <div style={styles.swatch} onClick={handleClickTask}>
+                  <div style={{ background: `${colorTask}`, width: '40px', height: '40px', borderRadius: '50%' }} />
+                </div>
+                {displayColorTask ? (
+                  <div style={styles.popover}>
+                    <div style={styles.cover} onClick={handleCloseTask} />
+                    <SketchPicker color={colorTask} onChange={handleChangeTask} />
+                  </div>
+                ) : null}
+              </div>
+              <div className="events-type">task</div>
             </div>
           </div>
         </div>
