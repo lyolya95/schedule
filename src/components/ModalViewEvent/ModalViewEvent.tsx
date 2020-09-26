@@ -2,7 +2,7 @@ import { TagOutlined } from '@ant-design/icons';
 import { DatePicker, Rate, Tag } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import moment from 'moment';
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { EventOfInterface } from '../../reducers/reducers.model';
 import './ModalViewEvent.scss';
 
@@ -22,9 +22,9 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
   event,
   types,
 }) => {
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setIsShowModalViewEvents(false);
-  };
+  }, [setIsShowModalViewEvents]);
 
   return (
     <Modal title={event[0]?.course} footer={null} visible={isShowModalViewEvents} onCancel={handleCancel}>
