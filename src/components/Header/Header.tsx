@@ -38,6 +38,10 @@ export const Header: FC<HeaderProps> = React.memo(
       history.push('/calendar');
     }, [history]);
 
+    const handleShowList = useCallback(() => {
+      history.push('/list');
+    }, [history]);
+
     if (JSON.parse(localStorage.getItem('DARK_MODE') || '{}') === true) {
       document.body.classList.add('dark-mode');
     }
@@ -57,7 +61,7 @@ export const Header: FC<HeaderProps> = React.memo(
             <Button onClick={handleShowCalendar}>
               <CalendarOutlined />
             </Button>
-            <Button>
+            <Button onClick={handleShowList}>
               <UnorderedListOutlined />
             </Button>
             <Button onClick={changeMentorStatus}>{isMentorStatus ? 'To Student App' : 'To Mentor App'}</Button>

@@ -33,10 +33,7 @@ export const TaskPage: FC<TaskPageProps> = React.memo((props) => {
       </div>
 
       {isMentorStatus ? (
-        <MentorTaskForm 
-          taskContent={taskContent} 
-          isShowFeedback={isShowFeedback} 
-        />
+        <MentorTaskForm taskContent={taskContent} isShowFeedback={isShowFeedback} />
       ) : (
         <div>
           {taskContentHtml}

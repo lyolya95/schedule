@@ -1,4 +1,14 @@
-import { CheckOutlined, CloseOutlined, DeleteOutlined, ExclamationOutlined, EyeInvisibleTwoTone, EyeTwoTone, HighlightTwoTone, PlusCircleTwoTone, SaveOutlined } from '@ant-design/icons';
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  ExclamationOutlined,
+  EyeInvisibleTwoTone,
+  EyeTwoTone,
+  HighlightTwoTone,
+  PlusCircleTwoTone,
+  SaveOutlined,
+} from '@ant-design/icons';
 import { EyeOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
@@ -130,11 +140,25 @@ const TableSchedule: FC<any> = React.memo((props) => {
   // надо взять с localstorage первоначальные данные
   const [eventRating, setEventRating] = useState<any>();
 
+  //____________________
+  const [widthScreen, setWidthScreen] = useState(1366);
+  const updateDimensions = () => {
+    setWidthScreen(window.innerWidth);
+  };
+  useEffect(() => {
+    setWidthScreen(window.innerWidth);
+    if (widthScreen !== window.innerWidth) {
+      window.addEventListener('resize', updateDimensions);
+    }
+  }, [window.addEventListener]);
+
+  //_________________________
+
   const mentorOperationData = {
     title: 'Edit',
     dataIndex: 'operation',
-    fixed: 'right',
-    width: '250px',
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const editable = isEditing(record);
       if (editable) {
@@ -200,8 +224,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
   const studentOperationData = {
     title: '',
     dataIndex: 'operation',
-    fixed: 'right',
-    width: '250px',
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
@@ -392,12 +416,17 @@ const TableSchedule: FC<any> = React.memo((props) => {
         Add event
       </Button>
       <div className="hidden-btn-row">
-        <Button
-          type="primary"
-          disabled={editingId !== '' || !isMentorStatus}
-          onClick={add}
-          icon={<PlusCircleTwoTone />}
-        />
+        {isMentorStatus ? (
+          <Button
+            type="primary"
+            disabled={editingId !== '' || !isMentorStatus}
+            onClick={add}
+            icon={<PlusCircleTwoTone />}
+          />
+        ) : (
+          ''
+        )}
+
         {hiddenData.length === 0 ? (
           <Button
             onClick={hideRows}
@@ -407,7 +436,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         ) : (
           <Button onClick={unHideRows} icon={<EyeTwoTone />} />
         )}
-        <SelectTimeZone setTimeZone={setTimeZone} />
+        <SelectTimeZone setTimeZone={setTimeZone} widthScreen={widthScreen} />
       </div>
       <MentorFilters
         data={data}
@@ -432,7 +461,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 2000, y: 600 }}
+        scroll={{ x: 2500, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
@@ -479,4 +508,3 @@ const TableSchedule: FC<any> = React.memo((props) => {
 });
 
 export { TableSchedule };
-
