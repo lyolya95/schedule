@@ -482,6 +482,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
       />
       {clickingRow ? (
         <Modal
+          key = {clickingRow.id}
           title={clickingRow.course}
           centered
           visible={visibleModal}
