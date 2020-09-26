@@ -93,7 +93,6 @@ const reducer = (state = initialState, action: any): StateModel => {
         }
         if (event.rating && event.rating > 0) {
           ratingVotes++;
-          console.log(ratingVotes);
         }
         return event;
       });

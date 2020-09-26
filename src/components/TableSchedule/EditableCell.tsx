@@ -19,7 +19,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   let inputNode;
-  console.log(types);
 
   switch (dataIndex) {
     case 'score':

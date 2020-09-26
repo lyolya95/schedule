@@ -239,7 +239,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
           dataIndex: 'type',
           editable: true,
           render: (_: any, record: any) => {
-            console.log(types);
             return (
               <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
                 {record.type}
