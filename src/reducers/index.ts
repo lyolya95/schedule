@@ -1,11 +1,14 @@
-import { StateModel } from './reducers.model';
-import { setDataEventsAC, setOrganizersAC } from './../actions/index';
+import { typesTag } from '../components/utilities';
+import { setColorTypes, setDataEventsAC, setModalSettings, setOrganizersAC } from './../actions/index';
 import { scheduleAPI } from './../API/api';
+import { StateModel } from './reducers.model';
 
 const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
 const SET_DATA_EVENT = 'SET_DATA_EVENT';
 const SET_ORGANIZERS = 'SET_ORGANIZERS';
 const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
+export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
+export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
 
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -60,6 +63,8 @@ const initialState: StateModel = {
     type: '',
     week: '',
   },
+  isShowSettingsModal: false,
+  types: typesTag,
 };
 
 const reducer = (state = initialState, action: any): StateModel => {
@@ -88,17 +93,22 @@ const reducer = (state = initialState, action: any): StateModel => {
         }
         if (event.rating && event.rating > 0) {
           ratingVotes++;
-          console.log(ratingVotes);
         }
         return event;
       });
-      return { ...state, data: action.events };
+      return { ...state, data: action.events, ratingVotes: ratingVotes };
     }
     case SET_ORGANIZERS: {
       return { ...state, organizers: [...action.organizers] };
     }
     case ADD_DATA_EVENT: {
       return state;
+    }
+    case SET_MODAL_SETTINGS: {
+      return { ...state, isShowSettingsModal: action.value };
+    }
+    case SET_TYPES_COLOR: {
+      return { ...state, types: action.value };
     }
     default:
       return state;
@@ -124,5 +134,12 @@ const addDataEvent = (newEvent: object) => async (dispatch: any) => {
   return await scheduleAPI.addDataEvent(newEvent);
 };
 
+export const setShowModalSettings = (value: boolean) => (dispatch: any) => {
+  dispatch(setModalSettings(value));
+};
+
+export const setColorType = (value: any) => (dispatch: any) => {
+  dispatch(setColorTypes(value));
+};
 export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
 export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent };

@@ -7,6 +7,10 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   index: number;
   children: React.ReactNode;
   organizers: any;
+  types: {
+    type: string;
+    color: string;
+  }[];
 }
 export interface IAgeMap {
   [keys: string]: string | boolean | object;

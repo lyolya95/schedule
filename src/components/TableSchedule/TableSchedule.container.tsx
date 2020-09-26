@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
-import { getDataEvent, putDataEvent, addDataEvent, deleteDataEvent } from '../../reducers';
-import { TableScheduleContainer } from './TableScheduleContainer';
-import React, { useEffect, useState } from 'react';
 import { Alert, Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { addDataEvent, deleteDataEvent, getDataEvent, putDataEvent } from '../../reducers';
 import { StateModel } from '../../reducers/reducers.model';
+import { TableScheduleContainer } from './TableScheduleContainer';
 
 const Container = (props: any) => {
   const [preloader, setPreloader] = useState(true);
@@ -35,6 +35,7 @@ const mapStateToProps = (state: StateModel) => {
     ratingVotes: state.ratingVotes,
     organizers: state.organizers,
     initialEventData: state.initialEventData,
+    types: state.types,
   };
 };
 

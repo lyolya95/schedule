@@ -28,4 +28,9 @@ export interface StateModel {
   ratingVotes: number;
   organizers: MentorInterface[];
   initialEventData: EventOfInterface;
+  isShowSettingsModal: boolean;
+  types: {
+    type: string;
+    color: string;
+  }[];
 }

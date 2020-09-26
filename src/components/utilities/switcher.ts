@@ -1,4 +1,4 @@
-const switchTypeToColor = (typeName: string) => {
+export const switchTypeToColor = (typeName: string) => {
   let color = typeName;
   switch (typeName) {
     case 'live':
@@ -41,7 +41,7 @@ const switchTypeToColor = (typeName: string) => {
   return color;
 };
 
-const typesTag = [
+export const types = [
   { type: 'live', color: 'blue' },
   { type: 'youtube live', color: 'blue' },
   { type: 'self education', color: 'blue' },
@@ -63,31 +63,3 @@ const typesTag = [
   { type: 'stage-interview', color: 'volcano' },
   { type: 'interview', color: 'volcano' },
 ];
-
-const dateAndTimeFormat = 'YYYY.MM.DD hh:mm';
-
-const columnSetWidth = (columnName: string) => {
-  switch (columnName) {
-    case 'course':
-      return '180px';
-    case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone':
-      return '140px';
-    case 'name':
-      return '250px';
-    case 'Type':
-      return '250px';
-    case 'descriptionUrl':
-      return '350px';
-    case 'organizer':
-      return '200px';
-    case 'timeToComplete':
-      return '120px';
-    case 'week':
-      return '60px';
-    case 'Score/maxScore':
-      return '80px';
-    default:
-      return 'auto';
-  }
-};
-export { switchTypeToColor, typesTag, dateAndTimeFormat, columnSetWidth };
