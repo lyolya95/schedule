@@ -465,7 +465,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           centered
           visible={visibleModal}
           footer={[
-            <Button id="back" onClick={() => setVisibleModal(false)}>
+            <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
               Return
             </Button>,
           ]}
