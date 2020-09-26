@@ -29,6 +29,7 @@ const initialState: StateModel = {
       timeZone: '',
       type: '',
       week: '',
+      combineScore: '',
     },
   ],
   columnsName: [
@@ -62,6 +63,7 @@ const initialState: StateModel = {
     timeZone: '',
     type: '',
     week: '',
+    combineScore: '',
   },
   isShowSettingsModal: false,
   types: typesTag,
