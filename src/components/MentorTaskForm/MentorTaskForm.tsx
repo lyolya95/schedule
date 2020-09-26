@@ -1,27 +1,26 @@
 import React, {FC,useState}  from 'react';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import TaskEditor from '../TaskEditor';
+import {MentorTaskFormProps} from './MentorTaskForm.model';
 import ReactMarkdown from 'react-markdown';
 import {EditFilled} from '@ant-design/icons';
 import { Checkbox } from 'antd';
 
-type PropsType = {
-  taskContent:string;
-  isShowFeedback:boolean;
-}
-
-const MentorTaskForm:FC<PropsType> = (props) => {
-  const {taskContent, isShowFeedback} = props;
+export const MentorTaskForm:FC<MentorTaskFormProps> = (props) => {
+  const { eventData, putDataEvent } = props;
   const [editStatus, setEditStatus] = useState(false);
-  const [saveTaskContent, setSaveTaskContent] = useState(taskContent);
+  const [saveTaskContent, setSaveTaskContent] = useState(eventData.taskContent);
+  const [isShowFeedback, setShowFeedback] = useState(eventData.isShowFeedback);
   const taskContentHtml = React.createElement(ReactMarkdown, {source: saveTaskContent});
 
   const handleClick = () => {
     setEditStatus(true);
   }
 
-  const handleSave = (text:string) => {
+  const handleSave = async (text:string) => {
     setSaveTaskContent(text);
+    eventData.taskContent = text;
+    await putDataEvent(eventData.id, eventData);
     setEditStatus(false);
   }
 
@@ -29,20 +28,20 @@ const MentorTaskForm:FC<PropsType> = (props) => {
     setEditStatus(false);
   }
 
-  const onChangeShowFeedback = (e:CheckboxChangeEvent) =>{
-    console.log('feed='+e.target.checked); 
-    //записать данные в api
-    //setShowFeedback(e.target.checked);
+  const onChangeShowFeedback = async (e:CheckboxChangeEvent) =>{
+    eventData.isShowFeedback = e.target.checked;
+    await putDataEvent(eventData.id, eventData);
+    setShowFeedback(e.target.checked);
   }
 
   return(
         <div>
           <Checkbox 
               onChange={onChangeShowFeedback}
-            //  checked={isShowFeedback}
-              >
-                  Feedback is available for student
-              </Checkbox>
+              checked={isShowFeedback}
+          >
+              Feedback is available for student
+          </Checkbox>
                         
             { editStatus
               ? <div className="task-description">
@@ -67,5 +66,3 @@ const MentorTaskForm:FC<PropsType> = (props) => {
           </div>
   );
 }
-
-export default MentorTaskForm;

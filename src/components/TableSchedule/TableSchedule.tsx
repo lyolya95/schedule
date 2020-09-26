@@ -457,12 +457,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           width={1000}
         >
           <TaskPageContainer
-            name={clickingRow.name}
-            date={clickingRow.dateTime}
-            type={clickingRow.type}
-            organizer={clickingRow.organizer}
-            taskContent={clickingRow.taskContent}
-            isShowFeedback={clickingRow.isShowFeedback}
+            eventData={clickingRow}
           />
         </Modal>
       ) : null}

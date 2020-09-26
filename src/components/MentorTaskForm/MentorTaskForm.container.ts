@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { StateModel } from '../../reducers/reducers.model';
 import { putDataEvent } from '../../reducers';
-import { TaskPage } from './TaskPage';
+import { MentorTaskForm } from './MentorTaskForm';
 
 const mapStateToProps = (state: StateModel) => {
   return {
     isMentorStatus: state.isMentorStatus,
   };
 };
-const TaskPageContainer = connect(mapStateToProps, {putDataEvent})(TaskPage);
+const MentorTaskFormContainer = connect(mapStateToProps, {putDataEvent})(MentorTaskForm);
 
-export { TaskPageContainer };
+export { MentorTaskFormContainer };
