@@ -1,7 +1,7 @@
 import React, { FC,useState }  from 'react';
 import { StudentTaskFormProps } from './StudentTaskForm.model';
 import ReactMarkdown from 'react-markdown';
-import { FeedbackForm } from '../FeedbackForm/FeedbackForm';
+import { FeedbackFormContainer } from '../FeedbackForm/FeedbackForm.container';
 import { Maps } from '../Maps';
 
 export const StudentTaskForm:FC<StudentTaskFormProps> = (props) => {
@@ -12,7 +12,7 @@ export const StudentTaskForm:FC<StudentTaskFormProps> = (props) => {
       <div>
         {taskContentHtml}
         {eventData.isShowFeedback 
-          ? <FeedbackForm />
+          ? <FeedbackFormContainer />
           : null
         }
          <Maps 

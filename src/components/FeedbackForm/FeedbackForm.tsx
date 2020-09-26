@@ -1,14 +1,15 @@
-import  React from 'react';
+import  React, { FC } from 'react';
 import { Form, Button, Input, message } from "antd";
 import { Store } from "antd/lib/form/interface";
 import { ValidateErrorEntity } from "rc-field-form/lib/interface";
+import { FeedbackFormProps } from './FeedbackForm.model';
 import './FeedbackForm.scss';
 
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
   
-const FeedbackForm = () => {
+  export const FeedbackForm:FC<FeedbackFormProps> = ({eventData, putDataEvent}) => {
     const { TextArea } = Input;
     const [form] = Form.useForm();
 
@@ -18,6 +19,8 @@ const FeedbackForm = () => {
 
     const onFinish = (values:Store) => {
         console.log('Success:', values);
+        eventData.feedbacks = values;
+        await putDataEvent(eventData.id, eventData);
         message.success('Your message send');
         form.resetFields();
     };
@@ -59,5 +62,3 @@ const FeedbackForm = () => {
         </div>
     );
 }
-
-export default FeedbackForm;
