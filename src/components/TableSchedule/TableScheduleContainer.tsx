@@ -20,6 +20,8 @@ const TableScheduleContainer = (props: any) => {
     deleteDataEvent,
     initialEventData,
     types,
+    widthScreen,
+    setWidthScreen,
     timeZone,
   } = props;
 
@@ -94,17 +96,26 @@ const TableScheduleContainer = (props: any) => {
   //@TOdo не убирается после изменения isMentorStatus поле Score в выбранных select
 
   useEffect(() => {
-    const userColumns = isMentorStatus
-      ? mapsColumnsName.filter((item: any) => item.title !== 'combineScore')
-      : mapsColumnsName;
+    const userColumns = isMentorStatus ? mapsColumnsName.filter((item: any) => item.title !== 'combineScore') : mapsColumnsName;
     setMapColumnsName(userColumns);
   }, [isMentorStatus]);
-
+  // width ___
+  const updateDimensions = () => {
+    setWidthScreen(window.innerWidth);
+  };
+  useEffect(() => {
+    setWidthScreen(window.innerWidth);
+    if (widthScreen !== window.innerWidth) {
+      window.addEventListener('resize', updateDimensions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.addEventListener]);
+  // width ___
   useEffect(() => {
     const mapColumns: any = defaultColumns.map((n: string) => ({
       title: n,
       dataIndex: n,
-      width: columnSetWidth(n),
+      width: columnSetWidth(n, widthScreen),
       editable: notEditableColumns.findIndex((item: string) => item === n) === -1 ? true : false,
     }));
     setMapColumnsName(mapColumns);
@@ -131,6 +142,7 @@ const TableScheduleContainer = (props: any) => {
       remove={remove}
       save={save}
       types={types}
+      widthScreen={widthScreen}
       timeZone={timeZone}
     />
   );

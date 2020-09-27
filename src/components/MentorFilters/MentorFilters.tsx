@@ -191,7 +191,7 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
 
   return (
     <Collapse bordered={false}>
-      <Panel header="Filters" key="1">
+      <Panel header="Filters (click to open)" key="1">
         {filters}
       </Panel>
     </Collapse>
