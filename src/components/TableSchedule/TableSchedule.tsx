@@ -1,14 +1,4 @@
-import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  ExclamationOutlined,
-  EyeInvisibleTwoTone,
-  EyeTwoTone,
-  HighlightTwoTone,
-  PlusCircleTwoTone,
-  SaveOutlined,
-} from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, DeleteOutlined, ExclamationOutlined, EyeInvisibleTwoTone, EyeTwoTone, HighlightTwoTone, PlusCircleTwoTone, SaveOutlined } from '@ant-design/icons';
 import { EyeOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
@@ -274,6 +264,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           title: 'Score/maxScore',
           dataIndex: 'combineScore',
           editable: true,
+          width: '10%',
         };
       default:
         return item;
@@ -504,3 +495,4 @@ const TableSchedule: FC<any> = React.memo((props) => {
 });
 
 export { TableSchedule };
+

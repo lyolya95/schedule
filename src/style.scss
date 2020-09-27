@@ -6,10 +6,21 @@ $background-color-dark: #292a32;
 $background-color-light: #fbfaf8;
 $complimentary-color-dark: #393b43;
 $complimentary-color-light: #feffff;
+$color-header-button: rgb(151, 150, 150);
 
 body {
   background-color: $background-color-light;
   color: $background-color-dark;
+
+  .ant-table-cell,
+  .ant-table-thead {
+    tr {
+      th {
+        background-color: rgb(163, 159, 159);
+        text-transform: uppercase;
+      }
+    }
+  }
 }
 
 body.dark-mode {
@@ -21,14 +32,191 @@ body.dark-mode {
     color: $background-color-light;
   }
 
+  button {
+    background-color: $color-header-button;
+    color: $background-color-light;
+    text-transform: uppercase;
+  }
+
+  .header {
+    img {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  .ant-typography.ant-typography-secondary {
+    color: $background-color-light;
+    font-size: 16px;
+  }
+
   .ant-collapse-item {
     background-color: rgba(70, 71, 71, 0.534);
   }
 
   .ant-table-cell,
-  .ant-table-thead,
-  .ant-table-pagination.ant-pagination {
-    background-color: rgb(161, 157, 157);
+  .ant-table-thead {
+    tr {
+      th {
+        background-color: rgb(163, 159, 159);
+        text-transform: uppercase;
+      }
+    }
+  }
+  .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td,
+  .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td,
+  .ant-table-thead > tr:hover:not(.ant-table-expanded-row) > td,
+  .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
+    background: rgb(163, 159, 159);
+  }
+
+  .ant-table-cell {
+    background-color: rgb(196, 190, 190);
+  }
+
+  .ant-pagination-total-text {
+    color: $background-color-light;
+    font-size: 20px;
+  }
+
+  .ant-drawer tr.ant-table-expanded-row > td,
+  .ant-drawer tr.ant-table-expanded-row:hover > td {
+    background: #272727;
+  }
+  .ant-drawer .ant-table.ant-table-small thead > tr > th {
+    background-color: #1f1f1f;
+    border-bottom: 1px solid #3a3a3a;
+  }
+  .ant-drawer .ant-table {
+    background-color: #1f1f1f;
+  }
+  .ant-drawer .ant-table .ant-table-row-expand-icon {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-drawer .ant-table tfoot > tr > th,
+  .ant-drawer .ant-table tfoot > tr > td {
+    border-bottom: 1px solid #3a3a3a;
+  }
+  .ant-drawer .ant-table thead > tr > th {
+    background-color: #272727;
+    border-bottom: 1px solid #3a3a3a;
+  }
+  .ant-drawer .ant-table tbody > tr > td {
+    border-bottom: 1px solid #3a3a3a;
+  }
+  .ant-drawer .ant-table tbody > tr > td.ant-table-cell-fix-left,
+  .ant-drawer .ant-table tbody > tr > td.ant-table-cell-fix-right {
+    background-color: #1f1f1f;
+  }
+  .ant-drawer .ant-table tbody > tr.ant-table-row:hover > td {
+    background: #303030;
+  }
+  .ant-drawer .ant-table.ant-table-bordered .ant-table-title {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-drawer .ant-table.ant-table-bordered thead > tr > th,
+  .ant-drawer .ant-table.ant-table-bordered tbody > tr > td,
+  .ant-drawer .ant-table.ant-table-bordered tfoot > tr > th,
+  .ant-drawer .ant-table.ant-table-bordered tfoot > tr > td {
+    border-right: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered .ant-table-cell-fix-right-first::after {
+    border-right: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered table thead > tr:not(:last-child) > th {
+    border-bottom: 1px solid #303030;
+  }
+  .ant-table.ant-table-bordered .ant-table-container {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered .ant-table-expanded-row-fixed::after {
+    border-right: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered .ant-table-footer {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-table .ant-table-filter-trigger-container-open {
+    background-color: #525252;
+  }
+  .ant-picker-calendar-full {
+    background-color: #5e5d5d;
+  }
+  .ant-picker-calendar-full .ant-picker-panel {
+    background-color: #555555;
+    color: $background-color-light;
+  }
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
+    border-top: 2px solid $background-color-light;
+    color: $background-color-light;
+  }
+
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-body th {
+    height: auto;
+    padding: 0 12px 5px 0;
+    line-height: 18px;
+    color: $background-color-light;
+    font-size: 16px;
+  }
+
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected .ant-picker-calendar-date,
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected:hover .ant-picker-calendar-date,
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected .ant-picker-calendar-date-today,
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected:hover .ant-picker-calendar-date-today {
+    background: rgba(29, 28, 28, 0.699);
+  }
+
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value {
+    color: #cfd6dd;
+  }
+
+  .ant-picker-calendar-mini .ant-picker-calendar-header {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+  .ant-picker-calendar-mini .ant-picker-panel {
+    background-color: #5e5d5d;
+  }
+
+  .ant-picker-calendar-mini .ant-picker-content th {
+    height: auto;
+    padding: 0;
+    line-height: 18px;
+    color: $background-color-light;
+  }
+
+  .ant-picker-cell-inner.ant-picker-calendar-date {
+    color: $background-color-light;
+  }
+
+  .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+    background-color: #1f1f1f;
+    border-bottom: 1px solid #1f1f1f;
+  }
+  .ant-card {
+    background-color: rgb(128, 128, 128);
+    color: rgb(255, 255, 255);
+
+    .ant-card-head-title {
+      color: rgb(255, 255, 255);
+    }
   }
 }
 
