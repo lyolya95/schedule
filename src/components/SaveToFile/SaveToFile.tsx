@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {Button, Modal, Space, Table, Tag} from "antd";
+import {Button, Modal, Space, Table, Tag, Tooltip} from "antd";
 import html2canvas from "html2canvas";
 import {SaveToFileProps} from "./SaveToFile.model";
 import XLSX from "xlsx";
@@ -8,16 +8,19 @@ import {jsPDF} from "jspdf";
 import autoTable from 'jspdf-autotable';
 
 import './SaveToFile.scss';
+import {FileExcelOutlined, FilePdfOutlined, SaveOutlined} from "@ant-design/icons/lib";
 
-export const SaveToFile: FC<SaveToFileProps> = (props) => {
+export const SaveToFile: FC<SaveToFileProps> = ({widthScreen, columns, data}) => {
 
     const columnsState = ['dateTime', 'timeToComplete', 'type', 'name', 'course', 'organizer', 'place'];
-    const columns = props.columns.filter((item: any) => columnsState.includes(item.dataIndex))
-    const columnsArr = columns.map((item: any) => item.title);
-    const dataArr = props.data.map((item: any) => {
-        const result: any = [item.dateTime, item.timeToComplete, item.type, item.name, item.course, item.organizer, item.place];
-        return result;
-    })
+    const visibleColumns = columns.filter((item: any) => columnsState.includes(item.dataIndex))
+    const columnsArr = visibleColumns
+        .map((item: any) => item.title);
+    const dataArr = data
+        .map((item: any) => {
+            const result: any = [item.dateTime, item.timeToComplete, item.type, item.name, item.course, item.organizer, item.place];
+            return result;
+        })
 
     const [visibleModal, setVisibleModal] = useState(false);
     const showModal = () => {
@@ -52,7 +55,8 @@ export const SaveToFile: FC<SaveToFileProps> = (props) => {
             }
             return buf;
         }
-        saveAs(new Blob([s2ab(wbout)],{type: "application/octet-stream"}), 'schedule.xlsx');
+
+        saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), 'schedule.xlsx');
         setVisibleModal(false);
     }
 
@@ -74,7 +78,7 @@ export const SaveToFile: FC<SaveToFileProps> = (props) => {
 
     const createPDFtable = () => {
         const doc = new jsPDF()
-        autoTable(doc,{
+        autoTable(doc, {
             head: [columnsArr],
             body: dataArr,
             styles: {font: "times", fontStyle: "normal"}
@@ -83,24 +87,43 @@ export const SaveToFile: FC<SaveToFileProps> = (props) => {
         setVisibleModal(false);
     }
 
-
-
     return (
         <>
-            <Button className="save-to-file-btn" onClick={showModal}>Save to file</Button>
-            <Modal
-                title="Create PDF"
-                visible={visibleModal}
-                onCancel={onCancel}
-                width={1000}
-                footer={[
-                    <Button onClick={createExcel}>Excel</Button>,
-                    <Button onClick={createPDF}>PDF/img</Button>,
-                    <Button onClick={createPDFtable}>PDF/table</Button>,
-                    <Button onClick={onCancel} danger>Cancel</Button>,
-                ]}>
-                <Table id="table-to-file" size="small" columns={columns} dataSource={props.data} />
-            </Modal>
+            <Tooltip title="Save to file">
+                <Button className="save-to-file-btn" onClick={showModal}>
+                    <SaveOutlined/>
+                </Button>
+            </Tooltip>
+            {widthScreen > 800 ? (
+                <Modal
+                    title="Save to file"
+                    visible={visibleModal}
+                    onCancel={onCancel}
+                    width={1000}
+                    footer={[
+                        <Button onClick={createExcel}><FileExcelOutlined /> Excel</Button>,
+                        <Button onClick={createPDF}><FilePdfOutlined /> PDF/img</Button>,
+                        <Button onClick={createPDFtable}><FilePdfOutlined /> PDF/table</Button>,
+                        <Button onClick={onCancel} danger>Cancel</Button>,
+                    ]}>
+                    <Table id="table-to-file" size="small" columns={visibleColumns} dataSource={data}/>
+                </Modal>
+            ) : (
+                <Modal title="Save to file"
+                       visible={visibleModal}
+                       width={250}
+                       onCancel={onCancel}
+                       footer={[
+                           <Tooltip title="Excel">
+                           <Button onClick={createExcel}><FileExcelOutlined /></Button>
+                           </Tooltip>,
+                           <Tooltip title="Pdf">
+                           <Button onClick={createPDFtable}><FilePdfOutlined /></Button>
+                           </Tooltip>,
+                           <Button onClick={onCancel} danger>Cancel</Button>,
+                       ]}>Select file format</Modal>
+            )}
         </>
+
     )
 }

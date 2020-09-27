@@ -8,6 +8,7 @@ const mapStateToProps = (state: StateModel) => {
     isShowSettingsModal: state.isShowSettingsModal,
     types: state.types,
     timeZone: state.timeZone,
+    widthScreen: state.widthScreen,
   };
 };
 

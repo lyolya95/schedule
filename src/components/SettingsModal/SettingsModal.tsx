@@ -10,7 +10,7 @@ import './SettingsModal.scss';
 import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";
 
 
-export const SettingsModal: FC<SettingsModalProps> = ({ isShowSettingsModal, setShowModalSetting, types, setColorType, timeZone, setTimeZone,}) => {
+export const SettingsModal: FC<SettingsModalProps> = ({ isShowSettingsModal, setShowModalSetting, types, setColorType, timeZone, setTimeZone, widthScreen}) => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [displayColorDeadline, setDisplayColorDeadline] = useState(false);
   const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
@@ -139,7 +139,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({ isShowSettingsModal, set
           />
         </div>
         <div className="set-time-zone">
-          <SelectTimeZone setTimeZone={handleSetTimeZone} defaultValue={timeZone}/>
+          <SelectTimeZone setTimeZone={handleSetTimeZone} defaultValue={timeZone} widthScreen={widthScreen}/>
         </div>
         <div className="setting-picker">
           <div>Change color events:</div>

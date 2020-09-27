@@ -8,4 +8,5 @@ export interface SettingsModalProps {
   setColorType: (value: any) => void;
   timeZone: string;
   setTimeZone: (value: string) => void;
+  widthScreen: number;
 }

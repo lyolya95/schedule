@@ -14,26 +14,6 @@ $buttonWidth: 250px;
 .hidden-btn-row {
   display: flex;
   margin: 10px 0;
-  justify-content: normal;
-
-  .hide-btn {
-    height: 40px;
-
-    .icon {
-      color: #eb2f96;
-    }
-  }
-
-  .unhide-btn {
-    height: 40px;
-
-    .icon {
-      color: #2596ff;
-    }
-  }
-  .save-to-file-btn{
-    justify-self: end;
-  }
 }
 
 .ant-divider-inner-text {

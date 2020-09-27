@@ -3,20 +3,17 @@ import {
     CloseOutlined,
     DeleteOutlined,
     ExclamationOutlined,
-    EyeInvisibleTwoTone,
-    EyeTwoTone,
     HighlightTwoTone,
     PlusCircleTwoTone,
     SaveOutlined,
 } from '@ant-design/icons';
-import { EyeOutlined } from '@ant-design/icons/lib';
+import {MinusSquareOutlined, UndoOutlined} from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
 import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
 import React, {FC, useEffect, useState} from 'react';
 import {MentorFilters} from '../MentorFilters/MentorFilters';
-import {SelectTimeZone} from '../SelectTimeZone/SelectTimeZone';
 import {TaskPageContainer} from '../TaskPage/TaskPage.container';
 import {dateAndTimeFormat} from '../utilities';
 import {SaveToFile} from "../SaveToFile/SaveToFile";
@@ -410,31 +407,21 @@ const TableSchedule: FC<any> = React.memo((props) => {
             <div className="hidden-btn-row">
                 <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add}
                         icon={<PlusCircleTwoTone/>}/>
-                {/*
-    <Form form={form} component={false}>
-      <div className="hidden-btn-row">
-        {isMentorStatus && (
-          <Tooltip title="Add new event">
-            <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
-          </Tooltip>
-        )}
-        {hiddenData.length === 0 ? (
-          <Tooltip title="Show hidden rows in tables">
-            <Button onClick={unHideRows} icon={<EyeTwoTone />} />
-          </Tooltip>
-        )}*/}
+                <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen}/>
                 {hideButton ? (
-                    <Button className="hide-btn" onClick={hideRows}>
-                        <EyeInvisibleTwoTone className="icon"/>
-                    </Button>
+                    <Tooltip title="Hide rows">
+                        <Button onClick={hideRows}>
+                            <MinusSquareOutlined />
+                        </Button>
+                    </Tooltip>
                 ) : null}
                 {hiddenData.length === 0 ? null : (
-                    <Button className="unhide-btn" onClick={unHideRows}>
-                        <EyeOutlined className="icon"/>
-                    </Button>
+                    <Tooltip title="Show hidden rows">
+                        <Button onClick={unHideRows}>
+                            <UndoOutlined />
+                        </Button>
+                    </Tooltip>
                 )}
-                {/*<SelectTimeZone setTimeZone={setTimeZone} widthScreen={widthScreen}/>*/}
-                <SaveToFile data={visibleData} columns={mergedColumns}/>
             </div>
             <Text type="secondary">Double click on a table row to bring up detailed information</Text>
             <MentorFilters
@@ -504,83 +491,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
             ) : null}
         </Form>
     );
-/*=======
-          <Tooltip title="Show hidden rows in tables">
-            <Button onClick={unHideRows} icon={<EyeTwoTone />} />
-          </Tooltip>
-        )}
-        <SelectTimeZone setTimeZone={setTimeZone} widthScreen={widthScreen} />
-      </div>
-
-      <Text type="secondary">Double click on a table row to bring up detailed information</Text>
-      <MentorFilters
-        data={data}
-        filterFlag={filerFlags}
-        setFilterFlags={setFilterFlags}
-        setDates={setDates}
-        tagRender={tagRender}
-        defaultColumns={defaultColumns}
-        optionsKeyOfEvents={optionsKeyOfEvents}
-        changeColumnsSelect={changeColumnsSelect}
-        isMentorStatus={isMentorStatus}
-      />
-      <Table
-        loading={isLoading}
-        size="small"
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        bordered
-        dataSource={visibleData}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        scroll={{ x: widthScreen < 700 ? 1500 : 2300, y: 600 }}
-        pagination={{
-          onChange: cancel,
-          showSizeChanger: true,
-          defaultPageSize: 20,
-          defaultCurrent: 1,
-          showTotal: (total: number) => `Total ${total} items`,
-        }}
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: (event) => {
-              handleClickRow(record, rowIndex, event);
-            },
-            onDoubleClick: (event) => {
-              handleDoubleClickRow(record, rowIndex, event);
-            },
-          };
-        }}
-      />
-      {clickingRow ? (
-        <Modal
-          title={clickingRow.course}
-          centered
-          visible={visibleModal}
-          footer={[
-            <Button id="back" onClick={() => setVisibleModal(false)}>
-              Back
-            </Button>,
-          ]}
-          onCancel={() => setVisibleModal(false)}
-          width={1000}
-        >
-          <TaskPageContainer
-            name={clickingRow.name}
-            date={clickingRow.dateTime}
-            type={clickingRow.type}
-            organizer={clickingRow.organizer}
-            taskContent={clickingRow.taskContent}
-            isShowFeedback={clickingRow.isShowFeedback}
-          />
-        </Modal>
-      ) : null}
-    </Form>
-  );
->>>>>>> 1dcc62d3f23629b045c9479d909a6488f8dd833b*/
 });
 
 export {TableSchedule};

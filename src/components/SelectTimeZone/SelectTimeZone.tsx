@@ -5,14 +5,13 @@ import { SelectTimeZoneModelProps } from './SelectTimeZone.model';
 
 const { Option } = Select;
 
-export const SelectTimeZone: FC<SelectTimeZoneModelProps> = ({ setTimeZone, defaultValue }) => {
+export const SelectTimeZone: FC<SelectTimeZoneModelProps> = ({ setTimeZone, defaultValue, widthScreen }) => {
   const changeTimeZone = (value: string) => {
     setTimeZone(value);
   };
-  {/*style={{ width: widthScreen > 800 ? 400 : widthScreen / 2 }}*/}
   return (
     <div className="timezone">
-      <Select defaultValue={defaultValue} onChange={changeTimeZone}>
+      <Select defaultValue={defaultValue} onChange={changeTimeZone} style={{ width: widthScreen < 500 ? 200 : 400 }}>
         <Option value="-12:00">(GMT -12:00) Eniwetok, Kwajalein</Option>
         <Option value="-11:00">(GMT -11:00) Midway Island, Samoa</Option>
         <Option value="-10:00">(GMT -10:00) Hawaii</Option>
