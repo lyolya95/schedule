@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getDataEvent } from '../../reducers';
+import { getDataEvent, setShowModaViewEvent } from '../../reducers';
 import { StateModel } from '../../reducers/reducers.model';
 import { ListSchedule } from './ListSchedule';
 
@@ -8,7 +8,8 @@ const mapStateToProps = (state: StateModel) => {
     isMentorStatus: state.isMentorStatus,
     data: state.data,
     types: state.types,
+    isShowModalViewEvents: state.isShowModalViewEvents,
   };
 };
 
-export const ListScheduleContainer = connect(mapStateToProps, { getDataEvent })(ListSchedule);
+export const ListScheduleContainer = connect(mapStateToProps, { getDataEvent, setShowModaViewEvent })(ListSchedule);
