@@ -1,6 +1,6 @@
 | Deadline         | Folder name | Branch name | Team Id | Developers                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Project evaluation |
 | ---------------- | ----------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| 27.09.2020 23:59 | schedule    | schedule    | 44      | [<img src="https://avatars0.githubusercontent.com/u/55137598?s=460&u=8740b71f7d0ee8986706a17d65abb72d1f361bd6&v=4" alt="lyolya95" width="30"/>](https://github.com/lyolya95) [<img src="https://avatars0.githubusercontent.com/u/13054496?s=460&u=c34dcf141af5af5a2fcd3ac528f06f58d8ca301d&v=4" alt="newqwes" width="30"/>](https://github.com/newqwes) [<img src="https://avatars3.githubusercontent.com/u/55688514?s=460&v=4" alt="HalinaPP" width="30"/>](https://github.com/HalinaPP) [<img src="https://avatars2.githubusercontent.com/u/55784228?s=460&u=095228f2b8d78705bff5e0b49144d859a6c2db54&v=4" alt="rikkirikkardo44" width="30"/>](https://github.com/rikkirikkardo44) | 600 / 510         |
+| 27.09.2020 23:59 | schedule    | schedule    | 44      | [<img src="https://avatars0.githubusercontent.com/u/55137598?s=460&u=8740b71f7d0ee8986706a17d65abb72d1f361bd6&v=4" alt="lyolya95" width="30"/>](https://github.com/lyolya95) [<img src="https://avatars0.githubusercontent.com/u/13054496?s=460&u=c34dcf141af5af5a2fcd3ac528f06f58d8ca301d&v=4" alt="newqwes" width="30"/>](https://github.com/newqwes) [<img src="https://avatars3.githubusercontent.com/u/55688514?s=460&v=4" alt="HalinaPP" width="30"/>](https://github.com/HalinaPP) [<img src="https://avatars2.githubusercontent.com/u/55784228?s=460&u=095228f2b8d78705bff5e0b49144d859a6c2db54&v=4" alt="rikkirikkardo44" width="30"/>](https://github.com/rikkirikkardo44) | 600 / 520         |
 
 # schedule
 
@@ -83,8 +83,14 @@ yarn start
 
   - [x] выполнены и оформлены в виде markdown файла или документа Google Docs требования пункта "Определение потребностей пользователей" +10
   - [ ] идеи по улучшению расписания представлены в виде списка конкретных изменений и усовершенствований, которые необходимо внести в приложение +10
-  - [ ] создан макет приложения в figma либо другом редакторе (нарисованные от руки и отсканированные наброски и схемы тоже подойдут) +10
-
+  - [x] создан макет приложения в figma либо другом редакторе (нарисованные от руки и отсканированные наброски и схемы тоже подойдут) +10
+  
+    - <img src="https://i.imgur.com/T5YhyhI.png" alt="designe" width="250"/>
+     <img src="https://i.imgur.com/xlSmiy1.png" alt="designe" width="250"/>
+    - <img src="https://i.imgur.com/z2eT53c.png" alt="designe" width="250"/>
+     <img src="https://i.imgur.com/Jqyo514.png" alt="designe" width="250"/>
+    
+   
 - **Оформление приложения +30**
 
   - [x] приложение корректно отображается как на компьютере, так и на мобильных устройствах, оптимально занимает площадь страницы. Минимальная ширина страницы, при которой приложение отображается корректно, 320рх. Наличие в таблице полосы прокрутки не является ошибкой +10
