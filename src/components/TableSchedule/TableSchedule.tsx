@@ -8,8 +8,10 @@ import {
   HighlightTwoTone,
   PlusCircleTwoTone,
   SaveOutlined,
+  EyeOutlined, 
+  FileSearchOutlined
 } from '@ant-design/icons';
-import { EyeOutlined } from '@ant-design/icons/lib';
+//import {  } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
 import Text from 'antd/lib/typography/Text';
@@ -255,6 +257,36 @@ const TableSchedule: FC<any> = React.memo((props) => {
   };
   const allColumns: IAgeMap[] = columnsName.map((item: any) => {
     switch (item.dataIndex) {
+      case 'name':
+        return {
+          title: 'name',
+          dataIndex: 'name',
+          editable: true,
+          render: (_: any, record: any) => {
+            return (
+               <div className="name-link" 
+                    onClick={ () => handleDetailed(record)}
+                >
+                  <Tooltip title="Show event description">
+                    <FileSearchOutlined className="name-link-ico"/> 
+                  </Tooltip> {record.name}
+                </div>
+              );
+          },
+        };
+      case 'descriptionUrl':
+        return {
+          title: 'descriptionUrl',
+          dataIndex: 'descriptionUrl',
+          editable: true,
+          render: (_: any, record: any) => {
+            return (
+              <a href="{record.descriptionUrl}" title="{record.descriptionUrl}">
+                {record.descriptionUrl}
+              </a>
+            );
+          },
+        };
       case 'type':
         return {
           title: 'Type',
@@ -313,12 +345,11 @@ const TableSchedule: FC<any> = React.memo((props) => {
     return false;
   };
 
-  const handleDoubleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
-    if (isHandlingClickOnRow(event)) {
-      setClickingRow(record);
-      setVisibleModal(true);
-    }
+  const handleDetailed = (record: any) => {
+    setClickingRow(record);
+    setVisibleModal(true);
   };
+
   //______добавлена логика клика с зажатым shift__________________________________________________________________________
   const [hideButton, setHideButton] = useState<boolean>(false);
   const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
@@ -357,7 +388,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
       } else {
         if (event.shiftKey) {
           if (hiddenRowKeys.length !== 0) {
-            //console.log('Hidden row keys: ', hiddenRowKeys)
             const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
             const currentKey = record.key;
             let clazz = '';
@@ -469,9 +499,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
           return {
             onClick: (event) => {
               handleClickRow(record, rowIndex, event);
-            },
-            onDoubleClick: (event) => {
-              handleDoubleClickRow(record, rowIndex, event);
             },
           };
         }}
