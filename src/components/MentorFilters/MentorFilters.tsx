@@ -11,7 +11,7 @@ const { RangePicker } = DatePicker;
 const { Panel } = Collapse;
 
 export const MentorFilters: FC<MentorFiltersProps> = (props) => {
-  const { data, setFilterFlags, filterFlag, setDates, isMentorStatus } = props;
+  const { data, setFilterFlags, filterFlag, setDates } = props;
 
   const [tags, setTags] = useStickyState([], 'tags');
   const [course, setCourse] = useStickyState([], 'course');
