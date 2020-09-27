@@ -4,7 +4,7 @@ import Modal from 'antd/lib/modal/Modal';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import reactCSS from 'reactcss';
-import { useStickyState } from '../MentorFilters/hooks/useStickyState';
+import { useStickyState } from '../Filters/hooks/useStickyState';
 import { SettingsModalProps } from './SettingsModal.model';
 import './SettingsModal.scss';
 import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";

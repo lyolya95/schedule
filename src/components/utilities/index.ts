@@ -71,7 +71,7 @@ export const columnSetWidth = (columnName: string, widthScreen: number) => {
     case 'course':
       return `10%`;
     case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone':
-      return `7%`;
+      return `5%`;
     case 'name':
       return `10%`;
     case 'descriptionUrl':
@@ -79,14 +79,12 @@ export const columnSetWidth = (columnName: string, widthScreen: number) => {
     case 'organizer':
       return `10%`;
     case 'timeToComplete':
-      return `10%`;
+      return `5%`;
     case 'week':
       return `5%`;
     case 'dateTime':
-      return `10%`;
-    case 'Type':
-      return `15%`;
+      return `8%`;
     default:
-      return 'auto';
+      return '5%';
   }
 };

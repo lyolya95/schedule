@@ -1,7 +1,7 @@
 import { Alert, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { addDataEvent, deleteDataEvent, getDataEvent, putDataEvent, setWidthScreen } from '../../reducers';
+import { addDataEvent, deleteDataEvent, getDataEvent, putDataEvent, setWidthScreen, setDataLoaded } from '../../reducers';
 import { StateModel } from '../../reducers/reducers.model';
 import { TableScheduleContainer } from './TableScheduleContainer';
 
@@ -10,7 +10,10 @@ const Container = (props: any) => {
   useEffect(() => {
     const firstLoadTable = async () => {
       setPreloader(true);
-      await props.getDataEvent();
+      if (props.isDataLoaded === false) {
+        await props.getDataEvent();
+        props.setDataLoaded(true);
+      }
       setPreloader(false);
     };
     firstLoadTable();
@@ -38,6 +41,7 @@ const mapStateToProps = (state: StateModel) => {
     types: state.types,
     widthScreen: state.widthScreen,
     timeZone: state.timeZone,
+    isDataLoaded: state.isDataLoaded,
   };
 };
 
@@ -47,4 +51,5 @@ export const TableSchedule = connect(mapStateToProps, {
   addDataEvent,
   deleteDataEvent,
   setWidthScreen,
+  setDataLoaded,
 })(Container);
