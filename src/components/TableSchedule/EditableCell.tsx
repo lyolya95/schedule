@@ -6,18 +6,8 @@ import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
 
 const { Option } = Select;
-const EditableCell: React.FC<EditableCellProps> = ({
-  organizers,
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  types,
-  ...restProps
-}) => {
+const EditableCell: React.FC<EditableCellProps> = React.memo((props) => {
+  const { organizers, editing, dataIndex, title, inputType, record, index, children, types, ...restProps } = props;
   let inputNode;
 
   switch (dataIndex) {
@@ -76,5 +66,5 @@ const EditableCell: React.FC<EditableCellProps> = ({
       )}
     </td>
   );
-};
+});
 export { EditableCell };

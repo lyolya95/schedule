@@ -1,4 +1,10 @@
-import { CalendarOutlined, SettingOutlined, TableOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import {
+  CalendarOutlined,
+  FontSizeOutlined,
+  SettingOutlined,
+  TableOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons';
 import { Button } from 'antd';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -8,7 +14,16 @@ import { HeaderProps } from './Header.model';
 import './Header.scss';
 
 export const Header: FC<HeaderProps> = React.memo(
-  ({ isMentorStatus, changeMentorStatus, isShowSettingsModal, setShowModalSetting, types, setColorType }) => {
+  ({
+    isMentorStatus,
+    changeMentorStatus,
+    isShowSettingsModal,
+    setShowModalSetting,
+    types,
+    setColorType,
+    isShowVersionVisually,
+    setChangeVersionVisually,
+  }) => {
     const history = useHistory();
 
     const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
@@ -45,13 +60,16 @@ export const Header: FC<HeaderProps> = React.memo(
     if (JSON.parse(localStorage.getItem('DARK_MODE') || '{}') === true) {
       document.body.classList.add('dark-mode');
     }
-
+    console.log(isShowVersionVisually);
     return (
       <>
         <div className="header">
           <FirstLogo />
           <div className="calendar-title"></div>
           <div className="btn-header">
+            <Button onClick={setChangeVersionVisually} icon={<FontSizeOutlined />}>
+              version for the visually impaired
+            </Button>
             <Button onClick={() => setShowModalSetting(true)}>
               <SettingOutlined />
             </Button>
