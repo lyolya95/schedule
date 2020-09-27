@@ -4,14 +4,14 @@ import TaskEditor from '../TaskEditor';
 import {MentorTaskFormProps} from './MentorTaskForm.model';
 import ReactMarkdown from 'react-markdown';
 import {EditFilled} from '@ant-design/icons';
-import { Checkbox } from 'antd';
+import { Checkbox, List } from 'antd';
 
 export const MentorTaskForm:FC<MentorTaskFormProps> = (props) => {
   const { eventData, putDataEvent } = props;
   const [editStatus, setEditStatus] = useState(false);
   const [isShowFeedback, setShowFeedback] = useState(eventData.isShowFeedback);
   const taskContentHtml = React.createElement(ReactMarkdown, {source: eventData.taskContent});
-
+  const isFeedbacksExist = eventData.feedbacks && eventData.feedbacks?.length>0 ? true : false; 
   const handleClick = () => {
     setEditStatus(true);
   }
@@ -64,6 +64,17 @@ export const MentorTaskForm:FC<MentorTaskFormProps> = (props) => {
                   </div>
               </div>
             }
+            { isFeedbacksExist
+              ? <List
+                  size="small"
+                  header={<b>Отзывы студентов</b>}
+                  bordered
+                  dataSource={eventData.feedbacks}
+                  renderItem={(item:any) => <List.Item>{item}</List.Item>}
+                />
+              : <div><b>У события пока нет ни одного отзыва.</b></div>
+            }
+
           </div>
   );
 }
