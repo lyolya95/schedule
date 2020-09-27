@@ -76,16 +76,14 @@ export const columnSetWidth = (columnName: string, widthScreen: number) => {
       return `10%`;
     case 'descriptionUrl':
       return '15%';
-    case 'Type':
-      return '15%';
     case 'organizer':
       return `10%`;
     case 'timeToComplete':
-      return `10%`;
+      return `5%`;
     case 'week':
       return `5%`;
     case 'dateTime':
-      return `10%`;
+      return `8%`;
     default:
       return '5%';
   }
