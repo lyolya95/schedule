@@ -12,18 +12,20 @@ type StateType = {
 };
 interface PropsType {
   currTaskContent: string;
-  handleSave(text: string): void;
+  chosenCoordinates: number[];
+  handleSave(text: string, coords: number[]): void;
   handleCancel(): void;
 }
 const TaskEditor: FC<PropsType> = (props) => {
-  const { currTaskContent, handleSave, handleCancel } = props;
+  const { currTaskContent, chosenCoordinates, handleSave, handleCancel } = props;
 
   MdEditor.unuse(Plugins.ModeToggle);
   MdEditor.unuse(Plugins.FullScreen);
   MdEditor.use(ModeToggleMDHtml);
 
   const mdEditor = useRef<MdEditor>(null);
-  const [state, setState] = useState<StateType>({ value: currTaskContent });
+  const [state, setState] = useState<StateType>({ value: currTaskContent});
+  const [coords, setCoords] = useState<number[]>([]);
 
   const renderHTML = (text: string) => {
     return React.createElement(ReactMarkdown, {
@@ -33,7 +35,7 @@ const TaskEditor: FC<PropsType> = (props) => {
 
   const handleEditorChange = (it: { text: string; html: string }, event: any) => {
     setState({
-      value: it.text,
+      value: it.text
     });
   };
 
@@ -50,13 +52,17 @@ const TaskEditor: FC<PropsType> = (props) => {
 
   const handleSaveClick = () => {
     if (mdEditor.current) {
-      handleSave(mdEditor.current.getMdValue());
+      handleSave(mdEditor.current.getMdValue(), coords);
     }
   };
 
   const handleCancelClick = () => {
     handleCancel();
   };
+
+  const changeCoords = ( coordsNew:number[] ) => {
+    setCoords(coordsNew);
+  }
 
   return (
     <div className="task-editor">
@@ -81,7 +87,11 @@ const TaskEditor: FC<PropsType> = (props) => {
         onChange={handleEditorChange}
         onImageUpload={handleImageUpload}
       />
-      <Maps />
+      <Maps 
+        isMentorStatus={true}
+        chosenCoordinates={chosenCoordinates}
+        changeCoords={changeCoords}
+      />
       <Button type="primary" size="large" onClick={handleSaveClick}>
         Save changes
       </Button>
