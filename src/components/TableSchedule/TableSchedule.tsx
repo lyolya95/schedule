@@ -248,6 +248,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           title: 'name',
           dataIndex: 'name',
           editable: true,
+          width: '10%',
           render: (_: any, record: any) => {
             return (
               <div className="name-link" onClick={() => handleDetailed(record)}>
@@ -281,9 +282,11 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           width: '15%',
           render: (_: any, record: any) => {
             return (
-              <a key={record.descriptionUrl} target="_blank" href={record.descriptionUrl} rel="noopener noreferrer">
-                {record.descriptionUrl.length > 0 ? `${record.descriptionUrl.slice(0, 45)}...` : ''}
-              </a>
+              record.descriptionUrl && (
+                <a key={record.descriptionUrl} target="_blank" href={record.descriptionUrl} rel="noopener noreferrer">
+                  {record.descriptionUrl.slice(0, 40)}...
+                </a>
+              )
             );
           },
         };
@@ -470,7 +473,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </Tooltip>
         )}
       </div>
-      <Text type="secondary">Double click on a table row to bring up detailed information</Text>
+      <Text type="secondary">Click on the name of the event to open full description</Text>
       <MentorFilters
         data={data}
         filterFlag={filerFlags}
