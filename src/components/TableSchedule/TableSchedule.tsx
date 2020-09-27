@@ -279,7 +279,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           title: 'Score/maxScore',
           dataIndex: 'combineScore',
           editable: true,
-          width: '5%',
+          width: '9%',
         };
       default:
         return item;
