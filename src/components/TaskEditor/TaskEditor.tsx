@@ -63,8 +63,7 @@ const TaskEditor: FC<PropsType> = (props) => {
   };
 
   const changeCoords = ( coordsNew:number[] ) => {
-    console.log('new coor',coordsNew);
-    setCoords(coordsNew);
+     setCoords(coordsNew);
   }
   const onSwitchChange = () => {
      setIsShowMap((state) => {
