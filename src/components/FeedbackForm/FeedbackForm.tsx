@@ -9,7 +9,7 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
   
-  export const FeedbackForm:FC<FeedbackFormProps> = ({eventData, putDataEvent}) => {
+  export const FeedbackForm:FC<FeedbackFormProps> =  React.memo(({eventData, putDataEvent}) => {
     const { TextArea } = Input;
     const [form] = Form.useForm();
 
@@ -59,4 +59,4 @@ const tailLayout = {
         </Form>
         </div>
     );
-}
+});

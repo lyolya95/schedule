@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import {EditFilled} from '@ant-design/icons';
 import { Checkbox, List } from 'antd';
 
-export const MentorTaskForm:FC<MentorTaskFormProps> = (props) => {
+export const MentorTaskForm:FC<MentorTaskFormProps> =  React.memo((props) => {
   const { eventData, putDataEvent } = props;
   const [editStatus, setEditStatus] = useState(false);
   const [isShowFeedback, setShowFeedback] = useState(eventData.isShowFeedback);
@@ -77,4 +77,4 @@ export const MentorTaskForm:FC<MentorTaskFormProps> = (props) => {
 
           </div>
   );
-}
+});
