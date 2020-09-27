@@ -30,9 +30,9 @@ npm start
 yarn start
 ```
 
-## Демо
+## Ссылка на рабочий протатип:
 
-Расписание Schedule [link](https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/)
+ [Расписание Schedule](https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/)
 
 ## Описание приложения
 
