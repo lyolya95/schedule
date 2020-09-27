@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Tag } from 'antd';
 import { TaskPageProps } from './TaskPage.model';
 import { MentorTaskFormContainer } from '../MentorTaskForm/MentorTaskForm.container';
-import { StudentTaskFormContainer } from '../StudentTaskForm/StudentTaskForm.container';
+import { StudentTaskForm } from '../StudentTaskForm/StudentTaskForm';
 import './TaskPage.scss';
 
 export const TaskPage: FC<TaskPageProps> = React.memo((props) => {
@@ -32,7 +32,7 @@ export const TaskPage: FC<TaskPageProps> = React.memo((props) => {
           eventData={eventData} 
         />
       ) : (
-        <StudentTaskFormContainer 
+        <StudentTaskForm 
           eventData={eventData} 
         />
       )}

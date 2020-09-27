@@ -17,17 +17,15 @@ const tailLayout = {
         form.resetFields();
       };
 
-    const onFinish = (values:Store) => {
-        console.log('Success:', values);
-        eventData.feedbacks = values;
+    const onFinish = async (values:Store) => {
+        eventData.feedbacks = eventData.feedbacks ? [...eventData.feedbacks, values.message] : [values.message];
         await putDataEvent(eventData.id, eventData);
         message.success('Your message send');
         form.resetFields();
     };
     
     const onFinishFailed = (errorInfo:ValidateErrorEntity) => {
-        console.log('Failed:', errorInfo);
-        message.error('Failed. Check your message');
+          message.error('Failed. Check your message');
     };
 
     return(
