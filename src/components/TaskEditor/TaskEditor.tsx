@@ -26,7 +26,7 @@ const TaskEditor: FC<PropsType> = (props) => {
 
   const mdEditor = useRef<MdEditor>(null);
   const [state, setState] = useState<StateType>({ value: currTaskContent});
-  const [coords, setCoords] = useState<number[]>([]);
+  const [coords, setCoords] = useState<number[]>(chosenCoordinates);
   const [isShowMap, setIsShowMap] = useState<boolean>(showMap);
 
   const renderHTML = (text: string) => {
@@ -63,6 +63,7 @@ const TaskEditor: FC<PropsType> = (props) => {
   };
 
   const changeCoords = ( coordsNew:number[] ) => {
+    console.log('new coor',coordsNew);
     setCoords(coordsNew);
   }
   const onSwitchChange = () => {
@@ -93,11 +94,18 @@ const TaskEditor: FC<PropsType> = (props) => {
         onChange={handleEditorChange}
         onImageUpload={handleImageUpload}
       />
-      <Switch defaultChecked checked={isShowMap} onChange={onSwitchChange} />
+      <div className="map-switcher">
+        <Switch checked={isShowMap} onChange={onSwitchChange} />
+      {isShowMap 
+        ? <span>Show map</span>
+        : <span>Not show map</span>
+        
+      }
+      </div>
       {isShowMap
         ? <Maps 
           isMentorStatus={true}
-          chosenCoordinates={chosenCoordinates}
+          chosenCoordinates={coords}
           changeCoords={changeCoords}
           />
         : null

@@ -14,8 +14,11 @@ export const Maps:FC<MapsProps> = ({ isMentorStatus,  chosenCoordinates, changeC
   };
 
   const onMapClick = (event: any) => {
+   
     setCoords(() =>{
+      
       const newState = event.get('coords');
+      console.log('coord',newState);
       if(changeCoords){
         changeCoords(newState);
       }
@@ -23,18 +26,7 @@ export const Maps:FC<MapsProps> = ({ isMentorStatus,  chosenCoordinates, changeC
     });
   };
 
-  const getPlacemark = () => {
-    if(coords && coords.length>0){
-      return (<div><Placemark 
-                key={coords.join(',')} 
-                geometry={coords} />
-              </div>
-            );
-    }
-    return null;
-
-  }
-
+  
   return (
     <div className="task-editor-maps">
       <YMaps
@@ -52,7 +44,9 @@ export const Maps:FC<MapsProps> = ({ isMentorStatus,  chosenCoordinates, changeC
                 width={600}
                 modules={['control.ZoomControl', 'control.FullscreenControl']}
               >
-                {getPlacemark}
+                {<Placemark 
+                  key={coords?.join(',')} 
+                  geometry={coords} />}
                 <SearchControl options={{ float: 'right' }} />
               </Map>
             : <Map
@@ -60,7 +54,7 @@ export const Maps:FC<MapsProps> = ({ isMentorStatus,  chosenCoordinates, changeC
                 width={600}
                 modules={['control.ZoomControl', 'control.FullscreenControl']}
               >
-                {getPlacemark}
+                  {<Placemark key={coords?.join(',')} geometry={coords} />}
               </Map>
           }
        </YMaps>
