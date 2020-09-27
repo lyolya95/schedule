@@ -45,7 +45,9 @@ export const TableScheduleContainer = (props: any) => {
 
   const add = async () => {
     setIsLoading(true);
-    const newId = await addDataEvent(initialEventData);
+    const newData = initialEventData;
+    newData.timeZone = timeZone;
+    const newId = await addDataEvent(newData);
     await getDataEvent();
     setIsLoading(false);
     edit(newId.data);

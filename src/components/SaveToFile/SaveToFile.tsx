@@ -12,6 +12,7 @@ import './SaveToFile.scss';
 export const SaveToFile: FC<SaveToFileProps> = React.memo(({ widthScreen, columns, data }) => {
   const columnsState = ['dateTime', 'timeToComplete', 'type', 'name', 'course', 'organizer', 'place'];
   const visibleColumns = columns.filter((item: any) => columnsState.includes(item.dataIndex));
+
   const columnsArr = visibleColumns.map((item: any) => item.title);
   const dataArr = data.map((item: any) => {
     const result: any = [

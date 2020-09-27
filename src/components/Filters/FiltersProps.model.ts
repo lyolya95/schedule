@@ -1,4 +1,4 @@
-export interface MentorFiltersProps {
+export interface FiltersProps {
   data: any;
   filterFlag: any;
   setFilterFlags(flag: {}): void;
