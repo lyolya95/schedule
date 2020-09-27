@@ -1,7 +1,6 @@
 import { TagOutlined } from '@ant-design/icons';
 import { Rate, Tag } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
-//import moment from 'moment';
 import React, { FC, useCallback } from 'react';
 import { EventOfInterface } from '../../reducers/reducers.model';
 import './ModalViewEvent.scss';
@@ -41,7 +40,7 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
         {event[0]?.dateTime && (
           <div className="modal_events__item">
             <div>Date:</div>
-            <div><b>{event[0]?.dateTime+event[0]?.timeZone}</b></div>
+            <div><b>{event[0]?.dateTime}</b></div>
           </div>
         )}
         {event[0]?.place && (
