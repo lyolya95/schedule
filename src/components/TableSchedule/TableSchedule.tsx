@@ -295,6 +295,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         title: col.title,
         editing: isEditing(record),
         organizers,
+        types,
       }),
     };
   });
