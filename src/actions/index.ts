@@ -14,6 +14,7 @@ export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
 export const SET_MODAL_VIEW_EVENT: string = 'SET_MODAL_VIEW_EVENT';
 export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
 export const CHANGE_VERSION_VISUALLY: string = 'CHANGE_VERSION_VISUALLY';
+export const SET_WIDTH_SCREEN: string = 'SET_WIDTH_SCREEN';
 
 const changeMentorStatus = (): ChangeMentorStatusActionInterface => ({ type: CHANGE_MENTOR_STATUS });
 const setDataEventsAC = (events: EventOfInterface[], organizers: MentorInterface[]): SetDataEventsActionInterface => ({
@@ -30,6 +31,7 @@ const setModalSettings = (value: boolean) => ({ type: SET_MODAL_SETTINGS, value 
 const setColorTypes = (value: any) => ({ type: SET_TYPES_COLOR, value });
 const setModalViewEvent = (value: boolean) => ({ type: SET_MODAL_VIEW_EVENT, value });
 const changeVersionVisually = () => ({ type: CHANGE_VERSION_VISUALLY });
+const setwidthScreenAC = (value: number) => ({ type: SET_WIDTH_SCREEN, value });
 
 export {
   setModalSettings,
@@ -40,4 +42,5 @@ export {
   addDataEventAC,
   setModalViewEvent,
   changeVersionVisually,
+  setwidthScreenAC,
 };

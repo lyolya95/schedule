@@ -15,6 +15,7 @@ export interface EventOfInterface {
   taskContent: string;
   isShowFeedback: string;
   rating: string;
+  combineScore: string;
 }
 export interface MentorInterface {
   id: string | undefined;
@@ -35,4 +36,5 @@ export interface StateModel {
     color: string;
   }[];
   isShowVersionVisually: boolean;
+  widthScreen: number;
 }

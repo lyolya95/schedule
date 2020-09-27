@@ -10,11 +10,13 @@ import {
   setModalSettings,
   setModalViewEvent,
   setOrganizersAC,
+  setwidthScreenAC,
   SET_DATA_EVENT,
   SET_MODAL_SETTINGS,
   SET_MODAL_VIEW_EVENT,
   SET_ORGANIZERS,
   SET_TYPES_COLOR,
+  SET_WIDTH_SCREEN,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
@@ -38,6 +40,7 @@ const initialState: StateModel = {
       timeZone: '',
       type: '',
       week: '',
+      combineScore: '',
     },
   ],
   columnsName: [
@@ -71,11 +74,13 @@ const initialState: StateModel = {
     timeZone: '',
     type: '',
     week: '',
+    combineScore: '',
   },
   isShowSettingsModal: false,
   types: typesTag,
   isShowModalViewEvents: false,
   isShowVersionVisually: false,
+  widthScreen: 1920,
 };
 
 const reducer = (state = initialState, action: any): StateModel => {
@@ -129,6 +134,9 @@ const reducer = (state = initialState, action: any): StateModel => {
         ...state,
         isShowVersionVisually: !state.isShowVersionVisually,
       };
+    case SET_WIDTH_SCREEN: {
+      return { ...state, widthScreen: action.value };
+    }
     default:
       return state;
   }
@@ -169,4 +177,8 @@ export const setChangeVersionVisually = () => (dispatch: Dispatch) => {
   dispatch(changeVersionVisually());
 };
 
-export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent };
+const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
+  dispatch(setwidthScreenAC(value));
+};
+
+export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent, setWidthScreen };
