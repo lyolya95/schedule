@@ -17,10 +17,13 @@ export const StudentTaskForm:FC<StudentTaskFormProps> = React.memo((props) => {
           />
           : null
         }
-         <Maps 
-          isMentorStatus={false}
-          chosenCoordinates = {eventData.coordinates}
-         />
+        {eventData.showMap
+          ? <Maps 
+              isMentorStatus={false}
+              chosenCoordinates = {eventData.coordinates}
+            />
+          : null
+        }
     </div>
    );
 });

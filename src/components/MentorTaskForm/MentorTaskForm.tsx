@@ -16,9 +16,10 @@ export const MentorTaskForm:FC<MentorTaskFormProps> =  React.memo((props) => {
     setEditStatus(true);
   }
 
-  const handleSave = async (text:string, coords:number[]) => {
+  const handleSave = async (text:string, coords:number[], showMap:boolean) => {
     eventData.taskContent = text;
-    eventData.coordinates = coords;
+    eventData.showMap = showMap;
+    eventData.coordinates = showMap ? coords : [];
     await putDataEvent(eventData.id, eventData);
     setEditStatus(false);
   }
@@ -48,6 +49,7 @@ export const MentorTaskForm:FC<MentorTaskFormProps> =  React.memo((props) => {
                   <TaskEditor 
                     currTaskContent={eventData.taskContent}
                     chosenCoordinates={eventData.coordinates}
+                    showMap={eventData.showMap}
                     handleSave={handleSave}
                     handleCancel={handleCancel}
                   />

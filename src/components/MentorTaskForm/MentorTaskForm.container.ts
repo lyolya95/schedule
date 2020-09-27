@@ -4,7 +4,7 @@ import { putDataEvent } from '../../reducers';
 import { MentorTaskForm } from './MentorTaskForm';
 
 const mapStateToProps = (state: StateModel) => {
-  return ;
+  return {};
 };
 const MentorTaskFormContainer = connect(mapStateToProps, {putDataEvent})(MentorTaskForm);
 
