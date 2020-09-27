@@ -17,34 +17,21 @@ export const CHANGE_VERSION_VISUALLY: string = 'CHANGE_VERSION_VISUALLY';
 export const SET_WIDTH_SCREEN: string = 'SET_WIDTH_SCREEN';
 export const SET_TIME_ZONE: string = 'SET_TIME_ZONE';
 
-const changeMentorStatus = (): ChangeMentorStatusActionInterface => ({ type: CHANGE_MENTOR_STATUS });
-const setDataEventsAC = (events: EventOfInterface[], organizers: MentorInterface[]): SetDataEventsActionInterface => ({
+export const changeMentorStatus = (): ChangeMentorStatusActionInterface => ({ type: CHANGE_MENTOR_STATUS });
+export const setDataEventsAC = (events: EventOfInterface[], organizers: MentorInterface[]): SetDataEventsActionInterface => ({
   type: SET_DATA_EVENT,
   events,
   organizers,
 });
-const setOrganizersAC = (organizers: MentorInterface[]): SetOrganizersActionInterface => ({
+export const setOrganizersAC = (organizers: MentorInterface[]): SetOrganizersActionInterface => ({
   type: SET_ORGANIZERS,
   organizers,
 });
-const addDataEventAC = (): AddDataEventActionInterface => ({ type: ADD_DATA_EVENT });
-const setModalSettings = (value: boolean) => ({ type: SET_MODAL_SETTINGS, value });
-const setColorTypes = (value: any) => ({ type: SET_TYPES_COLOR, value });
-const setModalViewEvent = (value: boolean) => ({ type: SET_MODAL_VIEW_EVENT, value });
-const changeVersionVisually = () => ({ type: CHANGE_VERSION_VISUALLY });
-const setwidthScreenAC = (value: number) => ({ type: SET_WIDTH_SCREEN, value });
-const setTimeZones = (value: any) => ({ type: SET_TIME_ZONE, value });
 
-export {
-  setModalSettings,
-  setColorTypes,
-  changeMentorStatus,
-  setDataEventsAC,
-  setOrganizersAC,
-  addDataEventAC,
-  setModalViewEvent,
-  changeVersionVisually,
-  setwidthScreenAC,
-  setTimeZones,
-};
-
+export const addDataEventAC = (): AddDataEventActionInterface => ({ type: ADD_DATA_EVENT });
+export const setModalSettings = (value: boolean) => ({ type: SET_MODAL_SETTINGS, value });
+export const setColorTypes = (value: any) => ({ type: SET_TYPES_COLOR, value });
+export const setModalViewEvent = (value: boolean) => ({ type: SET_MODAL_VIEW_EVENT, value });
+export const changeVersionVisually = () => ({ type: CHANGE_VERSION_VISUALLY });
+export const setwidthScreenAC = (value: number) => ({ type: SET_WIDTH_SCREEN, value });
+export const setTimeZones = (value: any) => ({ type: SET_TIME_ZONE, value });
