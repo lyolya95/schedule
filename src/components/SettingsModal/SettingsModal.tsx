@@ -5,9 +5,9 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import reactCSS from 'reactcss';
 import { useStickyState } from '../MentorFilters/hooks/useStickyState';
+import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { SettingsModalProps } from './SettingsModal.model';
 import './SettingsModal.scss';
-import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";
 
 export const SettingsModal: FC<SettingsModalProps> = ({
   isShowSettingsModal,
@@ -40,7 +40,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({
     if (JSON.parse(localStorage.getItem('timeZone')!)) {
       setTimeZone(JSON.parse(localStorage.getItem('timeZone')!));
     }
-  }, []);
+  }, [setTimeZone]);
 
   useEffect(() => {
     if (darkMode) {
@@ -92,10 +92,13 @@ export const SettingsModal: FC<SettingsModalProps> = ({
     [setColorsTaskLocalStorage]
   );
 
-  const handleSetTimeZone = useCallback((value: string) => {
-    setTimeZone(value);
-    localStorage.setItem('timeZone', JSON.stringify(value));
-  }, [setTimeZone])
+  const handleSetTimeZone = useCallback(
+    (value: string) => {
+      setTimeZone(value);
+      localStorage.setItem('timeZone', JSON.stringify(value));
+    },
+    [setTimeZone]
+  );
 
   const styles: any = reactCSS({
     default: {
@@ -135,7 +138,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({
           />
         </div>
         <div className="set-time-zone">
-          <SelectTimeZone setTimeZone={handleSetTimeZone} defaultValue={timeZone} widthScreen={widthScreen}/>
+          <SelectTimeZone setTimeZone={handleSetTimeZone} defaultValue={timeZone} widthScreen={widthScreen} />
         </div>
         <div className="setting-picker">
           <div>Change color events:</div>
