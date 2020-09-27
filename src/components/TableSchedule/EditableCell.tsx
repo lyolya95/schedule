@@ -7,27 +7,16 @@ import { dateAndTimeFormat } from '../utilities';
 import './Tables.scss';
 import { EditableCellProps } from './TableSchedule.model';
 
-const { Option } = Select;
+interface newTypesInterface {
+  type: string;
+  color: string;
+  name?: string;
+}
 
-const EditableCell: React.FC<EditableCellProps> = ({
-  organizers,
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  types,
-  ...restProps
-}) => {
+const { Option } = Select;
+const EditableCell: React.FC<EditableCellProps> = React.memo((props) => {
+  const { organizers, editing, dataIndex, title, inputType, record, index, children, types, ...restProps } = props;
   let inputNode;
-  //_________________
-  interface newTypesInterface {
-    type: string;
-    color: string;
-    name?: string;
-  }
 
   const temporarilyTypes = !types ? [] : types;
   const newTypes: {
@@ -51,7 +40,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const addItem = () => {
     setState([...state, stateOne]);
   };
-  //_____________________________
+
   switch (dataIndex) {
     case 'score':
       inputNode = <InputNumber />;
@@ -124,5 +113,5 @@ const EditableCell: React.FC<EditableCellProps> = ({
       )}
     </td>
   );
-};
+});
 export { EditableCell };

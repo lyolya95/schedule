@@ -74,7 +74,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+    const valueToCheck: string[] = keysToCheck
+      .map((key: string) => flags[key].map((value: string) => value.split(',')))
+      .flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -119,9 +121,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
   };
 
-  //const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
-
-  const visibleData = data // формируем отображаемые данные для таблицы
+  const visibleData = data
     .filter((item: any) => hasFilterFlag(item, filerFlags))
     .map((item: any) => {
       return {
@@ -137,12 +137,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
-  // надо взять с localstorage первоначальные данные
   const [eventRating, setEventRating] = useState<any>();
-
-  //____________________
-
-  //_________________________
 
   const mentorOperationData = {
     title: 'Edit',
@@ -188,7 +183,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
                 ghost={true}
                 onClick={() => remove(record.id)}
                 icon={<DeleteOutlined />}
-                style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+                style={{ fontSize: '16px', border: '1px solid #FF69B4', color: '#FF69B4' }}
               />
             </Tooltip>
             <Rate disabled value={eventRating} />
@@ -285,7 +280,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
     }
   });
 
-  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+  const columns: IAgeMap[] = isMentorStatus
+    ? [...allColumns, mentorOperationData]
+    : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -308,7 +305,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
 
   const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName =
+      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
@@ -411,12 +409,21 @@ const TableSchedule: FC<any> = React.memo((props) => {
       <div className="hidden-btn-row">
         {isMentorStatus && (
           <Tooltip title="Add new event">
-            <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
+            <Button
+              type="primary"
+              disabled={editingId !== '' || !isMentorStatus}
+              onClick={add}
+              icon={<PlusCircleTwoTone />}
+            />
           </Tooltip>
         )}
         {hiddenData.length === 0 ? (
           <Tooltip title="Hide selected table rows">
-            <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
+            <Button
+              onClick={hideRows}
+              disabled={!hideButton}
+              icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />}
+            />
           </Tooltip>
         ) : (
           <Tooltip title="Show hidden rows in tables">

@@ -1,24 +1,25 @@
 import { Dispatch } from 'redux';
 import { typesTag } from '../components/utilities';
 import {
+  ADD_DATA_EVENT,
+  changeVersionVisually,
+  CHANGE_MENTOR_STATUS,
+  CHANGE_VERSION_VISUALLY,
   setColorTypes,
   setDataEventsAC,
   setModalSettings,
   setModalViewEvent,
   setOrganizersAC,
   setwidthScreenAC,
+  SET_DATA_EVENT,
+  SET_MODAL_SETTINGS,
+  SET_MODAL_VIEW_EVENT,
+  SET_ORGANIZERS,
+  SET_TYPES_COLOR,
+  SET_WIDTH_SCREEN,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
-
-const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
-const SET_DATA_EVENT = 'SET_DATA_EVENT';
-const SET_ORGANIZERS = 'SET_ORGANIZERS';
-const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
-export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
-export const SET_MODAL_VIEW_EVENT: string = 'SET_MODAL_VIEW_EVENT';
-export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
-export const SET_WIDTH_SCREEN: string = 'SET_WIDTH_SCREEN';
 
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -78,6 +79,7 @@ const initialState: StateModel = {
   isShowSettingsModal: false,
   types: typesTag,
   isShowModalViewEvents: false,
+  isShowVersionVisually: false,
   widthScreen: 1920,
 };
 
@@ -127,6 +129,11 @@ const reducer = (state = initialState, action: any): StateModel => {
     case SET_MODAL_VIEW_EVENT: {
       return { ...state, isShowModalViewEvents: action.value };
     }
+    case CHANGE_VERSION_VISUALLY:
+      return {
+        ...state,
+        isShowVersionVisually: !state.isShowVersionVisually,
+      };
     case SET_WIDTH_SCREEN: {
       return { ...state, widthScreen: action.value };
     }
@@ -165,8 +172,13 @@ export const setShowModaViewEvent = (value: boolean) => (dispatch: Dispatch) => 
 export const setColorType = (value: any) => (dispatch: Dispatch) => {
   dispatch(setColorTypes(value));
 };
+
+export const setChangeVersionVisually = () => (dispatch: Dispatch) => {
+  dispatch(changeVersionVisually());
+};
+
 const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
   dispatch(setwidthScreenAC(value));
 };
-export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
+
 export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent, setWidthScreen };

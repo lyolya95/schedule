@@ -35,5 +35,6 @@ export interface StateModel {
     type: string;
     color: string;
   }[];
+  isShowVersionVisually: boolean;
   widthScreen: number;
 }
