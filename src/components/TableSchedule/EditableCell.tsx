@@ -40,7 +40,6 @@ const EditableCell: React.FC<EditableCellProps> = React.memo((props) => {
   const addItem = () => {
     setState([...state, stateOne]);
   };
-
   switch (dataIndex) {
     case 'score':
       inputNode = <InputNumber />;
