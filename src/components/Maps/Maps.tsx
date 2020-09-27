@@ -4,7 +4,6 @@ import { MapsProps } from './Maps.model';
 import './Maps.scss';
 
 export const Maps: FC<MapsProps> = ({ isMentorStatus, chosenCoordinates, changeCoords }) => {
-  // в coords храним координаты, их потом отправляем вместе с заданием, для сохранения места проведения
   const [coords, setCoords] = useState<number[]>(chosenCoordinates);
 
   const mapData = {

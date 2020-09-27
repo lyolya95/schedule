@@ -1,5 +1,5 @@
 import { Button, Switch } from 'antd';
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import MdEditor, { Plugins } from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
@@ -58,18 +58,28 @@ const TaskEditor: FC<PropsType> = (props) => {
     }
   };
 
-  const handleCancelClick = () => {
-    handleCancel();
-  };
+  const handleCancelClick = useCallback(
+    () => {
+      handleCancel();
+    },
+    [handleCancel]
+  );
+  const changeCoords = useCallback(
+    ( coordsNew:number[] ) => {
+      setCoords(coordsNew);
+    },
+    [setCoords]
+  );
 
-  const changeCoords = ( coordsNew:number[] ) => {
-     setCoords(coordsNew);
-  }
-  const onSwitchChange = () => {
-     setIsShowMap((state) => {
-      return !state;
-    });
-  }
+  const onSwitchChange = useCallback(
+     () => {
+      setIsShowMap((state) => {
+        return !state;
+      });
+    },
+    [setIsShowMap]
+  );
+
   return (
     <div className="task-editor">
       <MdEditor
