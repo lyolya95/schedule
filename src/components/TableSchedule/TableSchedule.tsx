@@ -240,7 +240,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 // @ts-ignore
                 const rowClassName = selRow.getAttribute('class');
                 const newRowClassName = rowClassName + ' ant-table-row-main';
-                console.log(newRowClassName)
                 // @ts-ignore
                 selRow.setAttribute('class', newRowClassName);
             })
