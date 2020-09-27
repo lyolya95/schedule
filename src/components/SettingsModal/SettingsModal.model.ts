@@ -6,4 +6,7 @@ export interface SettingsModalProps {
     color: string;
   }[];
   setColorType: (value: any) => void;
+  timeZone: string;
+  setTimeZone: (value: string) => void;
+  widthScreen: number;
 }

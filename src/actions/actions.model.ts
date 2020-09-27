@@ -16,3 +16,6 @@ export interface SetOrganizersActionInterface {
 export interface AddDataEventActionInterface {
   type: typeof ADD_DATA_EVENT;
 }
+/*export interface SetTimeZoneInterface {
+  type: typeof SET_TIME_ZONE;
+}*/

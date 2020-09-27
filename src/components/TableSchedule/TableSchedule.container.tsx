@@ -37,6 +37,7 @@ const mapStateToProps = (state: StateModel) => {
     initialEventData: state.initialEventData,
     types: state.types,
     widthScreen: state.widthScreen,
+    timeZone: state.timeZone,
   };
 };
 

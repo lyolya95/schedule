@@ -11,12 +11,14 @@ import {
   setModalViewEvent,
   setOrganizersAC,
   setwidthScreenAC,
+  setTimeZones,
   SET_DATA_EVENT,
   SET_MODAL_SETTINGS,
   SET_MODAL_VIEW_EVENT,
   SET_ORGANIZERS,
   SET_TYPES_COLOR,
   SET_WIDTH_SCREEN,
+  SET_TIME_ZONE,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
@@ -81,6 +83,7 @@ const initialState: StateModel = {
   isShowModalViewEvents: false,
   isShowVersionVisually: false,
   widthScreen: 1920,
+  timeZone: "+00:00",
 };
 
 const reducer = (state = initialState, action: any): StateModel => {
@@ -137,6 +140,9 @@ const reducer = (state = initialState, action: any): StateModel => {
     case SET_WIDTH_SCREEN: {
       return { ...state, widthScreen: action.value };
     }
+    case SET_TIME_ZONE: {
+      return {...state, timeZone: action.value};
+    }
     default:
       return state;
   }
@@ -181,4 +187,9 @@ const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
   dispatch(setwidthScreenAC(value));
 };
 
+export const setTimeZone = (value: any) => (dispatch: Dispatch) => {
+  dispatch(setTimeZones(value));
+};
+
+export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
 export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent, setWidthScreen };

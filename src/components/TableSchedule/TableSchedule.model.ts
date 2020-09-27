@@ -11,6 +11,7 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     type: string;
     color: string;
   }[];
+  timeZone: string;
 }
 export interface IAgeMap {
   [keys: string]: string | boolean | object;

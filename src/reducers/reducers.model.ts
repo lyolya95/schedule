@@ -37,4 +37,5 @@ export interface StateModel {
   }[];
   isShowVersionVisually: boolean;
   widthScreen: number;
+  timeZone: string;
 }
