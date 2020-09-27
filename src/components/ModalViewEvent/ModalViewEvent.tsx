@@ -26,7 +26,7 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
   }, [setIsShowModalViewEvents]);
   
   
-  const ratingMidValue  = event[0]?.rating?.voted ? event[0]?.rating?.sum / event[0]?.rating?.voted : 0;
+  const ratingMidValue  = event[0]?.rating?.voted ? event[0]?.rating?.sum / event[0]?.rating?.voted : null;
   
   return (
     <Modal title={event[0]?.course} footer={null} visible={isShowModalViewEvents} onCancel={handleCancel}>
@@ -41,6 +41,18 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
           <div className="modal_events__item">
             <div>Date:</div>
             <div><b>{event[0]?.dateTime}</b></div>
+          </div>
+        )}
+         {event[0]?.timeToComplete && (
+          <div className="modal_events__item">
+            <div>Time complite: </div>
+            <div>{event[0]?.timeToComplete}</div>
+          </div>
+        )}
+        {event[0]?.week && (
+          <div className="modal_events__item">
+            <div>Week of course:</div>
+            <div>{event[0]?.week}</div>
           </div>
         )}
         {event[0]?.place && (
@@ -60,33 +72,16 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
           </div>
         )}
       
-        {ratingMidValue && (
+      {ratingMidValue && (
           <div className="modal_events__item">
-            <Rate disabled value={ratingMidValue} />
-          </div>
+            <div>Rating:</div>
+            <div><Rate disabled value={ratingMidValue} /></div>
+         </div>
         )}
         {event[0]?.studentScore && (
           <div className="modal_events__item">
             <div>Score/MaxScore:</div>
             <div>{event[0]?.studentScore}/{event[0]?.maxScore}</div>
-          </div>
-        )}
-        {event[0]?.taskContent && (
-          <div className="modal_events__item">
-            <div>Description:</div>
-            <div>{event[0]?.taskContent}</div>
-          </div>
-        )}
-        {event[0]?.timeToComplete && (
-          <div className="modal_events__item">
-            <div>Time complite: </div>
-            <div>{event[0]?.timeToComplete}</div>
-          </div>
-        )}
-        {event[0]?.week && (
-          <div className="modal_events__item">
-            <div>Week of course:</div>
-            <div>{event[0]?.week}</div>
           </div>
         )}
         {event[0]?.descriptionUrl && (
