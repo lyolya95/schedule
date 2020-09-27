@@ -16,7 +16,7 @@ Schedule - расписание курса RS School.
 ```bash
 cd schedule && npm install
 ```
-Или, если Вы пользуетесь Yarn, тогда:
+Или, если Вы пользуетесь `yarn`, тогда:
 ```bash
 cd schedule && yarn
 ```
@@ -25,7 +25,7 @@ cd schedule && yarn
 ```bash
 npm start
 ```
-Или, если Вы пользуетесь Yarn, тогда:
+Или, если Вы пользуетесь `yarn`, тогда:
 ```bash
 yarn start
 ```
