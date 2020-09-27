@@ -274,6 +274,20 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             );
           },
         };
+      case 'descriptionUrl':
+        return {
+          title: 'Description Url',
+          dataIndex: 'descriptionUrl',
+          editable: true,
+          width: '15%',
+          render: (_: any, record: any) => {
+            return (
+              <a key={record.descriptionUrl} target="_blank" href={record.descriptionUrl} rel="noopener noreferrer">
+                {record.descriptionUrl.length > 0 ? `${record.descriptionUrl.slice(0, 45)}...` : ''}
+              </a>
+            );
+          },
+        };
       case 'combineScore':
         return {
           title: 'Score/maxScore',
