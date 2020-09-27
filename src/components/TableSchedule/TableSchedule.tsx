@@ -6,6 +6,7 @@ import {
   HighlightTwoTone,
   PlusCircleTwoTone,
   SaveOutlined,
+  FileSearchOutlined
 } from '@ant-design/icons';
 import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
@@ -29,7 +30,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     optionsKeyOfEvents,
     changeColumnsSelect,
     isMentorStatus,
-    ratingVotes,
     organizers,
     form,
     editingId,
@@ -42,6 +42,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     save,
     types,
     widthScreen,
+    changeRating,
+    isVoted,
     timeZone,
   } = props;
 
@@ -51,7 +53,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
-  const [eventRating, setEventRating] = useState<any>();
   const [hiddenData, setHiddenData] = useState<Array<string>>([]);
   const [filerFlags, setFilterFlags] = useState({ course, place, type });
   const [dates, setDates] = useState<Array<string>>(datesLocalStorage);
@@ -149,7 +150,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     title: 'Edit',
     dataIndex: 'operation',
     fixed: widthScreen > 940 && 'right',
-    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '120' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const editable = isEditing(record);
       if (editable) {
@@ -172,8 +173,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </span>
         );
       } else {
-        const eventRating = data.find((item: any) => record.id === item.id).rating;
-        return (
+         return (
           <span>
             <Tooltip title="Edit row">
               <Button
@@ -192,7 +192,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 style={{ fontSize: '16px', border: '1px solid #FF69B4', color: '#FF69B4' }}
               />
             </Tooltip>
-            <Rate disabled value={eventRating} />
           </span>
         );
       }
@@ -214,22 +213,12 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     }
   }, []);
 
-  const changeRating = useCallback(
-    (value: number, key: React.Key) => {
-      const currEventRating = data.find((item: any) => key === item.id).rating;
-      const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
-      setEventRating({ [key]: { voted: true, value: newRating } });
-    },
-    [data, ratingVotes]
-  );
-
   const studentOperationData = {
     title: '',
     dataIndex: 'operation',
     fixed: widthScreen > 940 && 'right',
-    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '120' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
-      const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
         <span>
           <Tooltip title="Mark row as important">
@@ -248,18 +237,42 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               icon={<CheckOutlined />}
             />
           </Tooltip>
-          <span></span>
-          {isVoted ? (
-            <Rate disabled value={eventRating[record.id].value} />
-          ) : (
-            <Rate onChange={(value) => changeRating(value, record.id)} />
-          )}
         </span>
       );
     },
   };
   const allColumns: IAgeMap[] = columnsName.map((item: any) => {
     switch (item.dataIndex) {
+      case 'name':
+        return {
+          title: 'name',
+          dataIndex: 'name',
+          editable: true,
+          render: (_: any, record: any) => {
+            return (
+               <div className="name-link" 
+                    onClick={ () => handleDetailed(record)}
+                >
+                  <Tooltip title="Show event description">
+                    <FileSearchOutlined className="name-link-ico"/> 
+                  </Tooltip> {record.name}
+                </div>
+              );
+          },
+        };
+      case 'descriptionUrl':
+        return {
+          title: 'descriptionUrl',
+          dataIndex: 'descriptionUrl',
+          editable: true,
+          render: (_: any, record: any) => {
+            return (
+              <a href={record.descriptionUrl} title={record.descriptionUrl}>
+                {record.descriptionUrl}
+              </a>
+            );
+          },
+        };
       case 'type':
         return {
           title: 'Type',
@@ -285,8 +298,41 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         return item;
     }
   });
-
-  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+  const ratingColumn = {
+    title: 'Rating',
+    dataIndex: 'rating',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '170' : widthScreen / 4}px`,
+    render: (_: any, record: any) => {
+      const hasVotes = record.rating && record.rating.voted && record.rating.voted>0  
+                        ? true : false;
+      const ratingMidValue  = hasVotes ? record.rating.sum / record.rating.voted : 0;
+      
+      if(isMentorStatus){
+        return (
+          <Rate disabled  value={ratingMidValue}/>
+        );
+      }else{
+        let isCurrVoted = false;
+        if( isVoted &&  isVoted.length>0){
+          const votedElement = isVoted.find((item: any) => record.key === item.id);
+          isCurrVoted = votedElement?.value;
+        }
+        return (
+          <span>
+            {isCurrVoted  
+            ? <Rate disabled value={ratingMidValue} />
+            : <Rate onChange={(value) => changeRating(value, record)} />
+            }
+          </span>
+        );
+      }
+    },
+  };
+  
+ 
+  const columns: IAgeMap[] = isMentorStatus
+    ? [...allColumns, ratingColumn, mentorOperationData]
+    : [...allColumns, ratingColumn, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -315,15 +361,14 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     return false;
   }, []);
 
-  const handleDoubleClickRow = useCallback(
-    (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
-      if (isHandlingClickOnRow(event)) {
-        setClickingRow(record);
-        setVisibleModal(true);
-      }
+  const handleDetailed =  useCallback(
+    (record: any) => {
+      setClickingRow(record);
+      setVisibleModal(true);
     },
-    [isHandlingClickOnRow]
+    [setClickingRow, setVisibleModal]
   );
+
 
   useEffect(() => {
     if (hiddenRowKeys.length === 0) setHideButton(false);
@@ -469,9 +514,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           return {
             onClick: (event) => {
               handleClickRow(record, rowIndex, event);
-            },
-            onDoubleClick: (event) => {
-              handleDoubleClickRow(record, rowIndex, event);
             },
           };
         }}

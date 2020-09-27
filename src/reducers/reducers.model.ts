@@ -14,7 +14,10 @@ export interface EventOfInterface {
   maxScore: string;
   taskContent: string;
   isShowFeedback: string;
-  rating: string;
+  rating:{
+    voted: number;
+    sum: number;
+  };
   combineScore: string;
 }
 export interface MentorInterface {
@@ -26,7 +29,6 @@ export interface StateModel {
   data: EventOfInterface[];
   columnsName: string[];
   notEditableColumns: string[];
-  ratingVotes: number;
   organizers: MentorInterface[];
   initialEventData: EventOfInterface;
   isShowSettingsModal: boolean;

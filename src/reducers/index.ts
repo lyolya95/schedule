@@ -37,7 +37,10 @@ const initialState: StateModel = {
       name: '',
       organizer: undefined,
       place: '',
-      rating: '',
+      rating:{
+        voted: 0,
+        sum: 0
+      },
       studentScore: '',
       taskContent: '',
       timeToComplete: '',
@@ -60,7 +63,6 @@ const initialState: StateModel = {
     'combineScore',
   ],
   notEditableColumns: ['id', 'combineScore'],
-  ratingVotes: 0,
   organizers: [],
   initialEventData: {
     course: '',
@@ -71,13 +73,16 @@ const initialState: StateModel = {
     name: '',
     organizer: undefined,
     place: '',
-    rating: '',
     studentScore: '',
     taskContent: '',
     timeToComplete: '',
     timeZone: '',
     type: '',
     week: '',
+    rating:{
+      voted: 0,
+      sum: 0
+    },
     combineScore: '',
   },
   isShowSettingsModal: false,
@@ -97,8 +102,7 @@ export const reducer = (state = initialState, action: any): StateModel => {
         isMentorStatus: !state.isMentorStatus,
       };
     case SET_DATA_EVENT: {
-      let ratingVotes: number = 0;
-      action.events.map((event: any) => {
+       action.events.map((event: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
             const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
@@ -113,12 +117,9 @@ export const reducer = (state = initialState, action: any): StateModel => {
           const coefficient = event.coefficient && event.coefficient > 0 ? ', coefficient:' + event.coefficient : '';
           event.combineScore = score + '/' + maxScore + coefficient;
         }
-        if (event.rating && event.rating > 0) {
-          ratingVotes++;
-        }
         return event;
       });
-      return { ...state, data: action.events, ratingVotes: ratingVotes };
+      return { ...state, data: action.events};
     }
     case SET_ORGANIZERS: {
       return { ...state, organizers: [...action.organizers] };
