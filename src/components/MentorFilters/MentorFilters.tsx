@@ -10,7 +10,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Panel } = Collapse;
 
-export const MentorFilters: FC<MentorFiltersProps> = (props) => {
+export const MentorFilters: FC<MentorFiltersProps> = React.memo((props) => {
   const { data, setFilterFlags, filterFlag, setDates } = props;
 
   const [tags, setTags] = useStickyState([], 'tags');
@@ -196,4 +196,4 @@ export const MentorFilters: FC<MentorFiltersProps> = (props) => {
       </Panel>
     </Collapse>
   );
-};
+});
