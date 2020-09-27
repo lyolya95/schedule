@@ -129,6 +129,12 @@ const TableSchedule: FC<any> = React.memo((props) => {
         })
         .filter((item: any) => !hiddenData.includes(item.key))
         .sort((a: any, b: any) => {
+            if (a.dateTime === 'Invalid date') {
+                return -1;
+            }
+            if (b.dateTime === 'Invalid date') {
+                return 1;
+            }
             const date1 = moment(a.dateTime);
             const date2 = moment(b.dateTime);
             if (date1 < date2) {
@@ -136,7 +142,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
             }
             return 1;
         });
-
 
     const [visibleModal, setVisibleModal] = useState(false);
     const [clickingRow, setClickingRow] = useState<any | null>();
