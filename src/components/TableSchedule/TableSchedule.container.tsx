@@ -35,7 +35,6 @@ const mapStateToProps = (state: StateModel) => {
     isMentorStatus: state.isMentorStatus,
     columnsName: state.columnsName,
     notEditableColumns: state.notEditableColumns,
-    ratingVotes: state.ratingVotes,
     organizers: state.organizers,
     initialEventData: state.initialEventData,
     types: state.types,

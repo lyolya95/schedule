@@ -1,13 +1,15 @@
-.ant-list {
+.ant-list
+{
   .ant-card-head-title {
-    color: #1890ff;
+      color:#1890ff;
+      cursor:pointer;
+  }
+  
+  .ant-card-head-title {
+      padding:12px 0px;
   }
 
-  .ant-card-head-title {
-    padding: 12px 0px;
-  }
-
-  .place {
+ .place {
     color: rgb(135, 208, 104);
   }
 
