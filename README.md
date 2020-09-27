@@ -36,7 +36,7 @@ yarn start
 
 ## Ссылка на рабочий прототип:
 
-[Расписание Schedule](https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/)
+[Расписание Schedule](https://schedule-team44.netlify.app/)
 
 ## Необходимые изменения и усовершенствования
 
