@@ -19,6 +19,8 @@ import {
   SET_TYPES_COLOR,
   SET_WIDTH_SCREEN,
   SET_TIME_ZONE,
+  SET_DATA_LOADED,
+  setDataLoadedAC,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
@@ -84,6 +86,7 @@ const initialState: StateModel = {
   isShowVersionVisually: false,
   widthScreen: 1920,
   timeZone: '+00:00',
+  isDataLoaded: false,
 };
 
 export const reducer = (state = initialState, action: any): StateModel => {
@@ -143,6 +146,10 @@ export const reducer = (state = initialState, action: any): StateModel => {
     case SET_TIME_ZONE: {
       return { ...state, timeZone: action.value };
     }
+    case SET_DATA_LOADED: {
+      debugger;
+      return { ...state, isDataLoaded: action.value };
+    }
     default:
       return state;
   }
@@ -189,4 +196,7 @@ export const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
 
 export const setTimeZone = (value: any) => (dispatch: Dispatch) => {
   dispatch(setTimeZones(value));
+};
+export const setDataLoaded = (value: boolean) => (dispatch: Dispatch) => {
+  dispatch(setDataLoadedAC(value));
 };

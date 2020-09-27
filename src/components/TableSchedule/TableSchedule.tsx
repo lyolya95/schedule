@@ -448,7 +448,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: widthScreen < 700 ? 1500 : 2300, y: 600 }}
+        scroll={{ x: widthScreen < 700 ? 1800 : 2300, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
