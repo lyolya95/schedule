@@ -6,7 +6,7 @@ import { columnSetWidth, dateAndTimeFormat } from '../utilities';
 import './Tables.scss';
 import { TableSchedule } from './TableSchedule';
 
-const TableScheduleContainer = (props: any) => {
+export const TableScheduleContainer = (props: any) => {
   const {
     columnsName,
     notEditableColumns,
@@ -145,5 +145,3 @@ const TableScheduleContainer = (props: any) => {
     />
   );
 };
-
-export { TableScheduleContainer };

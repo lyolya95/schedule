@@ -40,12 +40,10 @@ const mapStateToProps = (state: StateModel) => {
   };
 };
 
-const TableSchedule = connect(mapStateToProps, {
+export const TableSchedule = connect(mapStateToProps, {
   getDataEvent,
   putDataEvent,
   addDataEvent,
   deleteDataEvent,
   setWidthScreen,
 })(Container);
-
-export { TableSchedule };
