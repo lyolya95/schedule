@@ -24,8 +24,9 @@ export const App = () => {
             <Route path="/" component={TableSchedule} exact />
             <ConfigProvider locale={en_GB}>
               <Route path="/calendar" component={CalendarItemContainer} />
+
+              <Route path="/list" component={ListScheduleContainer} exact />
             </ConfigProvider>
-            <Route path="/list" component={ListScheduleContainer} exact />
           </Switch>
         </Router>
       </Provider>

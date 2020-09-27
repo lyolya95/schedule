@@ -1,11 +1,12 @@
 import {
-    CheckOutlined,
-    CloseOutlined,
-    DeleteOutlined,
-    ExclamationOutlined,
-    HighlightTwoTone,
-    PlusCircleTwoTone,
-    SaveOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  ExclamationOutlined,
+  HighlightTwoTone,
+  PlusCircleTwoTone,
+  SaveOutlined,
+  FileSearchOutlined,
 } from '@ant-design/icons';
 import {MinusSquareOutlined, UndoOutlined} from '@ant-design/icons/lib';
 import {Button, Form, Modal, Rate, Table, Tag, Tooltip} from 'antd';
@@ -30,7 +31,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         optionsKeyOfEvents,
         changeColumnsSelect,
         isMentorStatus,
-        ratingVotes,
         organizers,
         form,
         editingId,
@@ -43,6 +43,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         save,
         types,
         widthScreen,
+        changeRating,
+        isVoted,
         timeZone,
     } = props;
 
@@ -148,16 +150,16 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         [data, dates, filerFlags, hasFilterFlag, hiddenData, isInDateRange, timeZone, toUserTimeZone]
     );
 
-    const mentorOperationData = {
-        title: 'Edit',
-        dataIndex: 'operation',
-        fixed: widthScreen > 940 && 'right',
-        width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
-        render: (_: any, record: any) => {
-            const editable = isEditing(record);
-            if (editable) {
-                return (
-                    <span>
+  const mentorOperationData = {
+    title: 'Edit',
+    dataIndex: 'operation',
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '120' : widthScreen / 4}px`,
+    render: (_: any, record: any) => {
+      const editable = isEditing(record);
+      if (editable) {
+        return (
+          <span>
             <Tooltip title="Save changes">
               <Button
                   icon={<SaveOutlined/>}
@@ -173,11 +175,17 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               />
             </Tooltip>
           </span>
+/*<<<<<<< HEAD
                 );
             } else {
                 const eventRating = data.find((item: any) => record.id === item.id).rating;
                 return (
                     <span>
+=======*/
+        );
+      } else {
+        return (
+          <span>
             <Tooltip title="Edit row">
               <Button
                   ghost={true}
@@ -237,7 +245,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         }
       }, []);
 
-  const changeRating = useCallback(
+
+ /* const changeRating = useCallback(
     (value: number, key: React.Key) => {
       const currEventRating = data.find((item: any) => key === item.id).rating;
       const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
@@ -255,6 +264,15 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
             return (
                 <span>
+=======*/
+  const studentOperationData = {
+    title: '',
+    dataIndex: 'operation',
+    fixed: widthScreen > 940 && 'right',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '120' : widthScreen / 4}px`,
+    render: (_: any, record: any) => {
+      return (
+        <span>
           <Tooltip title="Mark row as important">
             <Button
               ghost={true}
@@ -271,18 +289,38 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               icon={<CheckOutlined />}
             />
           </Tooltip>
+{/*<<<<<<< HEAD
           <span></span>
                     {isVoted ? (
                         <Rate disabled value={eventRating[record.id].value}/>
                     ) : (
                         <Rate onChange={(value) => changeRating(value, record.id)}/>
                     )}
+=======
+>>>>>>> 5aef41f15c17c8d48b5526c5cf6d779ab9d321cd*/}
         </span>
       );
     },
   };
   const allColumns: IAgeMap[] = columnsName.map((item: any) => {
     switch (item.dataIndex) {
+      case 'name':
+        return {
+          title: 'name',
+          dataIndex: 'name',
+          editable: true,
+          width: '10%',
+          render: (_: any, record: any) => {
+            return (
+              <div className="name-link" onClick={() => handleDetailed(record)}>
+                <Tooltip title="Show event description">
+                  <FileSearchOutlined className="name-link-ico" />
+                </Tooltip>{' '}
+                {record.name}
+              </div>
+            );
+          },
+        };
       case 'type':
         return {
           title: 'Type',
@@ -297,6 +335,22 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             );
           },
         };
+      case 'descriptionUrl':
+        return {
+          title: 'Description Url',
+          dataIndex: 'descriptionUrl',
+          editable: true,
+          width: '15%',
+          render: (_: any, record: any) => {
+            return (
+              record.descriptionUrl && (
+                <a key={record.descriptionUrl} target="_blank" href={record.descriptionUrl} rel="noopener noreferrer">
+                  {record.descriptionUrl.slice(0, 40)}...
+                </a>
+              )
+            );
+          },
+        };
       case 'combineScore':
         return {
           title: 'Score/maxScore',
@@ -308,8 +362,37 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         return item;
     }
   });
+  const ratingColumn = {
+    title: 'Rating',
+    dataIndex: 'rating',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '170' : widthScreen / 4}px`,
+    render: (_: any, record: any) => {
+      const hasVotes = record.rating && record.rating.voted && record.rating.voted > 0 ? true : false;
+      const ratingMidValue = hasVotes ? record.rating.sum / record.rating.voted : 0;
 
+      if (isMentorStatus) {
+        return <Rate disabled value={ratingMidValue} />;
+      } else {
+        let isCurrVoted = false;
+        if (isVoted && isVoted.length > 0) {
+          const votedElement = isVoted.find((item: any) => record.key === item.id);
+          isCurrVoted = votedElement?.value;
+        }
+        return (
+          <span>
+            {isCurrVoted ? <Rate disabled value={ratingMidValue} /> : <Rate onChange={(value) => changeRating(value, record)} />}
+          </span>
+        );
+      }
+    },
+  };
+
+/*<<<<<<< HEAD
     const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+=======*/
+  const columns: IAgeMap[] = isMentorStatus
+    ? [...allColumns, ratingColumn, mentorOperationData]
+    : [...allColumns, ratingColumn, studentOperationData];
 
     const mergedColumns = columns.map((col) => {
         if (!col.editable) {
@@ -338,14 +421,12 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     return false;
   }, []);
 
-  const handleDoubleClickRow = useCallback(
-    (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
-      if (isHandlingClickOnRow(event)) {
-        setClickingRow(record);
-        setVisibleModal(true);
-      }
+  const handleDetailed = useCallback(
+    (record: any) => {
+      setClickingRow(record);
+      setVisibleModal(true);
     },
-    [isHandlingClickOnRow]
+    [setClickingRow, setVisibleModal]
   );
 
     useEffect(() => {
@@ -432,6 +513,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         [hiddenRowKeys, isHandlingClickOnRow, visibleData]
     );
 
+/*<<<<<<< HEAD
     return (
         <Form form={form} component={false}>
             <div className="hidden-btn-row">
@@ -518,4 +600,88 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             ) : null}
         </Form>
     );
+=======*/
+  return (
+    <Form form={form} component={false}>
+      <div className="hidden-btn-row">
+        {isMentorStatus && (
+          <Tooltip title="Add new event">
+            <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
+          </Tooltip>
+        )}
+        <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen} />
+        {hideButton ? (
+          <Tooltip title="Hide rows">
+            <Button onClick={hideRows}>
+              <MinusSquareOutlined />
+            </Button>
+          </Tooltip>
+        ) : null}
+        {hiddenData.length === 0 ? null : (
+          <Tooltip title="Show hidden rows">
+            <Button onClick={unHideRows}>
+              <UndoOutlined />
+            </Button>
+          </Tooltip>
+        )}
+      </div>
+      <Text type="secondary">Click on the name of the event to open full description</Text>
+      <Filters
+        data={data}
+        filterFlag={filerFlags}
+        setFilterFlags={setFilterFlags}
+        setDates={setDates}
+        tagRender={tagRender}
+        defaultColumns={defaultColumns}
+        optionsKeyOfEvents={optionsKeyOfEvents}
+        changeColumnsSelect={changeColumnsSelect}
+        isMentorStatus={isMentorStatus}
+      />
+      <Table
+        loading={isLoading}
+        size="small"
+        components={{
+          body: {
+            cell: EditableCell,
+          },
+        }}
+        bordered
+        dataSource={visibleData}
+        columns={mergedColumns}
+        rowClassName="editable-row"
+        scroll={{ x: widthScreen < 700 ? 1800 : 2300, y: 600 }}
+        pagination={{
+          onChange: cancel,
+          showSizeChanger: true,
+          defaultPageSize: 20,
+          defaultCurrent: 1,
+          showTotal: (total: number) => `Total ${total} items`,
+        }}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              handleClickRow(record, rowIndex, event);
+            },
+          };
+        }}
+      />
+      {clickingRow ? (
+        <Modal
+          key={clickingRow.id}
+          title={clickingRow.course}
+          centered
+          visible={visibleModal}
+          footer={[
+            <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
+              Back
+            </Button>,
+          ]}
+          onCancel={() => setVisibleModal(false)}
+          width={1000}
+        >
+          <TaskPageContainer eventData={clickingRow} />
+        </Modal>
+      ) : null}
+    </Form>
+  );
 });

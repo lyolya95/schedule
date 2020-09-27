@@ -12,7 +12,6 @@ export const TableScheduleContainer = (props: any) => {
     notEditableColumns,
     data,
     isMentorStatus,
-    ratingVotes,
     putDataEvent,
     organizers,
     getDataEvent,
@@ -33,6 +32,7 @@ export const TableScheduleContainer = (props: any) => {
   const [editingId, setEditingId] = useState('');
   const isEditing = (record: any) => record.id === editingId;
   const [isLoading, setIsLoading] = useState(false);
+  const [isVoted, setIsVoted] = useState<any>([]);
 
   const edit = useCallback((record: any) => {
     form.setFieldsValue({ ...record });
@@ -78,6 +78,18 @@ export const TableScheduleContainer = (props: any) => {
     await putDataEvent(item.id, newData[indexElement]);
     setEditingId('');
     setIsLoading(false);
+  };
+
+  const changeRating = async (value: number, record:any) => {
+    const currEventRating = record?.rating;
+    const numVoted = currEventRating && currEventRating.voted && currEventRating.voted > 0 ? currEventRating.voted+1 : 1;
+    const sumRating = currEventRating && currEventRating.sum && currEventRating.sum > 0  ? (value + currEventRating.sum) : value;
+    record.rating = { voted: numVoted, sum: sumRating }
+    await putDataEvent( record.id,  record);
+    setIsVoted((state:Array<any>)  => {
+      return  [...state, {"id":record.id, "value": true }];
+     });
+    
   };
 
   const defaultColumns = userColumnsName;
@@ -138,7 +150,6 @@ export const TableScheduleContainer = (props: any) => {
       changeColumnsSelect={changeColumnsSelect}
       data={data}
       isMentorStatus={isMentorStatus}
-      ratingVotes={ratingVotes}
       organizers={organizers}
       form={form}
       editingId={editingId}
@@ -151,6 +162,8 @@ export const TableScheduleContainer = (props: any) => {
       save={save}
       types={types}
       widthScreen={widthScreen}
+      changeRating={changeRating}
+      isVoted={isVoted}
       timeZone={timeZone}
     />
   );

@@ -1,7 +1,6 @@
 import { TagOutlined } from '@ant-design/icons';
-import { DatePicker, Rate, Tag } from 'antd';
+import { Rate, Tag } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
-import moment from 'moment';
 import React, { FC, useCallback } from 'react';
 import { EventOfInterface } from '../../reducers/reducers.model';
 import './ModalViewEvent.scss';
@@ -25,7 +24,10 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
   const handleCancel = useCallback(() => {
     setIsShowModalViewEvents(false);
   }, [setIsShowModalViewEvents]);
-
+  
+  
+  const ratingMidValue  = event[0]?.rating?.voted ? event[0]?.rating?.sum / event[0]?.rating?.voted : null;
+  
   return (
     <Modal title={event[0]?.course} footer={null} visible={isShowModalViewEvents} onCancel={handleCancel}>
       <div className="modal_events">
@@ -38,7 +40,19 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
         {event[0]?.dateTime && (
           <div className="modal_events__item">
             <div>Date:</div>
-            <DatePicker defaultValue={moment(event[0]?.dateTime)} disabled />
+            <div><b>{event[0]?.dateTime}</b></div>
+          </div>
+        )}
+         {event[0]?.timeToComplete && (
+          <div className="modal_events__item">
+            <div>Time complite: </div>
+            <div>{event[0]?.timeToComplete}</div>
+          </div>
+        )}
+        {event[0]?.week && (
+          <div className="modal_events__item">
+            <div>Week of course:</div>
+            <div>{event[0]?.week}</div>
           </div>
         )}
         {event[0]?.place && (
@@ -51,38 +65,23 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
         )}
         {event[0]?.type && (
           <div className="modal_events__item">
+             <div>Type:</div>
             <Tag color={types?.filter((i) => i.type === event[0]?.type)[0]?.color} className="size">
               {event[0]?.type}
             </Tag>
           </div>
         )}
-        {event[0]?.rating && (
+      
+      {ratingMidValue && (
           <div className="modal_events__item">
-            <Rate disabled value={event[0]?.rating ? +event[0].rating : 0} />
-          </div>
+            <div>Rating:</div>
+            <div><Rate disabled value={ratingMidValue} /></div>
+         </div>
         )}
         {event[0]?.studentScore && (
           <div className="modal_events__item">
-            <div>Score:</div>
-            <div>{event[0]?.studentScore}</div>
-          </div>
-        )}
-        {event[0]?.taskContent && (
-          <div className="modal_events__item">
-            <div>Description:</div>
-            <div>{event[0]?.taskContent}</div>
-          </div>
-        )}
-        {event[0]?.timeToComplete && (
-          <div className="modal_events__item">
-            <div>Time complite: </div>
-            <div>{event[0]?.timeToComplete}</div>
-          </div>
-        )}
-        {event[0]?.week && (
-          <div className="modal_events__item">
-            <div>Week complete:</div>
-            <div>{event[0]?.week}</div>
+            <div>Score/MaxScore:</div>
+            <div>{event[0]?.studentScore}/{event[0]?.maxScore}</div>
           </div>
         )}
         {event[0]?.descriptionUrl && (
@@ -92,10 +91,11 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
             </div>
           </div>
         )}
-        {event[0]?.maxScore && (
+        {event[0]?.taskContent && (
           <div className="modal_events__item">
-            <div>Max score solution: </div>
-            <div>{event[0]?.maxScore}</div>
+            <div>
+              {event[0]?.taskContent}
+            </div>
           </div>
         )}
       </div>

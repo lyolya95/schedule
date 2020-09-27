@@ -89,3 +89,13 @@ $buttonWidth: 250px;
 .ant-table-tbody>tr.ant-table-row-done:hover>td {
   background-color: #68c43b;
 }
+
+
+.name-link {
+  color: #1890ff;
+  cursor: pointer;
+
+  .name-link-ico {
+    color: rgba(0, 0, 0, 0.85);
+  }
+}

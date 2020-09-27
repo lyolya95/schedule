@@ -1,27 +1,27 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Map, Placemark, SearchControl, YMaps } from 'react-yandex-maps';
-import './Maps.scss';
 import { MapsProps } from './Maps.model';
+import './Maps.scss';
 
-export const Maps:FC<MapsProps> = ({ isMentorStatus,  chosenCoordinates, changeCoords }) => {
-  // в coords храним координаты, их потом отправляем вместе с заданием, для сохранения места проведения
+export const Maps: FC<MapsProps> = ({ isMentorStatus, chosenCoordinates, changeCoords }) => {
   const [coords, setCoords] = useState<number[]>(chosenCoordinates);
 
   const mapData = {
-    center: chosenCoordinates===[] ? [55.751574, 37.573856] : chosenCoordinates,
+    center: chosenCoordinates && chosenCoordinates.length > 0 ? chosenCoordinates : [55.751574, 37.573856],
     zoom: 5,
     controls: ['zoomControl', 'fullscreenControl'],
   };
 
-  const onMapClick = (event: any) => {
-    setCoords(() =>{
+  const onMapClick = useCallback(
+    (event: any) => {
       const newState = event.get('coords');
-      if(changeCoords){
+      if (changeCoords) {
         changeCoords(newState);
       }
-      return newState;
-    });
-  };
+      setCoords(newState);
+    },
+    [changeCoords]
+  );
 
   return (
     <div className="task-editor-maps">
@@ -33,30 +33,22 @@ export const Maps:FC<MapsProps> = ({ isMentorStatus,  chosenCoordinates, changeC
           lang: 'ru_RU',
         }}
       >
-        { isMentorStatus 
-            ? <Map
-                onClick={onMapClick}
-                defaultState={mapData}
-                width={600}
-                modules={['control.ZoomControl', 'control.FullscreenControl']}
-              >
-                {
-                  <Placemark key={coords.join(',')} geometry={coords} />
-                }
-                <SearchControl options={{ float: 'right' }} />
-              </Map>
-            : <Map
-                defaultState={mapData}
-                width={600}
-                modules={['control.ZoomControl', 'control.FullscreenControl']}
-              >
-                {
-                  <Placemark key={coords.join(',')} geometry={coords} />
-                }
-              </Map>
-          }
-       </YMaps>
+        {isMentorStatus ? (
+          <Map
+            onClick={onMapClick}
+            defaultState={mapData}
+            width={600}
+            modules={['control.ZoomControl', 'control.FullscreenControl']}
+          >
+            {<Placemark key={coords?.join(',')} geometry={coords} />}
+            <SearchControl options={{ float: 'right' }} />
+          </Map>
+        ) : (
+          <Map defaultState={mapData} width={600} modules={['control.ZoomControl', 'control.FullscreenControl']}>
+            {<Placemark key={coords?.join(',')} geometry={coords} />}
+          </Map>
+        )}
+      </YMaps>
     </div>
   );
 };
-  

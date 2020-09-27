@@ -6,4 +6,6 @@ export interface ListScheduleProps {
         type: string;
         color: string;
     }[];
+    setShowModaViewEvent: (value: boolean) => void;
+    isShowModalViewEvents: boolean;
 }  
