@@ -31,3 +31,11 @@ body.dark-mode {
     background-color: rgb(161, 157, 157);
   }
 }
+
+body.version-visually {
+  .ant-table-cell,
+  .ant-table-thead,
+  .ant-table-pagination.ant-pagination {
+    font-size: 20px;
+  }
+}

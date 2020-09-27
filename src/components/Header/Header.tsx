@@ -50,6 +50,14 @@ export const Header: FC<HeaderProps> = React.memo(
       }
     }, []);
 
+    useEffect(() => {
+      if (isShowVersionVisually) {
+        document.body.classList.add('version-visually');
+      } else {
+        document.body.classList.remove('version-visually');
+      }
+    }, [isShowVersionVisually]);
+
     const handleShowTable = useCallback(() => {
       history.push('/');
     }, [history]);
