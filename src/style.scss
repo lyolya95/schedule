@@ -1,0 +1,299 @@
+.app {
+  margin: 0 10px;
+}
+
+$background-color-dark: #292a32;
+$background-color-light: #fbfaf8;
+$complimentary-color-dark: #393b43;
+$complimentary-color-light: #feffff;
+$color-header-button: rgb(151, 150, 150);
+
+body {
+  background-color: $background-color-light;
+  color: $background-color-dark;
+
+  .ant-table-cell,
+  .ant-table-thead {
+    tr {
+      th {
+        background-color: rgb(163, 159, 159);
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+body.dark-mode {
+  background-color: $background-color-dark;
+  color: $background-color-light;
+
+  .ant-collapse-header {
+    background-color: rgba(31, 30, 30, 0.473);
+    color: $background-color-light;
+  }
+
+  button {
+    background-color: $color-header-button;
+    color: $background-color-light;
+    text-transform: uppercase;
+  }
+
+  .header {
+    img {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  .ant-typography.ant-typography-secondary {
+    color: $background-color-light;
+    font-size: 16px;
+  }
+
+  .ant-collapse-item {
+    background-color: rgba(61, 60, 60, 0.322);
+  }
+
+  .ant-collapse-borderless > .ant-collapse-item:last-child,
+  .ant-collapse-borderless > .ant-collapse-item:last-child .ant-collapse-header {
+    color: $background-color-light;
+  }
+
+  .ant-table-cell,
+  .ant-table-thead {
+    tr {
+      th {
+        background-color: rgb(163, 159, 159);
+        text-transform: uppercase;
+      }
+    }
+  }
+  .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td,
+  .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td,
+  .ant-table-thead > tr:hover:not(.ant-table-expanded-row) > td,
+  .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
+    background: rgb(163, 159, 159);
+  }
+
+  .ant-table-cell {
+    background-color: rgba(61, 60, 60, 0.322);
+  }
+
+  .ant-pagination-total-text {
+    color: $background-color-light;
+    font-size: 20px;
+  }
+
+  tr.ant-table-expanded-row > td,
+  tr.ant-table-expanded-row:hover > td {
+    background: #272727;
+    color: $background-color-light;
+  }
+  .ant-table.ant-table-small thead > tr > th {
+    background-color: #1f1f1f;
+    border-bottom: 1px solid #3a3a3a;
+    color: $background-color-light;
+  }
+  .ant-table {
+    background-color: #131313b4;
+    color: $background-color-light;
+  }
+  .ant-table .ant-table-row-expand-icon {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    border-bottom: 1px solid #3a3a3a;
+  }
+  .ant-table thead > tr > th {
+    background-color: #272727;
+    border-bottom: 1px solid #3a3a3a;
+  }
+  .ant-table tbody > tr > td {
+    border-bottom: 1px solid #3a3a3a;
+  }
+  .ant-table tbody > tr > td.ant-table-cell-fix-left,
+  .ant-table tbody > tr > td.ant-table-cell-fix-right {
+    background-color: #1f1f1f;
+  }
+  .ant-table tbody > tr.ant-table-row:hover > td {
+    background: #303030;
+  }
+  .ant-table.ant-table-bordered .ant-table-title {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered thead > tr > th,
+  .ant-table.ant-table-bordered tbody > tr > td,
+  .ant-table.ant-table-bordered tfoot > tr > th,
+  .ant-table.ant-table-bordered tfoot > tr > td {
+    border-right: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered .ant-table-cell-fix-right-first::after {
+    border-right: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered table thead > tr:not(:last-child) > th {
+    border-bottom: 1px solid #303030;
+  }
+  .ant-table.ant-table-bordered .ant-table-container {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered .ant-table-expanded-row-fixed::after {
+    border-right: 1px solid #3a3a3a;
+  }
+  .ant-table.ant-table-bordered .ant-table-footer {
+    border: 1px solid #3a3a3a;
+  }
+  .ant-table .ant-table-filter-trigger-container-open {
+    background-color: #525252;
+  }
+  .ant-picker-calendar-full {
+    background-color: #5e5d5d;
+  }
+  .ant-picker-calendar-full .ant-picker-panel {
+    background-color: #555555;
+    color: $background-color-light;
+  }
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
+    border-top: 2px solid $background-color-light;
+    color: $background-color-light;
+  }
+
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-body th {
+    height: auto;
+    padding: 0 12px 5px 0;
+    line-height: 18px;
+    color: $background-color-light;
+    font-size: 16px;
+  }
+
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected .ant-picker-calendar-date,
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected:hover .ant-picker-calendar-date,
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected .ant-picker-calendar-date-today,
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected:hover .ant-picker-calendar-date-today {
+    background: rgba(29, 28, 28, 0.699);
+  }
+
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value {
+    color: #cfd6dd;
+  }
+
+  .ant-picker-calendar-mini .ant-picker-calendar-header {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+  .ant-picker-calendar-mini .ant-picker-panel {
+    background-color: #5e5d5d;
+  }
+
+  .ant-picker-calendar-mini .ant-picker-content th {
+    height: auto;
+    padding: 0;
+    line-height: 18px;
+    color: $background-color-light;
+  }
+
+  .ant-picker-cell-inner.ant-picker-calendar-date {
+    color: $background-color-light;
+  }
+
+  .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+    background-color: #1f1f1f;
+    border-bottom: 1px solid #1f1f1f;
+  }
+  .ant-card {
+    background-color: rgb(128, 128, 128);
+    color: rgb(255, 255, 255);
+
+    .ant-card-head-title {
+      color: rgb(255, 255, 255);
+    }
+  }
+  .ant-modal-header,
+  .ant-modal-body,
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    background-color: rgba(24, 23, 23, 0.473);
+    color: rgb(255, 255, 255);
+  }
+
+  .ant-select-multiple.ant-select-allow-clear .ant-select-selector,
+  .ant-picker-range,
+  .ant-select-show-search.ant-select-multiple .ant-select-selector {
+    background-color: rgba(63, 61, 61, 0.473);
+  }
+}
+
+body.version-visually {
+  .ant-table-cell,
+  .ant-table-thead,
+  .ant-table-pagination.ant-pagination,
+  .ant-card,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value,
+  .ant-collapse-borderless > .ant-collapse-item:last-child,
+  .ant-collapse-borderless > .ant-collapse-item:last-child .ant-collapse-header,
+  .ant-typography.ant-typography-secondary,
+  .ant-modal-header,
+  .ant-modal-body,
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value,
+  .ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-cell-selected:hover
+    .ant-picker-calendar-date-today
+    .ant-picker-calendar-date-value {
+    font-size: 20px;
+  }
+  button {
+    font-size: 18px;
+  }
+}

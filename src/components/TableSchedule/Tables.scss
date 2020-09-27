@@ -1,0 +1,101 @@
+$buttonWidth: 250px;
+
+.select-dropdown-columns {
+  margin: 0;
+  align-self: flex-start;
+  width: 100%;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.tableSchedule__button_add {
+  margin-left: 25px;
+}
+
+.hidden-btn-row {
+  display: flex;
+  margin: 10px 0;
+}
+
+.ant-divider-inner-text {
+  padding: 0 1em 0 0;
+  font-weight: bold;
+}
+
+.ant-divider-horizontal.ant-divider-with-text-left::before {
+  top: 0;
+  width: 0;
+}
+
+.select-dropdown-columns {
+  .ant-tag {
+    background-color: #e6f7ff;
+  }
+
+  .ant-select-selector {
+    padding: 1px 4px;
+  }
+
+  .ant-select-arrow {
+    font-size: 18px;
+    color: #1890ff;
+    width: 26px;
+    height: 26px;
+    margin-top: -9px;
+  }
+}
+
+.ant-table-row {
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.ant-btn-primary {
+  margin: 0;
+}
+
+.ant-collapse-item {
+  background-color: rgb(244, 250, 252);
+  transition: 0.3s ease;
+
+  &:hover {
+    background-color: rgba(232, 246, 248, 0.534);
+  }
+}
+
+.mainEvent {
+  border: 1px solid #1890ff;
+  color: #1890ff;
+}
+
+.doneEvent {
+  border: 1px solid #52c41a;
+  color: #52c41a;
+}
+
+.ant-table-row-main {
+  background-color: #ff9898;
+}
+
+.ant-table-tbody>tr.ant-table-row-main:hover>td {
+  background-color: #ff8686;
+}
+
+.ant-table-row-done {
+  background-color: #7dc45a;
+}
+
+.ant-table-tbody>tr.ant-table-row-done:hover>td {
+  background-color: #68c43b;
+}
+
+
+.name-link {
+  color: #1890ff;
+  cursor: pointer;
+
+  .name-link-ico {
+    color: rgba(0, 0, 0, 0.85);
+  }
+}

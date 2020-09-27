@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: 720px) {
+    &:first-child {
+      display: block;
+    }
+
+    text-align: center;
+  }
+
+  .events-title {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+
+    li {
+      margin-right: 20px;
+    }
+  }
+
+  .btn-header {
+    display: flex;
+    align-items: center;
+
+    button {
+      margin-right: 10px;
+    }
+
+    @media screen and (max-width: 720px) {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 15px;
+      margin: 0 10px;
+    }
+  }
+}

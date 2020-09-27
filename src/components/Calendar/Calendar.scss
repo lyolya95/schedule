@@ -1,0 +1,62 @@
+.ant-picker-calendar {
+  margin: 0 30px;
+
+  .events {
+    list-style: none;
+    padding: 0 5px;
+  }
+
+  .size {
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 5px;
+    text-overflow: ellipsis;
+  }
+  .size:hover {
+    white-space: normal;
+  }
+}
+
+.calendar {
+  .calendar-title {
+    text-align: center;
+    font-size: 16px;
+
+    span:first-child {
+      font-weight: 600;
+      margin-right: 2px;
+    }
+  }
+}
+
+.site-calendar-demo-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+}
+[data-theme='dark'] .site-calendar-demo-card {
+  border: 1px solid #303030;
+}
+
+@media screen and (max-width: 1000px) {
+  .ant-picker-calendar {
+    .size {
+      width: 65px;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .events {
+    display: flex;
+  }
+
+  .ant-badge-status-text {
+    margin-left: 2px;
+  }
+
+  .ant-picker-content th,
+  .ant-picker-content td {
+    height: 50px;
+  }
+}
