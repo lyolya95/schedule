@@ -147,7 +147,6 @@ export const reducer = (state = initialState, action: any): StateModel => {
       return { ...state, timeZone: action.value };
     }
     case SET_DATA_LOADED: {
-      debugger;
       return { ...state, isDataLoaded: action.value };
     }
     default:
