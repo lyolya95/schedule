@@ -64,7 +64,7 @@ export const typesTag = [
   { type: 'interview', color: 'volcano' },
 ];
 
-export const dateAndTimeFormat = 'YYYY.MM.DD hh:mm';
+export const dateAndTimeFormat = 'YYYY.MM.DD HH:mm';
 
 export const columnSetWidth = (columnName: string, widthScreen: number) => {
   switch (columnName) {
