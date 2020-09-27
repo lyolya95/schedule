@@ -1,25 +1,16 @@
-import {
-    CheckOutlined,
-    CloseOutlined,
-    DeleteOutlined,
-    ExclamationOutlined,
-    FileSearchOutlined,
-    HighlightTwoTone,
-    PlusCircleTwoTone,
-    SaveOutlined,
-} from '@ant-design/icons';
-import {MinusSquareOutlined, UndoOutlined} from '@ant-design/icons/lib';
-import {Button, Form, Modal, Rate, Table, Tag, Tooltip} from 'antd';
+import { CheckOutlined, CloseOutlined, DeleteOutlined, ExclamationOutlined, FileSearchOutlined, HighlightTwoTone, PlusCircleTwoTone, SaveOutlined } from '@ant-design/icons';
+import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
+import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
 import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
-import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
-import {Filters} from '../Filters/Filters';
-import {SaveToFile} from '../SaveToFile/SaveToFile';
-import {TaskPageContainer} from '../TaskPage/TaskPage.container';
-import {dateAndTimeFormat} from '../utilities';
-import {EditableCell} from './EditableCell';
-import {IAgeMap} from './TableSchedule.model';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { Filters } from '../Filters/Filters';
+import { SaveToFile } from '../SaveToFile/SaveToFile';
+import { TaskPageContainer } from '../TaskPage/TaskPage.container';
+import { dateAndTimeFormat } from '../utilities';
+import { EditableCell } from './EditableCell';
+import { IAgeMap } from './TableSchedule.model';
 
 export const TableSchedule: FC<any> = React.memo((props) => {
     const {
@@ -244,6 +235,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 selRow.setAttribute('class', newRowClassName);
             })
         }
+    // eslint-disable-next-line 
     }, []);
 
     const studentOperationData = {

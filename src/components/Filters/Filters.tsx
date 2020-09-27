@@ -2,16 +2,16 @@ import { Button, Collapse, DatePicker, Divider, Form, Select } from 'antd';
 import 'antd/dist/antd.css';
 import moment from 'moment';
 import React, { FC, useCallback } from 'react';
-import { useStickyState } from './hooks/useStickyState';
 import './Filters.scss';
 import { FiltersProps } from './FiltersProps.model';
+import { useStickyState } from './hooks/useStickyState';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Panel } = Collapse;
 
 export const Filters: FC<FiltersProps> = React.memo((props) => {
-  const { data, setFilterFlags, filterFlag, setDates, isMentorStatus } = props;
+  const { data, setFilterFlags, filterFlag, setDates } = props;
   const [tags, setTags] = useStickyState([], 'tags');
   const [course, setCourse] = useStickyState([], 'course');
   const [place, setPlace] = useStickyState([], 'place');
