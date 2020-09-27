@@ -20,7 +20,6 @@ import {TaskPageContainer} from '../TaskPage/TaskPage.container';
 import {dateAndTimeFormat} from '../utilities';
 import {EditableCell} from './EditableCell';
 import {IAgeMap} from './TableSchedule.model';
-import {useStickyState} from "../Filters/hooks/useStickyState";
 
 export const TableSchedule: FC<any> = React.memo((props) => {
     const {
@@ -60,8 +59,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     const [dates, setDates] = useState<Array<string>>(datesLocalStorage);
     const [hideButton, setHideButton] = useState<boolean>(false);
     const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
-    //const [eventMain, setEventMain] = useStickyState([], 'main')
-    const [mainKeys, setMainKeys] = useState<Array<any>>(eventMain === null ? [] : eventMain);
+    const [mainKeys, setMainKeys] = useState<Array<any>>(eventMain);
 
     const hasFilterFlag = useCallback((data: any, flags: any): boolean => {
         const keys = Object.keys(flags);
@@ -209,19 +207,14 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         if (className === 'ant-table-row-main') {
             if (mainKeys.includes(key)) {
                 setMainKeys((prev) => {
-                    const idx = prev.indexOf((item: any) => item === key);
-                    const newKeys = prev.splice(idx, 1);
-                    console.log('newKey', newKeys)
+                    const newKeys = prev.filter((item: any) => item !== key);
                     localStorage.setItem('main', JSON.stringify(newKeys));
-                    //setEventMain(newKeys)
                     return newKeys;
                 });
             } else {
                 setMainKeys((prev) => {
                     const newKeys = [...prev, key];
-                    console.log('newKey', newKeys)
                     localStorage.setItem('main', JSON.stringify(newKeys));
-                    //setEventMain(newKeys)
                     return newKeys;
                 });
             }
