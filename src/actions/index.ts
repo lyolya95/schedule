@@ -16,6 +16,7 @@ export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
 export const CHANGE_VERSION_VISUALLY: string = 'CHANGE_VERSION_VISUALLY';
 export const SET_WIDTH_SCREEN: string = 'SET_WIDTH_SCREEN';
 export const SET_TIME_ZONE: string = 'SET_TIME_ZONE';
+export const SET_DATA_LOADED: string = 'SET_DATA_LOADED';
 
 export const changeMentorStatus = (): ChangeMentorStatusActionInterface => ({ type: CHANGE_MENTOR_STATUS });
 export const setDataEventsAC = (events: EventOfInterface[], organizers: MentorInterface[]): SetDataEventsActionInterface => ({
@@ -35,3 +36,4 @@ export const setModalViewEvent = (value: boolean) => ({ type: SET_MODAL_VIEW_EVE
 export const changeVersionVisually = () => ({ type: CHANGE_VERSION_VISUALLY });
 export const setwidthScreenAC = (value: number) => ({ type: SET_WIDTH_SCREEN, value });
 export const setTimeZones = (value: any) => ({ type: SET_TIME_ZONE, value });
+export const setDataLoadedAC = (value: boolean) => ({ type: SET_DATA_LOADED, value });
