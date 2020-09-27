@@ -1,4 +1,12 @@
-import { CheckOutlined, CloseOutlined, DeleteOutlined, ExclamationOutlined, HighlightTwoTone, PlusCircleTwoTone, SaveOutlined } from '@ant-design/icons';
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  ExclamationOutlined,
+  HighlightTwoTone,
+  PlusCircleTwoTone,
+  SaveOutlined,
+} from '@ant-design/icons';
 import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
@@ -66,9 +74,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck
-      .map((key: string) => flags[key].map((value: string) => value.split(',')))
-      .flat(2);
+    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -259,6 +265,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           title: 'Type',
           dataIndex: 'type',
           editable: true,
+          width: '10%',
           render: (_: any, record: any) => {
             return (
               <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
@@ -272,16 +279,14 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           title: 'Score/maxScore',
           dataIndex: 'combineScore',
           editable: true,
-          width: '10%',
+          width: '5%',
         };
       default:
         return item;
     }
   });
 
-  const columns: IAgeMap[] = isMentorStatus
-    ? [...allColumns, mentorOperationData]
-    : [...allColumns, studentOperationData];
+  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -303,8 +308,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
   const isHandlingClickOnRow = useCallback((event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName =
-      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
@@ -339,50 +343,58 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     setHiddenData([]);
   }, [hiddenData]);
 
-  const handleClickRow = useCallback((record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
-    if (isHandlingClickOnRow(event)) {
-      const ind = rowIndex ? rowIndex + 1 : 1;
-      const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
-      const rowClassName = selRow.className;
-      let newRowClassName;
-      const classSel = ' ant-table-row-selected';
+  const handleClickRow = useCallback(
+    (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
+      if (isHandlingClickOnRow(event)) {
+        const ind = rowIndex ? rowIndex + 1 : 1;
+        const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
+        const rowClassName = selRow.className;
+        let newRowClassName;
+        const classSel = ' ant-table-row-selected';
 
-      if (rowClassName.indexOf(classSel) !== -1) {
-        newRowClassName = rowClassName.replace(classSel, '');
-        setHiddenRowKeys((prev) => {
-          return prev.filter((key) => key !== record.key);
-        });
-      } else {
-        if (event.shiftKey) {
-          if (hiddenRowKeys.length !== 0) {
-            const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
-            const currentKey = record.key;
-            let clazz = '';
-            visibleData.forEach((item: any) => {
-              const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
-              if (currentSelRow === null) {
-                return;
-              }
-              // @ts-ignore
-              const currentRowClassName = currentSelRow.className;
-              if (currentRowClassName.indexOf(classSel) === -1) {
+        if (rowClassName.indexOf(classSel) !== -1) {
+          newRowClassName = rowClassName.replace(classSel, '');
+          setHiddenRowKeys((prev) => {
+            return prev.filter((key) => key !== record.key);
+          });
+        } else {
+          if (event.shiftKey) {
+            if (hiddenRowKeys.length !== 0) {
+              const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
+              const currentKey = record.key;
+              let clazz = '';
+              visibleData.forEach((item: any) => {
+                const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
+                if (currentSelRow === null) {
+                  return;
+                }
                 // @ts-ignore
-                currentSelRow.className = currentRowClassName + clazz;
-                if (clazz !== '') {
-                  setHiddenRowKeys((prev) => {
-                    return [...prev, item.key];
-                  });
+                const currentRowClassName = currentSelRow.className;
+                if (currentRowClassName.indexOf(classSel) === -1) {
+                  // @ts-ignore
+                  currentSelRow.className = currentRowClassName + clazz;
+                  if (clazz !== '') {
+                    setHiddenRowKeys((prev) => {
+                      return [...prev, item.key];
+                    });
+                  }
                 }
-              }
-              if (item.key === lastKey || item.key === currentKey) {
-                if (clazz === '') {
-                  clazz = classSel;
-                } else {
-                  clazz = '';
+                if (item.key === lastKey || item.key === currentKey) {
+                  if (clazz === '') {
+                    clazz = classSel;
+                  } else {
+                    clazz = '';
+                  }
                 }
-              }
-            });
-            newRowClassName = rowClassName + classSel;
+              });
+              newRowClassName = rowClassName + classSel;
+            } else {
+              newRowClassName = rowClassName + classSel;
+              setHideButton(true);
+              setHiddenRowKeys((prev) => {
+                return [...prev, record.key];
+              });
+            }
           } else {
             newRowClassName = rowClassName + classSel;
             setHideButton(true);
@@ -390,29 +402,19 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               return [...prev, record.key];
             });
           }
-        } else {
-          newRowClassName = rowClassName + classSel;
-          setHideButton(true);
-          setHiddenRowKeys((prev) => {
-            return [...prev, record.key];
-          });
         }
+        selRow.className = newRowClassName;
       }
-      selRow.className = newRowClassName;
-    }
-  },[hiddenRowKeys,isHandlingClickOnRow,visibleData]);
-  
+    },
+    [hiddenRowKeys, isHandlingClickOnRow, visibleData]
+  );
+
   return (
     <Form form={form} component={false}>
       <div className="hidden-btn-row">
         {isMentorStatus && (
           <Tooltip title="Add new event">
-            <Button
-              type="primary"
-              disabled={editingId !== '' || !isMentorStatus}
-              onClick={add}
-              icon={<PlusCircleTwoTone />}
-            />
+            <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
           </Tooltip>
         )}
         <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen} />
