@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Tag } from 'antd';
+import { Tag, Rate } from 'antd';
 import { TaskPageProps } from './TaskPage.model';
 import { MentorTaskFormContainer } from '../MentorTaskForm/MentorTaskForm.container';
 import { StudentTaskForm } from '../StudentTaskForm/StudentTaskForm';
@@ -23,9 +23,13 @@ export const TaskPage: FC<TaskPageProps> = React.memo((props) => {
                       {eventData.type}
                     </Tag>
       </div>
-      <div className="mb20">
+      <div>
         <b>Organizer:</b> {eventData.organizer}
       </div>
+      <div className="mb20">
+        <b>Rating: </b>
+           <Rate disabled value={ eventData?.rating?.voted ? eventData?.rating?.sum / eventData?.rating?.voted : 0} />
+      </div>  
 
       {isMentorStatus ? (
         <MentorTaskFormContainer 

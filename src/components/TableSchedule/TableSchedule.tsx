@@ -33,7 +33,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
     optionsKeyOfEvents,
     changeColumnsSelect,
     isMentorStatus,
-    ratingVotes,
     organizers,
     form,
     editingId,
@@ -46,6 +45,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
     save,
     types,
     widthScreen,
+    changeRating,
+    isVoted,
   } = props;
 
   // localStorage
@@ -139,13 +140,12 @@ const TableSchedule: FC<any> = React.memo((props) => {
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
-  const [eventRating, setEventRating] = useState<any>();
-
+  
   const mentorOperationData = {
     title: 'Edit',
     dataIndex: 'operation',
     fixed: widthScreen > 940 && 'right',
-    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '120' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
       const editable = isEditing(record);
       if (editable) {
@@ -168,8 +168,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           </span>
         );
       } else {
-        const eventRating = data.find((item: any) => record.id === item.id).rating;
-        return (
+         return (
           <span>
             <Tooltip title="Edit row">
               <Button
@@ -188,7 +187,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
                 style={{ fontSize: '16px', border: '1px solid #FF69B4', color: '#FF69B4' }}
               />
             </Tooltip>
-            <Rate disabled value={eventRating} />
           </span>
         );
       }
@@ -209,29 +207,19 @@ const TableSchedule: FC<any> = React.memo((props) => {
     }
   };
 
-  const changeRating = (value: number, key: React.Key) => {
-    const currEventRating = data.find((item: any) => key === item.id).rating;
-    const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
-    //@todo save rating to event
-    setEventRating({ [key]: { voted: true, value: newRating } });
-  };
-
   const studentOperationData = {
     title: '',
     dataIndex: 'operation',
     fixed: widthScreen > 940 && 'right',
-    width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '120' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
-      const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
         <span>
           <Tooltip title="Mark row as important">
             <Button
               ghost={true}
               onClick={() => changeRowClass(record.id, 'ant-table-row-main')}
-              //icon={<WarningTwoTone twoToneColor="red" />}>
               className="mainEvent"
-              //icon={<ExclamationCircleOutlined />}
               icon={<ExclamationOutlined />}
             />
           </Tooltip>
@@ -240,17 +228,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
               ghost={true}
               onClick={() => changeRowClass(record.id, 'ant-table-row-done')}
               className="doneEvent"
-              //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
               icon={<CheckOutlined />}
             />
           </Tooltip>
-
-          <span></span>
-          {isVoted ? (
-            <Rate disabled value={eventRating[record.id].value} />
-          ) : (
-            <Rate onChange={(value) => changeRating(value, record.id)} />
-          )}
         </span>
       );
     },
@@ -281,7 +261,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           editable: true,
           render: (_: any, record: any) => {
             return (
-              <a href="{record.descriptionUrl}" title="{record.descriptionUrl}">
+              <a href={record.descriptionUrl} title={record.descriptionUrl}>
                 {record.descriptionUrl}
               </a>
             );
@@ -311,10 +291,41 @@ const TableSchedule: FC<any> = React.memo((props) => {
         return item;
     }
   });
-
+  const ratingColumn = {
+    title: 'Rating',
+    dataIndex: 'rating',
+    width: `${widthScreen > 1000 || widthScreen < 600 ? '170' : widthScreen / 4}px`,
+    render: (_: any, record: any) => {
+      const hasVotes = record.rating && record.rating.voted && record.rating.voted>0  
+                        ? true : false;
+      const ratingMidValue  = hasVotes ? record.rating.sum / record.rating.voted : 0;
+      
+      if(isMentorStatus){
+        return (
+          <Rate disabled  value={ratingMidValue}/>
+        );
+      }else{
+        let isCurrVoted = false;
+        if( isVoted &&  isVoted.length>0){
+          const votedElement = isVoted.find((item: any) => record.key === item.id);
+          isCurrVoted = votedElement?.value;
+        }
+        return (
+          <span>
+            {isCurrVoted  
+            ? <Rate disabled value={ratingMidValue} />
+            : <Rate onChange={(value) => changeRating(value, record)} />
+            }
+          </span>
+        );
+      }
+    },
+  };
+  
+ 
   const columns: IAgeMap[] = isMentorStatus
-    ? [...allColumns, mentorOperationData]
-    : [...allColumns, studentOperationData];
+    ? [...allColumns, ratingColumn, mentorOperationData]
+    : [...allColumns, ratingColumn, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {

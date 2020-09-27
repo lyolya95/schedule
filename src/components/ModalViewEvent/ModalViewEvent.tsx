@@ -25,7 +25,10 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
   const handleCancel = useCallback(() => {
     setIsShowModalViewEvents(false);
   }, [setIsShowModalViewEvents]);
-
+  
+  
+  const ratingMidValue  = event[0]?.rating?.voted ? event[0]?.rating?.sum / event[0]?.rating?.voted : 0;
+  
   return (
     <Modal title={event[0]?.course} footer={null} visible={isShowModalViewEvents} onCancel={handleCancel}>
       <div className="modal_events">
@@ -57,9 +60,10 @@ export const ModalViewEvents: FC<ModalViewEventsProps> = ({
             </Tag>
           </div>
         )}
-        {event[0]?.rating && (
+      
+        {ratingMidValue && (
           <div className="modal_events__item">
-            <Rate disabled value={event[0]?.rating ? +event[0].rating : 0} />
+            <Rate disabled value={ratingMidValue} />
           </div>
         )}
         {event[0]?.studentScore && (

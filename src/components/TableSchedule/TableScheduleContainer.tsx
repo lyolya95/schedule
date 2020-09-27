@@ -31,6 +31,7 @@ const TableScheduleContainer = (props: any) => {
   const [editingId, setEditingId] = useState('');
   const isEditing = (record: any) => record.id === editingId;
   const [isLoading, setIsLoading] = useState(false);
+  const [isVoted, setIsVoted] = useState<any>([]);
   const edit = (record: any) => {
     form.setFieldsValue({ ...record });
     setEditingId(record.id);
@@ -72,6 +73,19 @@ const TableScheduleContainer = (props: any) => {
     setEditingId('');
     setIsLoading(false);
   };
+
+  const changeRating = async (value: number, record:any) => {
+    const currEventRating = record?.rating;
+    const numVoted = currEventRating && currEventRating.voted && currEventRating.voted > 0 ? currEventRating.voted+1 : 1;
+    const sumRating = currEventRating && currEventRating.sum && currEventRating.sum > 0  ? (value + currEventRating.sum) : value;
+    record.rating = { voted: numVoted, sum: sumRating }
+    await putDataEvent( record.id,  record);
+    setIsVoted((state:Array<any>)  => {
+      return  [...state, {"id":record.id, "value": true }];
+     });
+    
+  };
+
   const [mapsColumnsName, setMapColumnsName] = useState([]);
   const defaultColumns = userColumnsName;
   const tagRender = (props: any) => {
@@ -142,6 +156,8 @@ const TableScheduleContainer = (props: any) => {
       save={save}
       types={types}
       widthScreen={widthScreen}
+      changeRating={changeRating}
+      isVoted={isVoted}
     />
   );
 };
