@@ -3,28 +3,25 @@ import {
   CloseOutlined,
   DeleteOutlined,
   ExclamationOutlined,
-  EyeInvisibleTwoTone,
-  EyeTwoTone,
   HighlightTwoTone,
   PlusCircleTwoTone,
   SaveOutlined,
-  EyeOutlined, 
   FileSearchOutlined
 } from '@ant-design/icons';
-//import {  } from '@ant-design/icons/lib';
+import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
 import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
-import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
+import { SaveToFile } from '../SaveToFile/SaveToFile';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { dateAndTimeFormat } from '../utilities';
 import { EditableCell } from './EditableCell';
 import { IAgeMap } from './TableSchedule.model';
 
-const TableSchedule: FC<any> = React.memo((props) => {
+export const TableSchedule: FC<any> = React.memo((props) => {
   const {
     data,
     columnsName,
@@ -47,21 +44,22 @@ const TableSchedule: FC<any> = React.memo((props) => {
     widthScreen,
     changeRating,
     isVoted,
+    timeZone,
   } = props;
 
-  // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
   const type = JSON.parse(localStorage['tags'] || null);
   const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [clickingRow, setClickingRow] = useState<any | null>();
+  const [hiddenData, setHiddenData] = useState<Array<string>>([]);
+  const [filerFlags, setFilterFlags] = useState({ course, place, type });
+  const [dates, setDates] = useState<Array<string>>(datesLocalStorage);
+  const [hideButton, setHideButton] = useState<boolean>(false);
+  const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
 
-  // данные для фильтрации
-  const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
-  const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
-  const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
-  const [timeZone, setTimeZone] = useState<string>('+0:00'); // Time Zone выбранный пользователем
-
-  const hasFilterFlag = (data: any, flags: any): boolean => {
+  const hasFilterFlag = useCallback((data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
     if (keys.length === 0) {
       return true;
@@ -77,9 +75,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck
-      .map((key: string) => flags[key].map((value: string) => value.split(',')))
-      .flat(2);
+    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -102,9 +98,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
       }
     }
     return true;
-  };
+  }, []);
 
-  const isInDateRange = (date: any, dateRange: any): boolean => {
+  const isInDateRange = useCallback((date: any, dateRange: any): boolean => {
     if (dateRange === null) {
       return true;
     }
@@ -118,29 +114,38 @@ const TableSchedule: FC<any> = React.memo((props) => {
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
+  const toUserTimeZone = useCallback((time: string, timeGap: string, timezone: string) => {
     return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
-  };
+  }, []);
 
-  const visibleData = data
-    .filter((item: any) => hasFilterFlag(item, filerFlags))
-    .map((item: any) => {
-      return {
-        ...item,
-        dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone),
-      };
-    })
-    .filter((item: any) => isInDateRange(item.dateTime, dates))
-    .map((item: any) => {
-      return { ...item, key: item.id };
-    })
-    .filter((item: any) => !hiddenData.includes(item.key));
+  const visibleData = useMemo(
+    () =>
+      data
+        .filter((item: any) => hasFilterFlag(item, filerFlags))
+        .map((item: any) => {
+          return {
+            ...item,
+            dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone),
+          };
+        })
+        .filter((item: any) => isInDateRange(item.dateTime, dates))
+        .map((item: any) => {
+          return { ...item, key: item.id };
+        })
+        .filter((item: any) => !hiddenData.includes(item.key))
+        .sort((a: any, b: any) => {
+          const date1 = moment(a.dateTime);
+          const date2 = moment(b.dateTime);
+          if (date1 < date2) {
+            return -1;
+          }
+          return 1;
+        }),
+    [data, dates, filerFlags, hasFilterFlag, hiddenData, isInDateRange, timeZone, toUserTimeZone]
+  );
 
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [clickingRow, setClickingRow] = useState<any | null>();
-  
   const mentorOperationData = {
     title: 'Edit',
     dataIndex: 'operation',
@@ -192,7 +197,8 @@ const TableSchedule: FC<any> = React.memo((props) => {
       }
     },
   };
-  const changeRowClass = (key: React.Key, className: string) => {
+
+  const changeRowClass = useCallback((key: React.Key, className: string) => {
     const selRow = document.querySelector(`[data-row-key=${key}]`);
     if (selRow) {
       const rowClassName = selRow.getAttribute('class');
@@ -205,7 +211,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
       }
       selRow.setAttribute('class', newRowClassName);
     }
-  };
+  }, []);
 
   const studentOperationData = {
     title: '',
@@ -272,6 +278,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           title: 'Type',
           dataIndex: 'type',
           editable: true,
+          width: '10%',
           render: (_: any, record: any) => {
             return (
               <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
@@ -280,12 +287,12 @@ const TableSchedule: FC<any> = React.memo((props) => {
             );
           },
         };
-
       case 'combineScore':
         return {
           title: 'Score/maxScore',
           dataIndex: 'combineScore',
           editable: true,
+          width: '9%',
         };
       default:
         return item;
@@ -331,7 +338,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
     if (!col.editable) {
       return col;
     }
-
     return {
       ...col,
       onCell: (record: any) => ({
@@ -346,87 +352,94 @@ const TableSchedule: FC<any> = React.memo((props) => {
     };
   });
 
-  const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
+  const isHandlingClickOnRow = useCallback((event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName =
-      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const handleDetailed = (record: any) => {
-    setClickingRow(record);
-    setVisibleModal(true);
-  };
+  const handleDetailed =  useCallback(
+    (record: any) => {
+      setClickingRow(record);
+      setVisibleModal(true);
+    },
+    [setClickingRow, setVisibleModal]
+  );
 
-  //______добавлена логика клика с зажатым shift__________________________________________________________________________
-  const [hideButton, setHideButton] = useState<boolean>(false);
-  const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
 
   useEffect(() => {
     if (hiddenRowKeys.length === 0) setHideButton(false);
   }, [hiddenRowKeys]);
 
-  const hideRows = () => {
+  const hideRows = useCallback(() => {
     setHiddenData((prev) => {
       return [...prev, ...hiddenRowKeys];
     });
     setHideButton(false);
-  };
+  }, [hiddenRowKeys]);
 
-  const unHideRows = () => {
+  const unHideRows = useCallback(() => {
     setHiddenRowKeys((prev) => {
       return prev.filter((key) => !hiddenData.includes(key));
     });
     setHiddenData([]);
-  };
+  }, [hiddenData]);
 
-  const handleClickRow = (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
-    if (isHandlingClickOnRow(event)) {
-      const ind = rowIndex ? rowIndex + 1 : 1;
-      const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
-      const rowClassName = selRow.className;
-      let newRowClassName;
-      const classSel = ' ant-table-row-selected';
+  const handleClickRow = useCallback(
+    (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
+      if (isHandlingClickOnRow(event)) {
+        const ind = rowIndex ? rowIndex + 1 : 1;
+        const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
+        const rowClassName = selRow.className;
+        let newRowClassName;
+        const classSel = ' ant-table-row-selected';
 
-      if (rowClassName.indexOf(classSel) !== -1) {
-        newRowClassName = rowClassName.replace(classSel, '');
-        setHiddenRowKeys((prev) => {
-          return prev.filter((key) => key !== record.key);
-        });
-      } else {
-        if (event.shiftKey) {
-          if (hiddenRowKeys.length !== 0) {
-            const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
-            const currentKey = record.key;
-            let clazz = '';
-            visibleData.forEach((item: any) => {
-              const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
-              if (currentSelRow === null) {
-                return;
-              }
-              // @ts-ignore
-              const currentRowClassName = currentSelRow.className;
-              if (currentRowClassName.indexOf(classSel) === -1) {
+        if (rowClassName.indexOf(classSel) !== -1) {
+          newRowClassName = rowClassName.replace(classSel, '');
+          setHiddenRowKeys((prev) => {
+            return prev.filter((key) => key !== record.key);
+          });
+        } else {
+          if (event.shiftKey) {
+            if (hiddenRowKeys.length !== 0) {
+              const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
+              const currentKey = record.key;
+              let clazz = '';
+              visibleData.forEach((item: any) => {
+                const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
+                if (currentSelRow === null) {
+                  return;
+                }
                 // @ts-ignore
-                currentSelRow.className = currentRowClassName + clazz;
-                if (clazz !== '') {
-                  setHiddenRowKeys((prev) => {
-                    return [...prev, item.key];
-                  });
+                const currentRowClassName = currentSelRow.className;
+                if (currentRowClassName.indexOf(classSel) === -1) {
+                  // @ts-ignore
+                  currentSelRow.className = currentRowClassName + clazz;
+                  if (clazz !== '') {
+                    setHiddenRowKeys((prev) => {
+                      return [...prev, item.key];
+                    });
+                  }
                 }
-              }
-              if (item.key === lastKey || item.key === currentKey) {
-                if (clazz === '') {
-                  clazz = classSel;
-                } else {
-                  clazz = '';
+                if (item.key === lastKey || item.key === currentKey) {
+                  if (clazz === '') {
+                    clazz = classSel;
+                  } else {
+                    clazz = '';
+                  }
                 }
-              }
-            });
-            newRowClassName = rowClassName + classSel;
+              });
+              newRowClassName = rowClassName + classSel;
+            } else {
+              newRowClassName = rowClassName + classSel;
+              setHideButton(true);
+              setHiddenRowKeys((prev) => {
+                return [...prev, record.key];
+              });
+            }
           } else {
             newRowClassName = rowClassName + classSel;
             setHideButton(true);
@@ -434,46 +447,37 @@ const TableSchedule: FC<any> = React.memo((props) => {
               return [...prev, record.key];
             });
           }
-        } else {
-          newRowClassName = rowClassName + classSel;
-          setHideButton(true);
-          setHiddenRowKeys((prev) => {
-            return [...prev, record.key];
-          });
         }
+        selRow.className = newRowClassName;
       }
-      selRow.className = newRowClassName;
-    }
-  };
+    },
+    [hiddenRowKeys, isHandlingClickOnRow, visibleData]
+  );
+
   return (
     <Form form={form} component={false}>
       <div className="hidden-btn-row">
         {isMentorStatus && (
           <Tooltip title="Add new event">
-            <Button
-              type="primary"
-              disabled={editingId !== '' || !isMentorStatus}
-              onClick={add}
-              icon={<PlusCircleTwoTone />}
-            />
+            <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
           </Tooltip>
         )}
-        {hiddenData.length === 0 ? (
-          <Tooltip title="Hide selected table rows">
-            <Button
-              onClick={hideRows}
-              disabled={!hideButton}
-              icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />}
-            />
+        <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen} />
+        {hideButton ? (
+          <Tooltip title="Hide rows">
+            <Button onClick={hideRows}>
+              <MinusSquareOutlined />
+            </Button>
           </Tooltip>
-        ) : (
-          <Tooltip title="Show hidden rows in tables">
-            <Button onClick={unHideRows} icon={<EyeTwoTone />} />
+        ) : null}
+        {hiddenData.length === 0 ? null : (
+          <Tooltip title="Show hidden rows">
+            <Button onClick={unHideRows}>
+              <UndoOutlined />
+            </Button>
           </Tooltip>
         )}
-        <SelectTimeZone setTimeZone={setTimeZone} widthScreen={widthScreen} />
       </div>
-
       <Text type="secondary">Double click on a table row to bring up detailed information</Text>
       <MentorFilters
         data={data}
@@ -498,7 +502,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: widthScreen < 700 ? 1500 : 2300, y: 600 }}
+        scroll={{ x: widthScreen < 700 ? 1800 : 2300, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
@@ -516,7 +520,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
       />
       {clickingRow ? (
         <Modal
-          key = {clickingRow.id}
+          key={clickingRow.id}
           title={clickingRow.course}
           centered
           visible={visibleModal}
@@ -528,13 +532,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
           onCancel={() => setVisibleModal(false)}
           width={1000}
         >
-          <TaskPageContainer
-            eventData={clickingRow}
-          />
+          <TaskPageContainer eventData={clickingRow} />
         </Modal>
       ) : null}
     </Form>
   );
 });
-
-export { TableSchedule };

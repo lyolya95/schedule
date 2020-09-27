@@ -11,12 +11,16 @@ import {
   setModalViewEvent,
   setOrganizersAC,
   setwidthScreenAC,
+  setTimeZones,
   SET_DATA_EVENT,
   SET_MODAL_SETTINGS,
   SET_MODAL_VIEW_EVENT,
   SET_ORGANIZERS,
   SET_TYPES_COLOR,
   SET_WIDTH_SCREEN,
+  SET_TIME_ZONE,
+  SET_DATA_LOADED,
+  setDataLoadedAC,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
@@ -59,7 +63,6 @@ const initialState: StateModel = {
     'combineScore',
   ],
   notEditableColumns: ['id', 'combineScore'],
-  ratingVotes: 0,
   organizers: [],
   initialEventData: {
     course: '',
@@ -87,9 +90,11 @@ const initialState: StateModel = {
   isShowModalViewEvents: false,
   isShowVersionVisually: false,
   widthScreen: 1920,
+  timeZone: '+00:00',
+  isDataLoaded: false,
 };
 
-const reducer = (state = initialState, action: any): StateModel => {
+export const reducer = (state = initialState, action: any): StateModel => {
   switch (action.type) {
     case CHANGE_MENTOR_STATUS:
       return {
@@ -139,27 +144,33 @@ const reducer = (state = initialState, action: any): StateModel => {
     case SET_WIDTH_SCREEN: {
       return { ...state, widthScreen: action.value };
     }
+    case SET_TIME_ZONE: {
+      return { ...state, timeZone: action.value };
+    }
+    case SET_DATA_LOADED: {
+      return { ...state, isDataLoaded: action.value };
+    }
     default:
       return state;
   }
 };
 
-const getDataEvent = () => async (dispatch: Dispatch) => {
+export const getDataEvent = () => async (dispatch: Dispatch) => {
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
   dispatch(setOrganizersAC(organizers));
 };
-const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: Dispatch) => {
+export const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: Dispatch) => {
   await scheduleAPI.updateDataEvent(idEvent, bodyData);
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
 };
-const deleteDataEvent = (idEvent: string) => async (dispatch: Dispatch) => {
+export const deleteDataEvent = (idEvent: string) => async (dispatch: Dispatch) => {
   await scheduleAPI.deleteDataEvent(idEvent);
 };
-const addDataEvent = (newEvent: object) => async (dispatch: Dispatch) => {
+export const addDataEvent = (newEvent: object) => async (dispatch: Dispatch) => {
   return await scheduleAPI.addDataEvent(newEvent);
 };
 
@@ -179,8 +190,13 @@ export const setChangeVersionVisually = () => (dispatch: Dispatch) => {
   dispatch(changeVersionVisually());
 };
 
-const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
+export const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
   dispatch(setwidthScreenAC(value));
 };
 
-export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent, setWidthScreen };
+export const setTimeZone = (value: any) => (dispatch: Dispatch) => {
+  dispatch(setTimeZones(value));
+};
+export const setDataLoaded = (value: boolean) => (dispatch: Dispatch) => {
+  dispatch(setDataLoadedAC(value));
+};
