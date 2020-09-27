@@ -7,6 +7,29 @@
 
 Schedule - расписание курса RS School.
 
+Как установить приложение
+----------------------------
+
+First, [Клонировать репозиторий](https://github.com/lyolya95/schedule.git).
+
+Далее, перейдите в папку со скаченным репозиторием и установите зависимости:
+```bash
+cd schedule && npm install
+```
+Или, если Вы пользуетесь Yarn, тогда:
+```bash
+cd schedule && yarn
+```
+
+Затем, как все зависимости будут проинсталированны, запустите проект:
+```bash
+npm start
+```
+Или, если Вы пользуетесь Yarn, тогда:
+```bash
+yarn start
+```
+
 ## Демо
 
 Расписание Schedule [link](https://docs.google.com/spreadsheets/d/1oM2O8DtjC0HodB3j7hcIResaWBw8P18tXkOl1ymelvE/)
