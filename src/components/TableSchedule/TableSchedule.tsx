@@ -54,7 +54,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
     const [visibleModal, setVisibleModal] = useState(false);
     const [clickingRow, setClickingRow] = useState<any | null>();
-    const [eventRating, setEventRating] = useState<any>();
     const [hiddenData, setHiddenData] = useState<Array<string>>([]);
     const [filerFlags, setFilterFlags] = useState({ course, place, type });
     const [dates, setDates] = useState<Array<string>>(datesLocalStorage);
@@ -175,13 +174,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               />
             </Tooltip>
           </span>
-/*<<<<<<< HEAD
-                );
-            } else {
-                const eventRating = data.find((item: any) => record.id === item.id).rating;
-                return (
-                    <span>
-=======*/
         );
       } else {
         return (
@@ -203,7 +195,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                   style={{fontSize: '16px', border: '1px solid #FF69B4', color: '#FF69B4'}}
               />
             </Tooltip>
-            <Rate disabled value={eventRating}/>
           </span>
         );
       }
@@ -245,26 +236,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         }
       }, []);
 
-
- /* const changeRating = useCallback(
-    (value: number, key: React.Key) => {
-      const currEventRating = data.find((item: any) => key === item.id).rating;
-      const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
-      setEventRating({ [key]: { voted: true, value: newRating } });
-    },
-    [data, ratingVotes]
-  );
-
-    const studentOperationData = {
-        title: '',
-        dataIndex: 'operation',
-        fixed: widthScreen > 940 && 'right',
-        width: `${widthScreen > 1000 || widthScreen < 600 ? '250' : widthScreen / 4}px`,
-        render: (_: any, record: any) => {
-            const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
-            return (
-                <span>
-=======*/
   const studentOperationData = {
     title: '',
     dataIndex: 'operation',
@@ -289,15 +260,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               icon={<CheckOutlined />}
             />
           </Tooltip>
-{/*<<<<<<< HEAD
-          <span></span>
-                    {isVoted ? (
-                        <Rate disabled value={eventRating[record.id].value}/>
-                    ) : (
-                        <Rate onChange={(value) => changeRating(value, record.id)}/>
-                    )}
-=======
->>>>>>> 5aef41f15c17c8d48b5526c5cf6d779ab9d321cd*/}
         </span>
       );
     },
@@ -387,9 +349,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     },
   };
 
-/*<<<<<<< HEAD
-    const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
-=======*/
   const columns: IAgeMap[] = isMentorStatus
     ? [...allColumns, ratingColumn, mentorOperationData]
     : [...allColumns, ratingColumn, studentOperationData];
@@ -513,94 +472,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         [hiddenRowKeys, isHandlingClickOnRow, visibleData]
     );
 
-/*<<<<<<< HEAD
-    return (
-        <Form form={form} component={false}>
-            <div className="hidden-btn-row">
-                {isMentorStatus && (
-                    <Tooltip title="Add new event">
-                        <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
-                    </Tooltip>
-                )}
-                <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen} />
-                {hideButton ? (
-                    <Tooltip title="Hide rows">
-                        <Button onClick={hideRows}>
-                            <MinusSquareOutlined />
-                        </Button>
-                    </Tooltip>
-                ) : null}
-                {hiddenData.length === 0 ? null : (
-                    <Tooltip title="Show hidden rows">
-                        <Button onClick={unHideRows}>
-                            <UndoOutlined />
-                        </Button>
-                    </Tooltip>
-                )}
-            </div>
-            <Text type="secondary">Double click on a table row to bring up detailed information</Text>
-            <Filters
-                data={data}
-                filterFlag={filerFlags}
-                setFilterFlags={setFilterFlags}
-                setDates={setDates}
-                tagRender={tagRender}
-                defaultColumns={defaultColumns}
-                optionsKeyOfEvents={optionsKeyOfEvents}
-                changeColumnsSelect={changeColumnsSelect}
-                isMentorStatus={isMentorStatus}
-            />
-            <Table
-                loading={isLoading}
-                size="small"
-                components={{
-                    body: {
-                        cell: EditableCell,
-                    },
-                }}
-                bordered
-                dataSource={visibleData}
-                columns={mergedColumns}
-                rowClassName="editable-row"
-                scroll={{ x: widthScreen < 700 ? 1800 : 2300, y: 600 }}
-                pagination={{
-                    onChange: cancel,
-                    showSizeChanger: true,
-                    defaultPageSize: 20,
-                    defaultCurrent: 1,
-                    showTotal: (total: number) => `Total ${total} items`,
-                }}
-                onRow={(record, rowIndex) => {
-                    return {
-                        onClick: (event) => {
-                            handleClickRow(record, rowIndex, event);
-                        },
-                        onDoubleClick: (event) => {
-                            handleDoubleClickRow(record, rowIndex, event);
-                        },
-                    };
-                }}
-            />
-            {clickingRow ? (
-                <Modal
-                    key={clickingRow.id}
-                    title={clickingRow.course}
-                    centered
-                    visible={visibleModal}
-                    footer={[
-                        <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
-                            Back
-                        </Button>,
-                    ]}
-                    onCancel={() => setVisibleModal(false)}
-                    width={1000}
-                >
-                    <TaskPageContainer eventData={clickingRow} />
-                </Modal>
-            ) : null}
-        </Form>
-    );
-=======*/
   return (
     <Form form={form} component={false}>
       <div className="hidden-btn-row">
