@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Map, Placemark, SearchControl, YMaps } from 'react-yandex-maps';
 import './Maps.scss';
+import { MapsProps } from './Maps.model';
 
-export const Maps = () => {
+export const Maps:FC<MapsProps> = ({ isMentorStatus,  chosenCoordinates, changeCoords }) => {
   // в coords храним координаты, их потом отправляем вместе с заданием, для сохранения места проведения
-  const [coords, setCoords] = useState<number[]>([]);
+  const [coords, setCoords] = useState<number[]>(chosenCoordinates);
 
   const mapData = {
-    center: [55.751574, 37.573856],
+    center: chosenCoordinates===[] ? [55.751574, 37.573856] : chosenCoordinates,
     zoom: 5,
     controls: ['zoomControl', 'fullscreenControl'],
   };
 
   const onMapClick = (event: any) => {
-    setCoords((state) => [...state, event.get('coords')]);
+    setCoords(() =>{
+      const newState = event.get('coords');
+      if(changeCoords){
+        changeCoords(newState);
+      }
+      return newState;
+    });
   };
 
   return (
@@ -26,18 +33,30 @@ export const Maps = () => {
           lang: 'ru_RU',
         }}
       >
-        <Map
-          onClick={onMapClick}
-          defaultState={mapData}
-          width={600}
-          modules={['control.ZoomControl', 'control.FullscreenControl']}
-        >
-          {coords.map((coord: any) => (
-            <Placemark key={coord.join(',')} geometry={coord} />
-          ))}
-          <SearchControl options={{ float: 'right' }} />
-        </Map>
-      </YMaps>
+        { isMentorStatus 
+            ? <Map
+                onClick={onMapClick}
+                defaultState={mapData}
+                width={600}
+                modules={['control.ZoomControl', 'control.FullscreenControl']}
+              >
+                {
+                  <Placemark key={coords.join(',')} geometry={coords} />
+                }
+                <SearchControl options={{ float: 'right' }} />
+              </Map>
+            : <Map
+                defaultState={mapData}
+                width={600}
+                modules={['control.ZoomControl', 'control.FullscreenControl']}
+              >
+                {
+                  <Placemark key={coords.join(',')} geometry={coords} />
+                }
+              </Map>
+          }
+       </YMaps>
     </div>
   );
 };
+  
