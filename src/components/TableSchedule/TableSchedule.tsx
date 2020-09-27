@@ -50,7 +50,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     const [dates, setDates] = useState<Array<string>>(datesLocalStorage);
     const [hideButton, setHideButton] = useState<boolean>(false);
     const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
-    const [mainKeys, setMainKeys] = useState<Array<any>>(eventMain);
+    const [mainKeys, setMainKeys] = useState<Array<any>>(eventMain !== null ? eventMain : []);
 
     const hasFilterFlag = useCallback((data: any, flags: any): boolean => {
         const keys = Object.keys(flags);
