@@ -1,12 +1,4 @@
-import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  ExclamationOutlined,
-  HighlightTwoTone,
-  PlusCircleTwoTone,
-  SaveOutlined,
-} from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, DeleteOutlined, ExclamationOutlined, HighlightTwoTone, PlusCircleTwoTone, SaveOutlined } from '@ant-design/icons';
 import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
@@ -14,11 +6,12 @@ import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
+import { SaveToFile } from "../SaveToFile/SaveToFile";
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { dateAndTimeFormat } from '../utilities';
-import { SaveToFile } from '../SaveToFile/SaveToFile';
 import { EditableCell } from './EditableCell';
 import { IAgeMap } from './TableSchedule.model';
+
 
 export const TableSchedule: FC<any> = React.memo((props) => {
   const {
@@ -274,6 +267,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           title: 'Score/maxScore',
           dataIndex: 'combineScore',
           editable: true,
+          width: '10%',
         };
       default:
         return item;
