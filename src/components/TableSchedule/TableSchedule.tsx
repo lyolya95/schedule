@@ -235,7 +235,15 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
     useEffect(() => {
         if (mainKeys.length > 0) {
-            mainKeys.forEach((item: any) => changeRowClass(item, 'ant-table-row-main'))
+            mainKeys.forEach((item: any) => {
+                const selRow = document.querySelector(`[data-row-key=${item}]`);
+                // @ts-ignore
+                const rowClassName = selRow.getAttribute('class');
+                const newRowClassName = rowClassName + ' ant-table-row-main';
+                console.log(newRowClassName)
+                // @ts-ignore
+                selRow.setAttribute('class', newRowClassName);
+            })
         }
     }, []);
 
