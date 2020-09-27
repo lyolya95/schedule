@@ -7,20 +7,20 @@ import {
   CHANGE_VERSION_VISUALLY,
   setColorTypes,
   setDataEventsAC,
+  setDataLoadedAC,
   setModalSettings,
   setModalViewEvent,
   setOrganizersAC,
-  setwidthScreenAC,
   setTimeZones,
+  setwidthScreenAC,
   SET_DATA_EVENT,
+  SET_DATA_LOADED,
   SET_MODAL_SETTINGS,
   SET_MODAL_VIEW_EVENT,
   SET_ORGANIZERS,
+  SET_TIME_ZONE,
   SET_TYPES_COLOR,
   SET_WIDTH_SCREEN,
-  SET_TIME_ZONE,
-  SET_DATA_LOADED,
-  setDataLoadedAC,
 } from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
@@ -37,9 +37,9 @@ const initialState: StateModel = {
       name: '',
       organizer: undefined,
       place: '',
-      rating:{
+      rating: {
         voted: 0,
-        sum: 0
+        sum: 0,
       },
       studentScore: '',
       taskContent: '',
@@ -71,7 +71,7 @@ const initialState: StateModel = {
     isShowFeedback: '',
     maxScore: '',
     name: '',
-    organizer: undefined,
+    organizer: '',
     place: '',
     studentScore: '',
     taskContent: '',
@@ -79,9 +79,9 @@ const initialState: StateModel = {
     timeZone: '',
     type: '',
     week: '',
-    rating:{
+    rating: {
       voted: 0,
-      sum: 0
+      sum: 0,
     },
     combineScore: '',
   },
@@ -102,7 +102,7 @@ export const reducer = (state = initialState, action: any): StateModel => {
         isMentorStatus: !state.isMentorStatus,
       };
     case SET_DATA_EVENT: {
-       action.events.map((event: any) => {
+      action.events.map((event: any) => {
         if (event.organizer) {
           const eventMentorArr = event.organizer.split(',').map((mentorId: string) => {
             const mentor = action.organizers.find((mentor: any) => mentor.id === mentorId);
@@ -119,7 +119,7 @@ export const reducer = (state = initialState, action: any): StateModel => {
         }
         return event;
       });
-      return { ...state, data: action.events};
+      return { ...state, data: action.events };
     }
     case SET_ORGANIZERS: {
       return { ...state, organizers: [...action.organizers] };
