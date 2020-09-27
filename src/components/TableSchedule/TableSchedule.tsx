@@ -6,7 +6,7 @@ import {
   HighlightTwoTone,
   PlusCircleTwoTone,
   SaveOutlined,
-  FileSearchOutlined
+  FileSearchOutlined,
 } from '@ant-design/icons';
 import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
@@ -173,7 +173,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </span>
         );
       } else {
-         return (
+        return (
           <span>
             <Tooltip title="Edit row">
               <Button
@@ -248,28 +248,15 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           title: 'name',
           dataIndex: 'name',
           editable: true,
+          width: '10%',
           render: (_: any, record: any) => {
             return (
-               <div className="name-link" 
-                    onClick={ () => handleDetailed(record)}
-                >
-                  <Tooltip title="Show event description">
-                    <FileSearchOutlined className="name-link-ico"/> 
-                  </Tooltip> {record.name}
-                </div>
-              );
-          },
-        };
-      case 'descriptionUrl':
-        return {
-          title: 'descriptionUrl',
-          dataIndex: 'descriptionUrl',
-          editable: true,
-          render: (_: any, record: any) => {
-            return (
-              <a href={record.descriptionUrl} title={record.descriptionUrl}>
-                {record.descriptionUrl}
-              </a>
+              <div className="name-link" onClick={() => handleDetailed(record)}>
+                <Tooltip title="Show event description">
+                  <FileSearchOutlined className="name-link-ico" />
+                </Tooltip>{' '}
+                {record.name}
+              </div>
             );
           },
         };
@@ -284,6 +271,22 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
                 {record.type}
               </Tag>
+            );
+          },
+        };
+      case 'descriptionUrl':
+        return {
+          title: 'Description Url',
+          dataIndex: 'descriptionUrl',
+          editable: true,
+          width: '15%',
+          render: (_: any, record: any) => {
+            return (
+              record.descriptionUrl && (
+                <a key={record.descriptionUrl} target="_blank" href={record.descriptionUrl} rel="noopener noreferrer">
+                  {record.descriptionUrl.slice(0, 40)}...
+                </a>
+              )
             );
           },
         };
@@ -303,33 +306,26 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     dataIndex: 'rating',
     width: `${widthScreen > 1000 || widthScreen < 600 ? '170' : widthScreen / 4}px`,
     render: (_: any, record: any) => {
-      const hasVotes = record.rating && record.rating.voted && record.rating.voted>0  
-                        ? true : false;
-      const ratingMidValue  = hasVotes ? record.rating.sum / record.rating.voted : 0;
-      
-      if(isMentorStatus){
-        return (
-          <Rate disabled  value={ratingMidValue}/>
-        );
-      }else{
+      const hasVotes = record.rating && record.rating.voted && record.rating.voted > 0 ? true : false;
+      const ratingMidValue = hasVotes ? record.rating.sum / record.rating.voted : 0;
+
+      if (isMentorStatus) {
+        return <Rate disabled value={ratingMidValue} />;
+      } else {
         let isCurrVoted = false;
-        if( isVoted &&  isVoted.length>0){
+        if (isVoted && isVoted.length > 0) {
           const votedElement = isVoted.find((item: any) => record.key === item.id);
           isCurrVoted = votedElement?.value;
         }
         return (
           <span>
-            {isCurrVoted  
-            ? <Rate disabled value={ratingMidValue} />
-            : <Rate onChange={(value) => changeRating(value, record)} />
-            }
+            {isCurrVoted ? <Rate disabled value={ratingMidValue} /> : <Rate onChange={(value) => changeRating(value, record)} />}
           </span>
         );
       }
     },
   };
-  
- 
+
   const columns: IAgeMap[] = isMentorStatus
     ? [...allColumns, ratingColumn, mentorOperationData]
     : [...allColumns, ratingColumn, studentOperationData];
@@ -361,14 +357,13 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     return false;
   }, []);
 
-  const handleDetailed =  useCallback(
+  const handleDetailed = useCallback(
     (record: any) => {
       setClickingRow(record);
       setVisibleModal(true);
     },
     [setClickingRow, setVisibleModal]
   );
-
 
   useEffect(() => {
     if (hiddenRowKeys.length === 0) setHideButton(false);
@@ -478,7 +473,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
           </Tooltip>
         )}
       </div>
-      <Text type="secondary">Double click on a table row to bring up detailed information</Text>
+      <Text type="secondary">Click on the name of the event to open full description</Text>
       <MentorFilters
         data={data}
         filterFlag={filerFlags}

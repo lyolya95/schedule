@@ -72,8 +72,6 @@ export const columnSetWidth = (columnName: string, widthScreen: number) => {
       return `10%`;
     case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone':
       return `5%`;
-    case 'name':
-      return `10%`;
     case 'descriptionUrl':
       return '15%';
     case 'organizer':
