@@ -8,4 +8,6 @@ export interface HeaderProps {
     color: string;
   }[];
   setColorType: (value: any) => void;
+  isShowVersionVisually: boolean;
+  setChangeVersionVisually: () => void;
 }

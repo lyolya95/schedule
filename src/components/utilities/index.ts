@@ -66,26 +66,24 @@ const typesTag = [
 
 const dateAndTimeFormat = 'YYYY.MM.DD hh:mm';
 
-const columnSetWidth = (columnName: string) => {
+const columnSetWidth = (columnName: string, widthScreen: number) => {
   switch (columnName) {
     case 'course':
-      return '180px';
+      return `10%`;
     case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone':
-      return '140px';
-    case 'name':
-      return '250px';
-    case 'Type':
-      return '250px';
+      return `5%`;
+    case 'name' || 'Type':
+      return `10%`;
     case 'descriptionUrl':
-      return '350px';
+      return '15%';
     case 'organizer':
-      return '200px';
+      return `10%`;
     case 'timeToComplete':
-      return '120px';
+      return `6%`;
     case 'week':
-      return '60px';
-    case 'Score/maxScore':
-      return '80px';
+      return `3%`;
+    case 'dateTime':
+      return `10%`;
     default:
       return 'auto';
   }

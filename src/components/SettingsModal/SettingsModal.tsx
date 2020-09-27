@@ -14,7 +14,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({
   types,
   setColorType,
 }) => {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem('DARK_MODE')!));
   const [displayColorDeadline, setDisplayColorDeadline] = useState(false);
   const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
   const [, setColorsDeadlineLocalStorage] = useStickyState('', 'colorDeadline');
@@ -29,9 +29,6 @@ export const SettingsModal: FC<SettingsModalProps> = ({
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('colorDeadline')!)) {
       setColorDeadline(JSON.parse(localStorage.getItem('colorDeadline')!));
-    }
-    if (JSON.parse(localStorage.getItem('DARK_MODE')!)) {
-      setDarkMode(JSON.parse(localStorage.getItem('DARK_MODE')!));
     }
     if (JSON.parse(localStorage.getItem('colorTask')!)) {
       setColorTask(JSON.parse(localStorage.getItem('colorTask')!));

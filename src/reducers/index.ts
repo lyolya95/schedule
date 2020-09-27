@@ -1,14 +1,25 @@
+import { Dispatch } from 'redux';
 import { typesTag } from '../components/utilities';
-import { setColorTypes, setDataEventsAC, setModalSettings, setOrganizersAC } from './../actions/index';
+import {
+  ADD_DATA_EVENT,
+  changeVersionVisually,
+  CHANGE_MENTOR_STATUS,
+  CHANGE_VERSION_VISUALLY,
+  setColorTypes,
+  setDataEventsAC,
+  setModalSettings,
+  setModalViewEvent,
+  setOrganizersAC,
+  setwidthScreenAC,
+  SET_DATA_EVENT,
+  SET_MODAL_SETTINGS,
+  SET_MODAL_VIEW_EVENT,
+  SET_ORGANIZERS,
+  SET_TYPES_COLOR,
+  SET_WIDTH_SCREEN,
+} from './../actions/index';
 import { scheduleAPI } from './../API/api';
 import { StateModel } from './reducers.model';
-
-const CHANGE_MENTOR_STATUS = 'CHANGE_MENTOR_STATUS';
-const SET_DATA_EVENT = 'SET_DATA_EVENT';
-const SET_ORGANIZERS = 'SET_ORGANIZERS';
-const ADD_DATA_EVENT = 'ADD_DATA_EVENT';
-export const SET_MODAL_SETTINGS: string = 'SET_MODAL_SETTINGS';
-export const SET_TYPES_COLOR: string = 'SET_TYPES_COLOR';
 
 const initialState: StateModel = {
   isMentorStatus: false,
@@ -29,6 +40,7 @@ const initialState: StateModel = {
       timeZone: '',
       type: '',
       week: '',
+      combineScore: '',
     },
   ],
   columnsName: [
@@ -62,9 +74,13 @@ const initialState: StateModel = {
     timeZone: '',
     type: '',
     week: '',
+    combineScore: '',
   },
   isShowSettingsModal: false,
   types: typesTag,
+  isShowModalViewEvents: false,
+  isShowVersionVisually: false,
+  widthScreen: 1920,
 };
 
 const reducer = (state = initialState, action: any): StateModel => {
@@ -110,36 +126,59 @@ const reducer = (state = initialState, action: any): StateModel => {
     case SET_TYPES_COLOR: {
       return { ...state, types: action.value };
     }
+    case SET_MODAL_VIEW_EVENT: {
+      return { ...state, isShowModalViewEvents: action.value };
+    }
+    case CHANGE_VERSION_VISUALLY:
+      return {
+        ...state,
+        isShowVersionVisually: !state.isShowVersionVisually,
+      };
+    case SET_WIDTH_SCREEN: {
+      return { ...state, widthScreen: action.value };
+    }
     default:
       return state;
   }
 };
 
-const getDataEvent = () => async (dispatch: any) => {
+const getDataEvent = () => async (dispatch: Dispatch) => {
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
   dispatch(setOrganizersAC(organizers));
 };
-const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: any) => {
+const putDataEvent = (idEvent: string, bodyData: object) => async (dispatch: Dispatch) => {
   await scheduleAPI.updateDataEvent(idEvent, bodyData);
   const events = await scheduleAPI.getDataEvents();
   const organizers = await scheduleAPI.getDataOrganizers();
   dispatch(setDataEventsAC(events, organizers));
 };
-const deleteDataEvent = (idEvent: string) => async (dispatch: any) => {
+const deleteDataEvent = (idEvent: string) => async (dispatch: Dispatch) => {
   await scheduleAPI.deleteDataEvent(idEvent);
 };
-const addDataEvent = (newEvent: object) => async (dispatch: any) => {
+const addDataEvent = (newEvent: object) => async (dispatch: Dispatch) => {
   return await scheduleAPI.addDataEvent(newEvent);
 };
 
-export const setShowModalSettings = (value: boolean) => (dispatch: any) => {
+export const setShowModalSettings = (value: boolean) => (dispatch: Dispatch) => {
   dispatch(setModalSettings(value));
 };
 
-export const setColorType = (value: any) => (dispatch: any) => {
+export const setShowModaViewEvent = (value: boolean) => (dispatch: Dispatch) => {
+  dispatch(setModalViewEvent(value));
+};
+
+export const setColorType = (value: any) => (dispatch: Dispatch) => {
   dispatch(setColorTypes(value));
 };
-export { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT };
-export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent };
+
+export const setChangeVersionVisually = () => (dispatch: Dispatch) => {
+  dispatch(changeVersionVisually());
+};
+
+const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
+  dispatch(setwidthScreenAC(value));
+};
+
+export { reducer, getDataEvent, putDataEvent, deleteDataEvent, addDataEvent, setWidthScreen };

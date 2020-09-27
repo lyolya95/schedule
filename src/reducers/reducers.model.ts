@@ -15,6 +15,7 @@ export interface EventOfInterface {
   taskContent: string;
   isShowFeedback: string;
   rating: string;
+  combineScore: string;
 }
 export interface MentorInterface {
   id: string | undefined;
@@ -29,8 +30,11 @@ export interface StateModel {
   organizers: MentorInterface[];
   initialEventData: EventOfInterface;
   isShowSettingsModal: boolean;
+  isShowModalViewEvents: boolean;
   types: {
     type: string;
     color: string;
   }[];
+  isShowVersionVisually: boolean;
+  widthScreen: number;
 }

@@ -5,4 +5,6 @@ export interface CalendarItemProps {
     type: string;
     color: string;
   }[];
+  setShowModaViewEvent: (value: boolean) => void;
+  isShowModalViewEvents: boolean;
 }

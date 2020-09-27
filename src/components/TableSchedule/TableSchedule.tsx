@@ -10,8 +10,9 @@ import {
   SaveOutlined,
 } from '@ant-design/icons';
 import { EyeOutlined } from '@ant-design/icons/lib';
-import { Button, Form, Modal, Rate, Table, Tag } from 'antd';
+import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
+import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
@@ -42,6 +43,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     remove,
     save,
     types,
+    widthScreen,
   } = props;
 
   // localStorage
@@ -72,7 +74,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+    const valueToCheck: string[] = keysToCheck
+      .map((key: string) => flags[key].map((value: string) => value.split(',')))
+      .flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -117,9 +121,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
     return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
   };
 
-  //const [data, setData] = useState(initialData); // хранятся все данные таблиц которые приходят
-
-  const visibleData = data // формируем отображаемые данные для таблицы
+  const visibleData = data
     .filter((item: any) => hasFilterFlag(item, filerFlags))
     .map((item: any) => {
       return {
@@ -135,22 +137,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
-  // надо взять с localstorage первоначальные данные
   const [eventRating, setEventRating] = useState<any>();
-
-  //____________________
-  const [widthScreen, setWidthScreen] = useState(1366);
-  const updateDimensions = () => {
-    setWidthScreen(window.innerWidth);
-  };
-  useEffect(() => {
-    setWidthScreen(window.innerWidth);
-    if (widthScreen !== window.innerWidth) {
-      window.addEventListener('resize', updateDimensions);
-    }
-  }, [window.addEventListener]);
-
-  //_________________________
 
   const mentorOperationData = {
     title: 'Edit',
@@ -162,35 +149,43 @@ const TableSchedule: FC<any> = React.memo((props) => {
       if (editable) {
         return (
           <span>
-            <Button
-              icon={<SaveOutlined />}
-              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
-              onClick={() => save(record.id)}
-            />
-            <Button
-              onClick={cancel}
-              icon={<CloseOutlined />}
-              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
-            />
+            <Tooltip title="Save changes">
+              <Button
+                icon={<SaveOutlined />}
+                style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+                onClick={() => save(record.id)}
+              />
+            </Tooltip>
+            <Tooltip title="Cancel changes">
+              <Button
+                onClick={cancel}
+                icon={<CloseOutlined />}
+                style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+              />
+            </Tooltip>
           </span>
         );
       } else {
         const eventRating = data.find((item: any) => record.id === item.id).rating;
         return (
           <span>
-            <Button
-              ghost={true}
-              disabled={editingId !== ''}
-              onClick={() => edit(record)}
-              icon={<HighlightTwoTone twoToneColor="#52c41a" />}
-              style={{ fontSize: '16px', border: '1px solid #b7eb8f', color: '##52c41a' }}
-            />
-            <Button
-              ghost={true}
-              onClick={() => remove(record.id)}
-              icon={<DeleteOutlined />}
-              style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
-            />
+            <Tooltip title="Edit row">
+              <Button
+                ghost={true}
+                disabled={editingId !== ''}
+                onClick={() => edit(record)}
+                icon={<HighlightTwoTone twoToneColor="#52c41a" />}
+                style={{ fontSize: '16px', border: '1px solid #b7eb8f', color: '##52c41a' }}
+              />
+            </Tooltip>
+            <Tooltip title="Delete row">
+              <Button
+                ghost={true}
+                onClick={() => remove(record.id)}
+                icon={<DeleteOutlined />}
+                style={{ fontSize: '16px', border: '1px solid #FF69B4', color: '#FF69B4' }}
+              />
+            </Tooltip>
             <Rate disabled value={eventRating} />
           </span>
         );
@@ -228,21 +223,26 @@ const TableSchedule: FC<any> = React.memo((props) => {
       const isVoted = eventRating && eventRating[record.id] && eventRating[record.id].voted ? true : false;
       return (
         <span>
-          <Button
-            ghost={true}
-            onClick={() => changeRowClass(record.id, 'ant-table-row-main')}
-            //icon={<WarningTwoTone twoToneColor="red" />}>
-            className="mainEvent"
-            //icon={<ExclamationCircleOutlined />}
-            icon={<ExclamationOutlined />}
-          ></Button>
-          <Button
-            ghost={true}
-            onClick={() => changeRowClass(record.id, 'ant-table-row-done')}
-            className="doneEvent"
-            //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
-            icon={<CheckOutlined />}
-          ></Button>
+          <Tooltip title="Mark row as important">
+            <Button
+              ghost={true}
+              onClick={() => changeRowClass(record.id, 'ant-table-row-main')}
+              //icon={<WarningTwoTone twoToneColor="red" />}>
+              className="mainEvent"
+              //icon={<ExclamationCircleOutlined />}
+              icon={<ExclamationOutlined />}
+            />
+          </Tooltip>
+          <Tooltip title="Mark row as done">
+            <Button
+              ghost={true}
+              onClick={() => changeRowClass(record.id, 'ant-table-row-done')}
+              className="doneEvent"
+              //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
+              icon={<CheckOutlined />}
+            />
+          </Tooltip>
+
           <span></span>
           {isVoted ? (
             <Rate disabled value={eventRating[record.id].value} />
@@ -280,7 +280,9 @@ const TableSchedule: FC<any> = React.memo((props) => {
     }
   });
 
-  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+  const columns: IAgeMap[] = isMentorStatus
+    ? [...allColumns, mentorOperationData]
+    : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -296,13 +298,15 @@ const TableSchedule: FC<any> = React.memo((props) => {
         title: col.title,
         editing: isEditing(record),
         organizers,
+        types,
       }),
     };
   });
 
   const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName =
+      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
@@ -403,19 +407,33 @@ const TableSchedule: FC<any> = React.memo((props) => {
   return (
     <Form form={form} component={false}>
       <div className="hidden-btn-row">
-        {isMentorStatus ? (
-          <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
-        ) : (
-          ''
+        {isMentorStatus && (
+          <Tooltip title="Add new event">
+            <Button
+              type="primary"
+              disabled={editingId !== '' || !isMentorStatus}
+              onClick={add}
+              icon={<PlusCircleTwoTone />}
+            />
+          </Tooltip>
         )}
-
         {hiddenData.length === 0 ? (
-          <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
+          <Tooltip title="Hide selected table rows">
+            <Button
+              onClick={hideRows}
+              disabled={!hideButton}
+              icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />}
+            />
+          </Tooltip>
         ) : (
-          <Button onClick={unHideRows} icon={<EyeTwoTone />} />
+          <Tooltip title="Show hidden rows in tables">
+            <Button onClick={unHideRows} icon={<EyeTwoTone />} />
+          </Tooltip>
         )}
         <SelectTimeZone setTimeZone={setTimeZone} widthScreen={widthScreen} />
       </div>
+
+      <Text type="secondary">Double click on a table row to bring up detailed information</Text>
       <MentorFilters
         data={data}
         filterFlag={filerFlags}
@@ -439,7 +457,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         dataSource={visibleData}
         columns={mergedColumns}
         rowClassName="editable-row"
-        scroll={{ x: 2500, y: 600 }}
+        scroll={{ x: widthScreen < 700 ? 1500 : 2300, y: 600 }}
         pagination={{
           onChange: cancel,
           showSizeChanger: true,
@@ -466,7 +484,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
           visible={visibleModal}
           footer={[
             <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
-              Return
+              Back
             </Button>,
           ]}
           onCancel={() => setVisibleModal(false)}
