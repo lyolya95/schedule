@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Switch } from 'antd';
 import React, { FC, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import MdEditor, { Plugins } from 'react-markdown-editor-lite';
@@ -13,11 +13,12 @@ type StateType = {
 interface PropsType {
   currTaskContent: string;
   chosenCoordinates: number[];
-  handleSave(text: string, coords: number[]): void;
+  showMap: boolean;
+  handleSave(text: string, coords: number[], showMap: boolean): void;
   handleCancel(): void;
 }
 const TaskEditor: FC<PropsType> = (props) => {
-  const { currTaskContent, chosenCoordinates, handleSave, handleCancel } = props;
+  const { currTaskContent, chosenCoordinates, showMap, handleSave, handleCancel } = props;
 
   MdEditor.unuse(Plugins.ModeToggle);
   MdEditor.unuse(Plugins.FullScreen);
@@ -26,6 +27,7 @@ const TaskEditor: FC<PropsType> = (props) => {
   const mdEditor = useRef<MdEditor>(null);
   const [state, setState] = useState<StateType>({ value: currTaskContent});
   const [coords, setCoords] = useState<number[]>([]);
+  const [isShowMap, setIsShowMap] = useState<boolean>(showMap);
 
   const renderHTML = (text: string) => {
     return React.createElement(ReactMarkdown, {
@@ -52,7 +54,7 @@ const TaskEditor: FC<PropsType> = (props) => {
 
   const handleSaveClick = () => {
     if (mdEditor.current) {
-      handleSave(mdEditor.current.getMdValue(), coords);
+      handleSave(mdEditor.current.getMdValue(), coords, isShowMap);
     }
   };
 
@@ -63,7 +65,11 @@ const TaskEditor: FC<PropsType> = (props) => {
   const changeCoords = ( coordsNew:number[] ) => {
     setCoords(coordsNew);
   }
-
+  const onSwitchChange = () => {
+     setIsShowMap((state) => {
+      return !state;
+    });
+  }
   return (
     <div className="task-editor">
       <MdEditor
@@ -87,11 +93,15 @@ const TaskEditor: FC<PropsType> = (props) => {
         onChange={handleEditorChange}
         onImageUpload={handleImageUpload}
       />
-      <Maps 
-        isMentorStatus={true}
-        chosenCoordinates={chosenCoordinates}
-        changeCoords={changeCoords}
-      />
+      <Switch defaultChecked checked={isShowMap} onChange={onSwitchChange} />
+      {isShowMap
+        ? <Maps 
+          isMentorStatus={true}
+          chosenCoordinates={chosenCoordinates}
+          changeCoords={changeCoords}
+          />
+        : null
+        }
       <Button type="primary" size="large" onClick={handleSaveClick}>
         Save changes
       </Button>
