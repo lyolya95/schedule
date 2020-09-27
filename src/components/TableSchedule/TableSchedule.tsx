@@ -4,14 +4,13 @@ import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
 import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
-import { SaveToFile } from "../SaveToFile/SaveToFile";
+import { SaveToFile } from '../SaveToFile/SaveToFile';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { dateAndTimeFormat } from '../utilities';
 import { EditableCell } from './EditableCell';
 import { IAgeMap } from './TableSchedule.model';
-
 
 export const TableSchedule: FC<any> = React.memo((props) => {
   const {
@@ -42,12 +41,16 @@ export const TableSchedule: FC<any> = React.memo((props) => {
   const place = JSON.parse(localStorage['place'] || null);
   const type = JSON.parse(localStorage['tags'] || null);
   const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [clickingRow, setClickingRow] = useState<any | null>();
+  const [eventRating, setEventRating] = useState<any>();
+  const [hiddenData, setHiddenData] = useState<Array<string>>([]);
+  const [filerFlags, setFilterFlags] = useState({ course, place, type });
+  const [dates, setDates] = useState<Array<string>>(datesLocalStorage);
+  const [hideButton, setHideButton] = useState<boolean>(false);
+  const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
 
-  const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
-  const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
-  const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
-
-  const hasFilterFlag = (data: any, flags: any): boolean => {
+  const hasFilterFlag = useCallback((data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
     if (keys.length === 0) {
       return true;
@@ -63,7 +66,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         return false;
       }
     }
-    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+    const valueToCheck: string[] = keysToCheck
+      .map((key: string) => flags[key].map((value: string) => value.split(',')))
+      .flat(2);
 
     const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
       for (let item of arr1) {
@@ -86,9 +91,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       }
     }
     return true;
-  };
+  }, []);
 
-  const isInDateRange = (date: any, dateRange: any): boolean => {
+  const isInDateRange = useCallback((date: any, dateRange: any): boolean => {
     if (dateRange === null) {
       return true;
     }
@@ -102,37 +107,37 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
+  const toUserTimeZone = useCallback((time: string, timeGap: string, timezone: string) => {
     return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
-  };
+  }, []);
 
-  const visibleData = data
-    .filter((item: any) => hasFilterFlag(item, filerFlags))
-    .map((item: any) => {
-      return {
-        ...item,
-        dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone),
-      };
-    })
-    .filter((item: any) => isInDateRange(item.dateTime, dates))
-    .map((item: any) => {
-      return { ...item, key: item.id };
-    })
-    .filter((item: any) => !hiddenData.includes(item.key))
-    .sort((a: any, b: any) => {
-      const date1 = moment(a.dateTime);
-      const date2 = moment(b.dateTime);
-      if (date1 < date2) {
-        return -1;
-      }
-      return 1;
-    });
-
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [clickingRow, setClickingRow] = useState<any | null>();
-  const [eventRating, setEventRating] = useState<any>();
+  const visibleData = useMemo(
+    () =>
+      data
+        .filter((item: any) => hasFilterFlag(item, filerFlags))
+        .map((item: any) => {
+          return {
+            ...item,
+            dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone),
+          };
+        })
+        .filter((item: any) => isInDateRange(item.dateTime, dates))
+        .map((item: any) => {
+          return { ...item, key: item.id };
+        })
+        .filter((item: any) => !hiddenData.includes(item.key))
+        .sort((a: any, b: any) => {
+          const date1 = moment(a.dateTime);
+          const date2 = moment(b.dateTime);
+          if (date1 < date2) {
+            return -1;
+          }
+          return 1;
+        }),
+    [data, dates, filerFlags, hasFilterFlag, hiddenData, isInDateRange, timeZone, toUserTimeZone]
+  );
 
   const mentorOperationData = {
     title: 'Edit',
@@ -187,7 +192,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       }
     },
   };
-  const changeRowClass = (key: React.Key, className: string) => {
+
+  const changeRowClass = useCallback((key: React.Key, className: string) => {
     const selRow = document.querySelector(`[data-row-key=${key}]`);
     if (selRow) {
       const rowClassName = selRow.getAttribute('class');
@@ -200,14 +206,16 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       }
       selRow.setAttribute('class', newRowClassName);
     }
-  };
+  }, []);
 
-  const changeRating = (value: number, key: React.Key) => {
-    const currEventRating = data.find((item: any) => key === item.id).rating;
-    const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
-    //@todo save rating to event
-    setEventRating({ [key]: { voted: true, value: newRating } });
-  };
+  const changeRating = useCallback(
+    (value: number, key: React.Key) => {
+      const currEventRating = data.find((item: any) => key === item.id).rating;
+      const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
+      setEventRating({ [key]: { voted: true, value: newRating } });
+    },
+    [data, ratingVotes]
+  );
 
   const studentOperationData = {
     title: '',
@@ -222,9 +230,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             <Button
               ghost={true}
               onClick={() => changeRowClass(record.id, 'ant-table-row-main')}
-              //icon={<WarningTwoTone twoToneColor="red" />}>
               className="mainEvent"
-              //icon={<ExclamationCircleOutlined />}
               icon={<ExclamationOutlined />}
             />
           </Tooltip>
@@ -233,7 +239,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               ghost={true}
               onClick={() => changeRowClass(record.id, 'ant-table-row-done')}
               className="doneEvent"
-              //icon={<CheckSquareTwoTone twoToneColor="#52c41a"/>}
               icon={<CheckOutlined />}
             />
           </Tooltip>
@@ -274,7 +279,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     }
   });
 
-  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+  const columns: IAgeMap[] = isMentorStatus
+    ? [...allColumns, mentorOperationData]
+    : [...allColumns, studentOperationData];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -294,44 +301,45 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     };
   });
 
-  const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
+  const isHandlingClickOnRow = useCallback((event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName =
+      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const handleDoubleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
-    if (isHandlingClickOnRow(event)) {
-      setClickingRow(record);
-      setVisibleModal(true);
-    }
-  };
-
-  const [hideButton, setHideButton] = useState<boolean>(false);
-  const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
+  const handleDoubleClickRow = useCallback(
+    (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
+      if (isHandlingClickOnRow(event)) {
+        setClickingRow(record);
+        setVisibleModal(true);
+      }
+    },
+    [isHandlingClickOnRow]
+  );
 
   useEffect(() => {
     if (hiddenRowKeys.length === 0) setHideButton(false);
   }, [hiddenRowKeys]);
 
-  const hideRows = () => {
+  const hideRows = useCallback(() => {
     setHiddenData((prev) => {
       return [...prev, ...hiddenRowKeys];
     });
     setHideButton(false);
-  };
+  }, [hiddenRowKeys]);
 
-  const unHideRows = () => {
+  const unHideRows = useCallback(() => {
     setHiddenRowKeys((prev) => {
       return prev.filter((key) => !hiddenData.includes(key));
     });
     setHiddenData([]);
-  };
+  }, [hiddenData]);
 
-  const handleClickRow = (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
+  const handleClickRow = useCallback((record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
     if (isHandlingClickOnRow(event)) {
       const ind = rowIndex ? rowIndex + 1 : 1;
       const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
@@ -347,7 +355,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       } else {
         if (event.shiftKey) {
           if (hiddenRowKeys.length !== 0) {
-            //console.log('Hidden row keys: ', hiddenRowKeys)
             const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
             const currentKey = record.key;
             let clazz = '';
@@ -393,13 +400,19 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       }
       selRow.className = newRowClassName;
     }
-  };
+  },[hiddenRowKeys,isHandlingClickOnRow,visibleData]);
+  
   return (
     <Form form={form} component={false}>
       <div className="hidden-btn-row">
         {isMentorStatus && (
           <Tooltip title="Add new event">
-            <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
+            <Button
+              type="primary"
+              disabled={editingId !== '' || !isMentorStatus}
+              onClick={add}
+              icon={<PlusCircleTwoTone />}
+            />
           </Tooltip>
         )}
         <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen} />
