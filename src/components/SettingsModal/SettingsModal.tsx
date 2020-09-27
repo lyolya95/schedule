@@ -9,9 +9,16 @@ import { SettingsModalProps } from './SettingsModal.model';
 import './SettingsModal.scss';
 import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";
 
-
-export const SettingsModal: FC<SettingsModalProps> = ({ isShowSettingsModal, setShowModalSetting, types, setColorType, timeZone, setTimeZone, widthScreen}) => {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+export const SettingsModal: FC<SettingsModalProps> = ({
+  isShowSettingsModal,
+  setShowModalSetting,
+  types,
+  setColorType,
+  timeZone,
+  setTimeZone,
+  widthScreen,
+}) => {
+  const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem('DARK_MODE')!));
   const [displayColorDeadline, setDisplayColorDeadline] = useState(false);
   const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
   const [, setColorsDeadlineLocalStorage] = useStickyState('', 'colorDeadline');
@@ -23,20 +30,9 @@ export const SettingsModal: FC<SettingsModalProps> = ({ isShowSettingsModal, set
   const filteredType = types.filter((i) => i.type !== 'deadline' && !i.type.includes('task'));
   const newColorTask = types.filter((i) => i.type.includes('task')).map((i) => ({ ...i, color: colorTask }));
 
-  // const changeColorButton = () => {
-  //   const newColor = types.map((n: any) => {
-  //     n.color === 'blue' ? (n.color = 'green') : (n.color = n.color);
-  //     return n;
-  //   });
-  //   setColorType(newColor);
-  // }; // заменяет цвет можно придумать функцию рандомно менять цвета тегов
-
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('colorDeadline')!)) {
       setColorDeadline(JSON.parse(localStorage.getItem('colorDeadline')!));
-    }
-    if (JSON.parse(localStorage.getItem('DARK_MODE')!)) {
-      setDarkMode(JSON.parse(localStorage.getItem('DARK_MODE')!));
     }
     if (JSON.parse(localStorage.getItem('colorTask')!)) {
       setColorTask(JSON.parse(localStorage.getItem('colorTask')!));
@@ -175,7 +171,6 @@ export const SettingsModal: FC<SettingsModalProps> = ({ isShowSettingsModal, set
           </div>
         </div>
       </div>
-      {/* <Button onClick={changeColorButton}>Поменяй цвет</Button> */}
       <div className="settings-button">
         <Button onClick={handleOk}>Ok</Button>
         <Button onClick={handleCancelModal}>Exit</Button>

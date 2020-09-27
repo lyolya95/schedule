@@ -1,14 +1,15 @@
-import  React from 'react';
+import  React, { FC } from 'react';
 import { Form, Button, Input, message } from "antd";
 import { Store } from "antd/lib/form/interface";
 import { ValidateErrorEntity } from "rc-field-form/lib/interface";
+import { FeedbackFormProps } from './FeedbackForm.model';
 import './FeedbackForm.scss';
 
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
   
-const FeedbackForm = () => {
+  export const FeedbackForm:FC<FeedbackFormProps> =  React.memo(({eventData, putDataEvent}) => {
     const { TextArea } = Input;
     const [form] = Form.useForm();
 
@@ -16,15 +17,15 @@ const FeedbackForm = () => {
         form.resetFields();
       };
 
-    const onFinish = (values:Store) => {
-        console.log('Success:', values);
+    const onFinish = async (values:Store) => {
+        eventData.feedbacks = eventData.feedbacks ? [...eventData.feedbacks, values.message] : [values.message];
+        await putDataEvent(eventData.id, eventData);
         message.success('Your message send');
         form.resetFields();
     };
     
     const onFinishFailed = (errorInfo:ValidateErrorEntity) => {
-        console.log('Failed:', errorInfo);
-        message.error('Failed. Check your message');
+          message.error('Failed. Check your message');
     };
 
     return(
@@ -58,6 +59,4 @@ const FeedbackForm = () => {
         </Form>
         </div>
     );
-}
-
-export default FeedbackForm;
+});

@@ -1,5 +1,5 @@
+import { ADD_DATA_EVENT, CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS } from '.';
 import { EventOfInterface, MentorInterface } from './../reducers/reducers.model';
-import { CHANGE_MENTOR_STATUS, SET_DATA_EVENT, SET_ORGANIZERS, ADD_DATA_EVENT } from './../reducers/index';
 
 export interface ChangeMentorStatusActionInterface {
   type: typeof CHANGE_MENTOR_STATUS;
@@ -16,3 +16,6 @@ export interface SetOrganizersActionInterface {
 export interface AddDataEventActionInterface {
   type: typeof ADD_DATA_EVENT;
 }
+/*export interface SetTimeZoneInterface {
+  type: typeof SET_TIME_ZONE;
+}*/

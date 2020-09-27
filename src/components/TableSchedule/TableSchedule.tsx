@@ -115,7 +115,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
         return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
     };
 
-    const visibleData = data // формируем отображаемые данные для таблицы
+    const visibleData = data
         .filter((item: any) => hasFilterFlag(item, filerFlags))
         .map((item: any) => {
             return {
@@ -186,7 +186,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
                 ghost={true}
                 onClick={() => remove(record.id)}
                 icon={<DeleteOutlined />}
-                style={{ fontSize: '16px', border: '1px solid #91d5ff', color: '#1890ff' }}
+                style={{ fontSize: '16px', border: '1px solid #FF69B4', color: '#FF69B4' }}
               />
             </Tooltip>
             <Rate disabled value={eventRating} />
@@ -270,7 +270,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
                         );
                     },
                 };
-
             case 'combineScore':
                 return {
                     title: 'Score/maxScore',
@@ -283,7 +282,6 @@ const TableSchedule: FC<any> = React.memo((props) => {
     });
 
     const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
-
 
     const mergedColumns = columns.map((col) => {
         if (!col.editable) {
@@ -302,14 +300,15 @@ const TableSchedule: FC<any> = React.memo((props) => {
         };
     });
 
-    const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
-        let target = event.target as HTMLInputElement;
-        let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
-        if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
-            return true;
-        }
-        return false;
-    };
+  const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
+    let target = event.target as HTMLInputElement;
+    let tagClassName =
+      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
+      return true;
+    }
+    return false;
+  };
 
     const handleDoubleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
         if (isHandlingClickOnRow(event)) {
@@ -405,8 +404,16 @@ const TableSchedule: FC<any> = React.memo((props) => {
     return (
         <Form form={form} component={false}>
             <div className="hidden-btn-row">
-                <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add}
-                        icon={<PlusCircleTwoTone/>}/>
+                {isMentorStatus && (
+                    <Tooltip title="Add new event">
+                        <Button
+                            type="primary"
+                            disabled={editingId !== '' || !isMentorStatus}
+                            onClick={add}
+                            icon={<PlusCircleTwoTone />}
+                        />
+                    </Tooltip>
+                )}
                 <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen}/>
                 {hideButton ? (
                     <Tooltip title="Hide rows">
@@ -468,11 +475,12 @@ const TableSchedule: FC<any> = React.memo((props) => {
             />
             {clickingRow ? (
                 <Modal
+                    key = {clickingRow.id}
                     title={clickingRow.course}
                     centered
                     visible={visibleModal}
                     footer={[
-                        <Button id="back" onClick={() => setVisibleModal(false)}>
+                        <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
                             Back
                         </Button>,
                     ]}
@@ -480,12 +488,7 @@ const TableSchedule: FC<any> = React.memo((props) => {
                     width={1000}
                 >
                     <TaskPageContainer
-                        name={clickingRow.name}
-                        date={clickingRow.dateTime}
-                        type={clickingRow.type}
-                        organizer={clickingRow.organizer}
-                        taskContent={clickingRow.taskContent}
-                        isShowFeedback={clickingRow.isShowFeedback}
+                        eventData={clickingRow}
                     />
                 </Modal>
             ) : null}

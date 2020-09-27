@@ -1,4 +1,10 @@
-import { CalendarOutlined, SettingOutlined, TableOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import {
+  CalendarOutlined,
+  FontSizeOutlined,
+  SettingOutlined,
+  TableOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -8,13 +14,21 @@ import { HeaderProps } from './Header.model';
 import './Header.scss';
 
 export const Header: FC<HeaderProps> = React.memo(
-  ({ isMentorStatus, changeMentorStatus, isShowSettingsModal, setShowModalSetting, types, setColorType }) => {
+  ({
+    isMentorStatus,
+    changeMentorStatus,
+    isShowSettingsModal,
+    setShowModalSetting,
+    types,
+    setColorType,
+    isShowVersionVisually,
+    setChangeVersionVisually,
+  }) => {
     const history = useHistory();
 
     const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
     const [colorTask, setColorTask] = useState<string>('#00FF56');
 
-    /** этот хук дает первоначальную отрисовку типов с цветами из локалстораджа */
     useEffect(() => {
       if (JSON.parse(localStorage.getItem('colorDeadline')!)) {
         setColorDeadline(JSON.parse(localStorage.getItem('colorDeadline')!));
@@ -30,6 +44,20 @@ export const Header: FC<HeaderProps> = React.memo(
       //eslint-disable-next-line
     }, [colorDeadline, colorTask]);
 
+    useEffect(() => {
+      if (JSON.parse(localStorage.getItem('DARK_MODE') || '{}') === true) {
+        document.body.classList.add('dark-mode');
+      }
+    }, []);
+
+    useEffect(() => {
+      if (isShowVersionVisually) {
+        document.body.classList.add('version-visually');
+      } else {
+        document.body.classList.remove('version-visually');
+      }
+    }, [isShowVersionVisually]);
+
     const handleShowTable = useCallback(() => {
       history.push('/');
     }, [history]);
@@ -42,16 +70,17 @@ export const Header: FC<HeaderProps> = React.memo(
       history.push('/list');
     }, [history]);
 
-    if (JSON.parse(localStorage.getItem('DARK_MODE') || '{}') === true) {
-      document.body.classList.add('dark-mode');
-    }
-
     return (
       <>
         <div className="header">
           <FirstLogo />
           <div className="calendar-title"></div>
           <div className="btn-header">
+          <Tooltip title="Check version for the visually impaired">
+          <Button onClick={setChangeVersionVisually} icon={<FontSizeOutlined />}>
+              version for the visually impaired
+            </Button>
+            </Tooltip>
             <Tooltip title="Show modal setting">
               <Button onClick={() => setShowModalSetting(true)}>
                 <SettingOutlined />
