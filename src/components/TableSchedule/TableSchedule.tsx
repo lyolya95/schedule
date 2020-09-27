@@ -3,10 +3,10 @@ import {
     CloseOutlined,
     DeleteOutlined,
     ExclamationOutlined,
+    FileSearchOutlined,
     HighlightTwoTone,
     PlusCircleTwoTone,
     SaveOutlined,
-    FileSearchOutlined,
 } from '@ant-design/icons';
 import {MinusSquareOutlined, UndoOutlined} from '@ant-design/icons/lib';
 import {Button, Form, Modal, Rate, Table, Tag, Tooltip} from 'antd';
@@ -79,7 +79,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 return false;
             }
         }
-        const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+        const valueToCheck: string[] = keysToCheck
+            .map((key: string) => flags[key].map((value: string) => value.split(',')))
+            .flat(2);
 
         const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
             for (let item of arr1) {
@@ -120,8 +122,9 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         return false;
     }, []);
 
+
     const toUserTimeZone = useCallback((time: string, timeGap: string, timezone: string) => {
-        return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
+        return moment(time, dateAndTimeFormat).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
     }, []);
 
     const visibleData = useMemo(
@@ -208,14 +211,16 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 setMainKeys((prev) => {
                     const idx = prev.indexOf((item: any) => item === key);
                     const newKeys = prev.splice(idx, 1);
-                   localStorage.setItem('main', JSON.stringify(newKeys));
+                    console.log('newKey', newKeys)
+                    localStorage.setItem('main', JSON.stringify(newKeys));
                     //setEventMain(newKeys)
                     return newKeys;
                 });
             } else {
                 setMainKeys((prev) => {
                     const newKeys = [...prev, key];
-                   localStorage.setItem('main', JSON.stringify(newKeys));
+                    console.log('newKey', newKeys)
+                    localStorage.setItem('main', JSON.stringify(newKeys));
                     //setEventMain(newKeys)
                     return newKeys;
                 });
@@ -348,8 +353,11 @@ export const TableSchedule: FC<any> = React.memo((props) => {
                 }
                 return (
                     <span>
-            {isCurrVoted ? <Rate disabled value={ratingMidValue}/> :
-                <Rate onChange={(value) => changeRating(value, record)}/>}
+            {isCurrVoted ? (
+                <Rate disabled value={ratingMidValue}/>
+            ) : (
+                <Rate onChange={(value) => changeRating(value, record)}/>
+            )}
           </span>
                 );
             }
@@ -380,7 +388,8 @@ export const TableSchedule: FC<any> = React.memo((props) => {
 
     const isHandlingClickOnRow = useCallback((event: React.FormEvent<EventTarget>) => {
         let target = event.target as HTMLInputElement;
-        let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+        let tagClassName =
+            target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
         if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
             return true;
         }
@@ -484,8 +493,12 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             <div className="hidden-btn-row">
                 {isMentorStatus && (
                     <Tooltip title="Add new event">
-                        <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add}
-                                icon={<PlusCircleTwoTone/>}/>
+                        <Button
+                            type="primary"
+                            disabled={editingId !== '' || !isMentorStatus}
+                            onClick={add}
+                            icon={<PlusCircleTwoTone/>}
+                        />
                     </Tooltip>
                 )}
                 <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen}/>
