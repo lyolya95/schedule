@@ -64,7 +64,7 @@ export const typesTag = [
   { type: 'interview', color: 'volcano' },
 ];
 
-export const dateAndTimeFormat = 'YYYY.MM.DD hh:mm';
+export const dateAndTimeFormat = 'YYYY.MM.DD HH:mm';
 
 export const columnSetWidth = (columnName: string, widthScreen: number) => {
   switch (columnName) {
@@ -72,8 +72,6 @@ export const columnSetWidth = (columnName: string, widthScreen: number) => {
       return `10%`;
     case 'isShowFeedback' || 'maxScore' || 'place' || 'rating' || 'studentScore' || 'taskContent' || 'timeZone':
       return `5%`;
-    case 'name':
-      return `10%`;
     case 'descriptionUrl':
       return '15%';
     case 'organizer':
