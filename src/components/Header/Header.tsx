@@ -29,7 +29,6 @@ export const Header: FC<HeaderProps> = React.memo(
     const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
     const [colorTask, setColorTask] = useState<string>('#00FF56');
 
-    /** этот хук дает первоначальную отрисовку типов с цветами из локалстораджа */
     useEffect(() => {
       if (JSON.parse(localStorage.getItem('colorDeadline')!)) {
         setColorDeadline(JSON.parse(localStorage.getItem('colorDeadline')!));
@@ -45,6 +44,12 @@ export const Header: FC<HeaderProps> = React.memo(
       //eslint-disable-next-line
     }, [colorDeadline, colorTask]);
 
+    useEffect(() => {
+      if (JSON.parse(localStorage.getItem('DARK_MODE') || '{}') === true) {
+        document.body.classList.add('dark-mode');
+      }
+    }, []);
+
     const handleShowTable = useCallback(() => {
       history.push('/');
     }, [history]);
@@ -57,10 +62,6 @@ export const Header: FC<HeaderProps> = React.memo(
       history.push('/list');
     }, [history]);
 
-    if (JSON.parse(localStorage.getItem('DARK_MODE') || '{}') === true) {
-      document.body.classList.add('dark-mode');
-    }
-    console.log(isShowVersionVisually);
     return (
       <>
         <div className="header">
