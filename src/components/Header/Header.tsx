@@ -1,5 +1,5 @@
 import { CalendarOutlined, SettingOutlined, TableOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FirstLogo } from '../../styles/basic-styles';
@@ -52,19 +52,29 @@ export const Header: FC<HeaderProps> = React.memo(
           <FirstLogo />
           <div className="calendar-title"></div>
           <div className="btn-header">
-            <Button onClick={() => setShowModalSetting(true)}>
-              <SettingOutlined />
-            </Button>
-            <Button onClick={handleShowTable}>
-              <TableOutlined />
-            </Button>
-            <Button onClick={handleShowCalendar}>
-              <CalendarOutlined />
-            </Button>
-            <Button onClick={handleShowList}>
-              <UnorderedListOutlined />
-            </Button>
-            <Button onClick={changeMentorStatus}>{isMentorStatus ? 'To Student App' : 'To Mentor App'}</Button>
+            <Tooltip title="Show modal setting">
+              <Button onClick={() => setShowModalSetting(true)}>
+                <SettingOutlined />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Show table">
+              <Button onClick={handleShowTable}>
+                <TableOutlined />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Show calendar">
+              <Button onClick={handleShowCalendar}>
+                <CalendarOutlined />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Show list">
+              <Button onClick={handleShowList}>
+                <UnorderedListOutlined />
+              </Button>
+            </Tooltip>
+            <Tooltip title="change access">
+              <Button onClick={changeMentorStatus}>{isMentorStatus ? 'To Student App' : 'To Mentor App'}</Button>
+            </Tooltip>
           </div>
         </div>
         {isShowSettingsModal && <SettingsModalContainer />}

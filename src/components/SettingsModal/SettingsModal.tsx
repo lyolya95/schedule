@@ -8,12 +8,7 @@ import { useStickyState } from '../MentorFilters/hooks/useStickyState';
 import { SettingsModalProps } from './SettingsModal.model';
 import './SettingsModal.scss';
 
-export const SettingsModal: FC<SettingsModalProps> = ({
-  isShowSettingsModal,
-  setShowModalSetting,
-  types,
-  setColorType,
-}) => {
+export const SettingsModal: FC<SettingsModalProps> = ({ isShowSettingsModal, setShowModalSetting, types, setColorType }) => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [displayColorDeadline, setDisplayColorDeadline] = useState(false);
   const [colorDeadline, setColorDeadline] = useState<string>('#FF69B4');
@@ -25,6 +20,14 @@ export const SettingsModal: FC<SettingsModalProps> = ({
   const newColorDeadline = types.filter((i) => i.type === 'deadline').map((i) => ({ ...i, color: colorDeadline }));
   const filteredType = types.filter((i) => i.type !== 'deadline' && !i.type.includes('task'));
   const newColorTask = types.filter((i) => i.type.includes('task')).map((i) => ({ ...i, color: colorTask }));
+
+  // const changeColorButton = () => {
+  //   const newColor = types.map((n: any) => {
+  //     n.color === 'blue' ? (n.color = 'green') : (n.color = n.color);
+  //     return n;
+  //   });
+  //   setColorType(newColor);
+  // }; // заменяет цвет можно придумать функцию рандомно менять цвета тегов
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('colorDeadline')!)) {
@@ -159,6 +162,7 @@ export const SettingsModal: FC<SettingsModalProps> = ({
           </div>
         </div>
       </div>
+      {/* <Button onClick={changeColorButton}>Поменяй цвет</Button> */}
       <div className="settings-button">
         <Button onClick={handleOk}>Ok</Button>
         <Button onClick={handleCancelModal}>Exit</Button>
