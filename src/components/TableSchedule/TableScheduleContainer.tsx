@@ -22,6 +22,7 @@ export const TableScheduleContainer = (props: any) => {
     types,
     widthScreen,
     setWidthScreen,
+    timeZone,
   } = props;
 
   const userColumnsName = isMentorStatus ? columnsName.filter((item: string) => item !== 'combineScore') : columnsName;
@@ -142,6 +143,7 @@ export const TableScheduleContainer = (props: any) => {
       save={save}
       types={types}
       widthScreen={widthScreen}
+      timeZone={timeZone}
     />
   );
 };

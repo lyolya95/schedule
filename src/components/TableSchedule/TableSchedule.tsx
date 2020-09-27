@@ -3,22 +3,20 @@ import {
   CloseOutlined,
   DeleteOutlined,
   ExclamationOutlined,
-  EyeInvisibleTwoTone,
-  EyeTwoTone,
   HighlightTwoTone,
   PlusCircleTwoTone,
   SaveOutlined,
 } from '@ant-design/icons';
-import { EyeOutlined } from '@ant-design/icons/lib';
+import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
 import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
 import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { MentorFilters } from '../MentorFilters/MentorFilters';
-import { SelectTimeZone } from '../SelectTimeZone/SelectTimeZone';
 import { TaskPageContainer } from '../TaskPage/TaskPage.container';
 import { dateAndTimeFormat } from '../utilities';
+import { SaveToFile } from '../SaveToFile/SaveToFile';
 import { EditableCell } from './EditableCell';
 import { IAgeMap } from './TableSchedule.model';
 
@@ -44,19 +42,17 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     save,
     types,
     widthScreen,
+    timeZone,
   } = props;
 
-  // localStorage
   const course = JSON.parse(localStorage['course'] || null);
   const place = JSON.parse(localStorage['place'] || null);
   const type = JSON.parse(localStorage['tags'] || null);
   const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
 
-  // данные для фильтрации
   const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
   const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
   const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
-  const [timeZone, setTimeZone] = useState<string>('+0:00'); // Time Zone выбранный пользователем
 
   const hasFilterFlag = (data: any, flags: any): boolean => {
     const keys = Object.keys(flags);
@@ -131,7 +127,15 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     .map((item: any) => {
       return { ...item, key: item.id };
     })
-    .filter((item: any) => !hiddenData.includes(item.key));
+    .filter((item: any) => !hiddenData.includes(item.key))
+    .sort((a: any, b: any) => {
+      const date1 = moment(a.dateTime);
+      const date2 = moment(b.dateTime);
+      if (date1 < date2) {
+        return -1;
+      }
+      return 1;
+    });
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [clickingRow, setClickingRow] = useState<any | null>();
@@ -240,7 +244,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
               icon={<CheckOutlined />}
             />
           </Tooltip>
-
           <span></span>
           {isVoted ? (
             <Rate disabled value={eventRating[record.id].value} />
@@ -266,7 +269,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             );
           },
         };
-
       case 'combineScore':
         return {
           title: 'Score/maxScore',
@@ -284,7 +286,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     if (!col.editable) {
       return col;
     }
-
     return {
       ...col,
       onCell: (record: any) => ({
@@ -294,7 +295,6 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         title: col.title,
         editing: isEditing(record),
         organizers,
-        types,
       }),
     };
   });
@@ -314,7 +314,7 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       setVisibleModal(true);
     }
   };
-  //______добавлена логика клика с зажатым shift__________________________________________________________________________
+
   const [hideButton, setHideButton] = useState<boolean>(false);
   const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
 
@@ -407,18 +407,22 @@ export const TableSchedule: FC<any> = React.memo((props) => {
             <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
           </Tooltip>
         )}
-        {hiddenData.length === 0 ? (
-          <Tooltip title="Hide selected table rows">
-            <Button onClick={hideRows} disabled={!hideButton} icon={hideButton ? <EyeInvisibleTwoTone /> : <EyeOutlined />} />
+        <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen} />
+        {hideButton ? (
+          <Tooltip title="Hide rows">
+            <Button onClick={hideRows}>
+              <MinusSquareOutlined />
+            </Button>
           </Tooltip>
-        ) : (
-          <Tooltip title="Show hidden rows in tables">
-            <Button onClick={unHideRows} icon={<EyeTwoTone />} />
+        ) : null}
+        {hiddenData.length === 0 ? null : (
+          <Tooltip title="Show hidden rows">
+            <Button onClick={unHideRows}>
+              <UndoOutlined />
+            </Button>
           </Tooltip>
         )}
-        <SelectTimeZone setTimeZone={setTimeZone} widthScreen={widthScreen} />
       </div>
-
       <Text type="secondary">Double click on a table row to bring up detailed information</Text>
       <MentorFilters
         data={data}
@@ -464,25 +468,19 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       />
       {clickingRow ? (
         <Modal
+          key={clickingRow.id}
           title={clickingRow.course}
           centered
           visible={visibleModal}
           footer={[
-            <Button id="back" onClick={() => setVisibleModal(false)}>
+            <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
               Back
             </Button>,
           ]}
           onCancel={() => setVisibleModal(false)}
           width={1000}
         >
-          <TaskPageContainer
-            name={clickingRow.name}
-            date={clickingRow.dateTime}
-            type={clickingRow.type}
-            organizer={clickingRow.organizer}
-            taskContent={clickingRow.taskContent}
-            isShowFeedback={clickingRow.isShowFeedback}
-          />
+          <TaskPageContainer eventData={clickingRow} />
         </Modal>
       ) : null}
     </Form>

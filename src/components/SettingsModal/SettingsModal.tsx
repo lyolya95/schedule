@@ -7,12 +7,16 @@ import reactCSS from 'reactcss';
 import { useStickyState } from '../MentorFilters/hooks/useStickyState';
 import { SettingsModalProps } from './SettingsModal.model';
 import './SettingsModal.scss';
+import {SelectTimeZone} from "../SelectTimeZone/SelectTimeZone";
 
 export const SettingsModal: FC<SettingsModalProps> = ({
   isShowSettingsModal,
   setShowModalSetting,
   types,
   setColorType,
+  timeZone,
+  setTimeZone,
+  widthScreen,
 }) => {
   const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem('DARK_MODE')!));
   const [displayColorDeadline, setDisplayColorDeadline] = useState(false);
@@ -32,6 +36,9 @@ export const SettingsModal: FC<SettingsModalProps> = ({
     }
     if (JSON.parse(localStorage.getItem('colorTask')!)) {
       setColorTask(JSON.parse(localStorage.getItem('colorTask')!));
+    }
+    if (JSON.parse(localStorage.getItem('timeZone')!)) {
+      setTimeZone(JSON.parse(localStorage.getItem('timeZone')!));
     }
   }, []);
 
@@ -85,6 +92,11 @@ export const SettingsModal: FC<SettingsModalProps> = ({
     [setColorsTaskLocalStorage]
   );
 
+  const handleSetTimeZone = useCallback((value: string) => {
+    setTimeZone(value);
+    localStorage.setItem('timeZone', JSON.stringify(value));
+  }, [setTimeZone])
+
   const styles: any = reactCSS({
     default: {
       swatch: {
@@ -121,6 +133,9 @@ export const SettingsModal: FC<SettingsModalProps> = ({
             style={darkMode ? { background: '#383434' } : {}}
             unCheckedChildren={<RightCircleOutlined style={{ fontSize: '18px' }} />}
           />
+        </div>
+        <div className="set-time-zone">
+          <SelectTimeZone setTimeZone={handleSetTimeZone} defaultValue={timeZone} widthScreen={widthScreen}/>
         </div>
         <div className="setting-picker">
           <div>Change color events:</div>
