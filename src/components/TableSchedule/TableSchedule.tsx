@@ -12,7 +12,8 @@ import { dateAndTimeFormat } from '../utilities';
 import { EditableCell } from './EditableCell';
 import { IAgeMap } from './TableSchedule.model';
 
-const TableSchedule: FC<any> = React.memo((props) => {
+
+export const TableSchedule: FC<any> = React.memo((props) => {
   const {
     data,
     columnsName,
@@ -37,102 +38,101 @@ const TableSchedule: FC<any> = React.memo((props) => {
     timeZone,
   } = props;
 
-    const course = JSON.parse(localStorage['course'] || null);
-    const place = JSON.parse(localStorage['place'] || null);
-    const type = JSON.parse(localStorage['tags'] || null);
-    const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
+  const course = JSON.parse(localStorage['course'] || null);
+  const place = JSON.parse(localStorage['place'] || null);
+  const type = JSON.parse(localStorage['tags'] || null);
+  const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
 
-    const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
-    const [filerFlags, setFilterFlags] = useState({course, place, type}); //из блока фильтров ментора
-    const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
+  const [hiddenData, setHiddenData] = useState<Array<string>>([]); //скрытые пользователем
+  const [filerFlags, setFilterFlags] = useState({ course, place, type }); //из блока фильтров ментора
+  const [dates, setDates] = useState<Array<string>>(datesLocalStorage); //по датам
 
-    const hasFilterFlag = (data: any, flags: any): boolean => {
-        const keys = Object.keys(flags);
-        if (keys.length === 0) {
-            return true;
-        }
-        const keysToCheck: string[] = keys
-            .filter((key: string) => flags[key] !== null)
-            .filter((key: string) => flags[key].length > 0);
-        if (keysToCheck.length === 0) {
-            return true;
-        }
-        for (let key of keysToCheck) {
-            if (data[key] === undefined) {
-                return false;
-            }
-        }
-        const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
-
-        const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
-            for (let item of arr1) {
-                if (arr2.includes(item)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-
-        for (const key of keysToCheck) {
-            if (data[key].split(',').length > 1) {
-                if (!haveAMatch(data[key].split(','), valueToCheck)) {
-                    return false;
-                }
-            } else {
-                if (!valueToCheck.includes(data[key])) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    };
-
-    const isInDateRange = (date: any, dateRange: any): boolean => {
-        if (dateRange === null) {
-            return true;
-        }
-        if (dateRange.length === 0) {
-            return true;
-        }
-        const compareDate = moment(date);
-        const firstDate = moment(dateRange[0]);
-        const lastDate = moment(dateRange[1]);
-        if (firstDate < compareDate && compareDate < lastDate) {
-            return true;
-        }
+  const hasFilterFlag = (data: any, flags: any): boolean => {
+    const keys = Object.keys(flags);
+    if (keys.length === 0) {
+      return true;
+    }
+    const keysToCheck: string[] = keys
+      .filter((key: string) => flags[key] !== null)
+      .filter((key: string) => flags[key].length > 0);
+    if (keysToCheck.length === 0) {
+      return true;
+    }
+    for (let key of keysToCheck) {
+      if (data[key] === undefined) {
         return false;
+      }
+    }
+    const valueToCheck: string[] = keysToCheck.map((key: string) => flags[key].map((value: string) => value.split(','))).flat(2);
+
+    const haveAMatch = (arr1: string[], arr2: string[]): boolean => {
+      for (let item of arr1) {
+        if (arr2.includes(item)) {
+          return true;
+        }
+      }
+      return false;
     };
 
-    const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
-        return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
-    };
+    for (const key of keysToCheck) {
+      if (data[key].split(',').length > 1) {
+        if (!haveAMatch(data[key].split(','), valueToCheck)) {
+          return false;
+        }
+      } else {
+        if (!valueToCheck.includes(data[key])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
 
-    const visibleData = data
-        .filter((item: any) => hasFilterFlag(item, filerFlags))
-        .map((item: any) => {
-            return {
-                ...item,
-                dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone),
-            };
-        })
-        .filter((item: any) => isInDateRange(item.dateTime, dates))
-        .map((item: any) => {
-            return {...item, key: item.id};
-        })
-        .filter((item: any) => !hiddenData.includes(item.key))
-        .sort((a: any, b: any) => {
-            const date1 = moment(a.dateTime);
-            const date2 = moment(b.dateTime);
-            if (date1 < date2) {
-                return - 1;
-            }
-            return 1;
-        });
+  const isInDateRange = (date: any, dateRange: any): boolean => {
+    if (dateRange === null) {
+      return true;
+    }
+    if (dateRange.length === 0) {
+      return true;
+    }
+    const compareDate = moment(date);
+    const firstDate = moment(dateRange[0]);
+    const lastDate = moment(dateRange[1]);
+    if (firstDate < compareDate && compareDate < lastDate) {
+      return true;
+    }
+    return false;
+  };
 
+  const toUserTimeZone = (time: string, timeGap: string, timezone: string) => {
+    return moment(time).subtract(timeGap, 'h').add(timezone).format(dateAndTimeFormat);
+  };
 
-    const [visibleModal, setVisibleModal] = useState(false);
-    const [clickingRow, setClickingRow] = useState<any | null>();
-    const [eventRating, setEventRating] = useState<any>();
+  const visibleData = data
+    .filter((item: any) => hasFilterFlag(item, filerFlags))
+    .map((item: any) => {
+      return {
+        ...item,
+        dateTime: toUserTimeZone(item.dateTime, item.timeZone, timeZone),
+      };
+    })
+    .filter((item: any) => isInDateRange(item.dateTime, dates))
+    .map((item: any) => {
+      return { ...item, key: item.id };
+    })
+    .filter((item: any) => !hiddenData.includes(item.key))
+    .sort((a: any, b: any) => {
+      const date1 = moment(a.dateTime);
+      const date2 = moment(b.dateTime);
+      if (date1 < date2) {
+        return -1;
+      }
+      return 1;
+    });
+
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [clickingRow, setClickingRow] = useState<any | null>();
+  const [eventRating, setEventRating] = useState<any>();
 
   const mentorOperationData = {
     title: 'Edit',
@@ -183,31 +183,31 @@ const TableSchedule: FC<any> = React.memo((props) => {
             </Tooltip>
             <Rate disabled value={eventRating} />
           </span>
-                );
-            }
-        },
-    };
-    const changeRowClass = (key: React.Key, className: string) => {
-        const selRow = document.querySelector(`[data-row-key=${key}]`);
-        if (selRow) {
-            const rowClassName = selRow.getAttribute('class');
-            let newRowClassName;
-            const classSel = ' ' + className;
-            if (rowClassName && rowClassName.indexOf(classSel) !== -1) {
-                newRowClassName = rowClassName.replace(classSel, '');
-            } else {
-                newRowClassName = rowClassName + classSel;
-            }
-            selRow.setAttribute('class', newRowClassName);
-        }
-    };
+        );
+      }
+    },
+  };
+  const changeRowClass = (key: React.Key, className: string) => {
+    const selRow = document.querySelector(`[data-row-key=${key}]`);
+    if (selRow) {
+      const rowClassName = selRow.getAttribute('class');
+      let newRowClassName;
+      const classSel = ' ' + className;
+      if (rowClassName && rowClassName.indexOf(classSel) !== -1) {
+        newRowClassName = rowClassName.replace(classSel, '');
+      } else {
+        newRowClassName = rowClassName + classSel;
+      }
+      selRow.setAttribute('class', newRowClassName);
+    }
+  };
 
-    const changeRating = (value: number, key: React.Key) => {
-        const currEventRating = data.find((item: any) => key === item.id).rating;
-        const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
-        //@todo save rating to event
-        setEventRating({[key]: {voted: true, value: newRating}});
-    };
+  const changeRating = (value: number, key: React.Key) => {
+    const currEventRating = data.find((item: any) => key === item.id).rating;
+    const newRating = currEventRating && currEventRating > 0 ? (value + currEventRating) / ratingVotes : value;
+    //@todo save rating to event
+    setEventRating({ [key]: { voted: true, value: newRating } });
+  };
 
   const studentOperationData = {
     title: '',
@@ -238,256 +238,246 @@ const TableSchedule: FC<any> = React.memo((props) => {
             />
           </Tooltip>
           <span></span>
-                    {isVoted ? (
-                        <Rate disabled value={eventRating[record.id].value}/>
-                    ) : (
-                        <Rate onChange={(value) => changeRating(value, record.id)}/>
-                    )}
+          {isVoted ? (
+            <Rate disabled value={eventRating[record.id].value} />
+          ) : (
+            <Rate onChange={(value) => changeRating(value, record.id)} />
+          )}
         </span>
+      );
+    },
+  };
+  const allColumns: IAgeMap[] = columnsName.map((item: any) => {
+    switch (item.dataIndex) {
+      case 'type':
+        return {
+          title: 'Type',
+          dataIndex: 'type',
+          editable: true,
+          render: (_: any, record: any) => {
+            return (
+              <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
+                {record.type}
+              </Tag>
             );
-        },
-    };
-    const allColumns: IAgeMap[] = columnsName.map((item: any) => {
-        switch (item.dataIndex) {
-            case 'type':
-                return {
-                    title: 'Type',
-                    dataIndex: 'type',
-                    editable: true,
-                    render: (_: any, record: any) => {
-                        return (
-                            <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
-                                {record.type}
-                            </Tag>
-                        );
-                    },
-                };
-            case 'combineScore':
-                return {
-                    title: 'Score/maxScore',
-                    dataIndex: 'combineScore',
-                    editable: true,
-                    width: '10%',
-                };
-            default:
-                return item;
-        }
-    });
-
-    const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
-
-    const mergedColumns = columns.map((col) => {
-        if (!col.editable) {
-            return col;
-        }
-          return {
-            ...col,
-            onCell: (record: any) => ({
-                record,
-                inputType: col.dataIndex,
-                dataIndex: col.dataIndex,
-                title: col.title,
-                editing: isEditing(record),
-                organizers,
-            }),
+          },
         };
-    });
+      case 'combineScore':
+        return {
+          title: 'Score/maxScore',
+          dataIndex: 'combineScore',
+          editable: true,
+          width: '10%',
+        };
+      default:
+        return item;
+    }
+  });
+
+  const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
+
+  const mergedColumns = columns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record: any) => ({
+        record,
+        inputType: col.dataIndex,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+        organizers,
+        types,
+      }),
+    };
+  });
 
   const isHandlingClickOnRow = (event: React.FormEvent<EventTarget>) => {
     let target = event.target as HTMLInputElement;
-    let tagClassName =
-      target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
+    let tagClassName = target.className !== '' && typeof target.className === 'string' ? target.className.split(' ')[0] : '';
     if (target.tagName === 'TD' || (target.tagName === 'SPAN' && tagClassName === 'ant-tag')) {
       return true;
     }
     return false;
   };
 
-    const handleDoubleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
-        if (isHandlingClickOnRow(event)) {
-            setClickingRow(record);
-            setVisibleModal(true);
-        }
-    };
+  const handleDoubleClickRow = (record: any, rowIndex: number | undefined, event: React.FormEvent<EventTarget>) => {
+    if (isHandlingClickOnRow(event)) {
+      setClickingRow(record);
+      setVisibleModal(true);
+    }
+  };
 
-    const [hideButton, setHideButton] = useState<boolean>(false);
-    const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
+  const [hideButton, setHideButton] = useState<boolean>(false);
+  const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
 
-    useEffect(() => {
-        if (hiddenRowKeys.length === 0) setHideButton(false);
-    }, [hiddenRowKeys]);
+  useEffect(() => {
+    if (hiddenRowKeys.length === 0) setHideButton(false);
+  }, [hiddenRowKeys]);
 
-    const hideRows = () => {
-        setHiddenData((prev) => {
-            return [...prev, ...hiddenRowKeys];
-        });
-        setHideButton(false);
-    };
+  const hideRows = () => {
+    setHiddenData((prev) => {
+      return [...prev, ...hiddenRowKeys];
+    });
+    setHideButton(false);
+  };
 
-    const unHideRows = () => {
+  const unHideRows = () => {
+    setHiddenRowKeys((prev) => {
+      return prev.filter((key) => !hiddenData.includes(key));
+    });
+    setHiddenData([]);
+  };
+
+  const handleClickRow = (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
+    if (isHandlingClickOnRow(event)) {
+      const ind = rowIndex ? rowIndex + 1 : 1;
+      const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
+      const rowClassName = selRow.className;
+      let newRowClassName;
+      const classSel = ' ant-table-row-selected';
+
+      if (rowClassName.indexOf(classSel) !== -1) {
+        newRowClassName = rowClassName.replace(classSel, '');
         setHiddenRowKeys((prev) => {
-            return prev.filter((key) => !hiddenData.includes(key));
+          return prev.filter((key) => key !== record.key);
         });
-        setHiddenData([]);
-    };
-
-    const handleClickRow = (record: any, rowIndex: number | undefined, event: React.MouseEvent) => {
-        if (isHandlingClickOnRow(event)) {
-            const ind = rowIndex ? rowIndex + 1 : 1;
-            const selRow = document.getElementsByClassName('ant-table-tbody')[0].children[ind];
-            const rowClassName = selRow.className;
-            let newRowClassName;
-            const classSel = ' ant-table-row-selected';
-
-            if (rowClassName.indexOf(classSel) !== -1) {
-                newRowClassName = rowClassName.replace(classSel, '');
-                setHiddenRowKeys((prev) => {
-                    return prev.filter((key) => key !== record.key);
-                });
-            } else {
-                if (event.shiftKey) {
-                    if (hiddenRowKeys.length !== 0) {
-                        //console.log('Hidden row keys: ', hiddenRowKeys)
-                        const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
-                        const currentKey = record.key;
-                        let clazz = '';
-                        visibleData.forEach((item: any) => {
-                            const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
-                            if (currentSelRow === null) {
-                                return;
-                            }
-                            // @ts-ignore
-                            const currentRowClassName = currentSelRow.className;
-                            if (currentRowClassName.indexOf(classSel) === -1) {
-                                // @ts-ignore
-                                currentSelRow.className = currentRowClassName + clazz;
-                                if (clazz !== '') {
-                                    setHiddenRowKeys((prev) => {
-                                        return [...prev, item.key];
-                                    });
-                                }
-                            }
-                            if (item.key === lastKey || item.key === currentKey) {
-                                if (clazz === '') {
-                                    clazz = classSel;
-                                } else {
-                                    clazz = '';
-                                }
-                            }
-                        });
-                        newRowClassName = rowClassName + classSel;
-                    } else {
-                        newRowClassName = rowClassName + classSel;
-                        setHideButton(true);
-                        setHiddenRowKeys((prev) => {
-                            return [...prev, record.key];
-                        });
-                    }
-                } else {
-                    newRowClassName = rowClassName + classSel;
-                    setHideButton(true);
-                    setHiddenRowKeys((prev) => {
-                        return [...prev, record.key];
-                    });
+      } else {
+        if (event.shiftKey) {
+          if (hiddenRowKeys.length !== 0) {
+            //console.log('Hidden row keys: ', hiddenRowKeys)
+            const lastKey = hiddenRowKeys[hiddenRowKeys.length - 1];
+            const currentKey = record.key;
+            let clazz = '';
+            visibleData.forEach((item: any) => {
+              const currentSelRow = document.querySelector(`[data-row-key="${item.key}"]`);
+              if (currentSelRow === null) {
+                return;
+              }
+              // @ts-ignore
+              const currentRowClassName = currentSelRow.className;
+              if (currentRowClassName.indexOf(classSel) === -1) {
+                // @ts-ignore
+                currentSelRow.className = currentRowClassName + clazz;
+                if (clazz !== '') {
+                  setHiddenRowKeys((prev) => {
+                    return [...prev, item.key];
+                  });
                 }
-            }
-            selRow.className = newRowClassName;
+              }
+              if (item.key === lastKey || item.key === currentKey) {
+                if (clazz === '') {
+                  clazz = classSel;
+                } else {
+                  clazz = '';
+                }
+              }
+            });
+            newRowClassName = rowClassName + classSel;
+          } else {
+            newRowClassName = rowClassName + classSel;
+            setHideButton(true);
+            setHiddenRowKeys((prev) => {
+              return [...prev, record.key];
+            });
+          }
+        } else {
+          newRowClassName = rowClassName + classSel;
+          setHideButton(true);
+          setHiddenRowKeys((prev) => {
+            return [...prev, record.key];
+          });
         }
-    };
-    return (
-        <Form form={form} component={false}>
-            <div className="hidden-btn-row">
-                {isMentorStatus && (
-                    <Tooltip title="Add new event">
-                        <Button
-                            type="primary"
-                            disabled={editingId !== '' || !isMentorStatus}
-                            onClick={add}
-                            icon={<PlusCircleTwoTone />}
-                        />
-                    </Tooltip>
-                )}
-                <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen}/>
-                {hideButton ? (
-                    <Tooltip title="Hide rows">
-                        <Button onClick={hideRows}>
-                            <MinusSquareOutlined />
-                        </Button>
-                    </Tooltip>
-                ) : null}
-                {hiddenData.length === 0 ? null : (
-                    <Tooltip title="Show hidden rows">
-                        <Button onClick={unHideRows}>
-                            <UndoOutlined />
-                        </Button>
-                    </Tooltip>
-                )}
-            </div>
-            <Text type="secondary">Double click on a table row to bring up detailed information</Text>
-            <MentorFilters
-                data={data}
-                filterFlag={filerFlags}
-                setFilterFlags={setFilterFlags}
-                setDates={setDates}
-                tagRender={tagRender}
-                defaultColumns={defaultColumns}
-                optionsKeyOfEvents={optionsKeyOfEvents}
-                changeColumnsSelect={changeColumnsSelect}
-                isMentorStatus={isMentorStatus}
-            />
-            <Table
-                loading={isLoading}
-                size="small"
-                components={{
-                    body: {
-                        cell: EditableCell,
-                    },
-                }}
-                bordered
-                dataSource={visibleData}
-                columns={mergedColumns}
-                rowClassName="editable-row"
-                scroll={{ x: widthScreen < 700 ? 1500 : 2300, y: 600 }}
-                pagination={{
-                    onChange: cancel,
-                    showSizeChanger: true,
-                    defaultPageSize: 20,
-                    defaultCurrent: 1,
-                    showTotal: (total: number) => `Total ${total} items`,
-                }}
-                onRow={(record, rowIndex) => {
-                    return {
-                        onClick: (event) => {
-                            handleClickRow(record, rowIndex, event);
-                        },
-                        onDoubleClick: (event) => {
-                            handleDoubleClickRow(record, rowIndex, event);
-                        },
-                    };
-                }}
-            />
-            {clickingRow ? (
-                <Modal
-                    key = {clickingRow.id}
-                    title={clickingRow.course}
-                    centered
-                    visible={visibleModal}
-                    footer={[
-                        <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
-                            Back
-                        </Button>,
-                    ]}
-                    onCancel={() => setVisibleModal(false)}
-                    width={1000}
-                >
-                    <TaskPageContainer
-                        eventData={clickingRow}
-                    />
-                </Modal>
-            ) : null}
-        </Form>
-    );
+      }
+      selRow.className = newRowClassName;
+    }
+  };
+  return (
+    <Form form={form} component={false}>
+      <div className="hidden-btn-row">
+        {isMentorStatus && (
+          <Tooltip title="Add new event">
+            <Button type="primary" disabled={editingId !== '' || !isMentorStatus} onClick={add} icon={<PlusCircleTwoTone />} />
+          </Tooltip>
+        )}
+        <SaveToFile data={visibleData} columns={mergedColumns} widthScreen={widthScreen} />
+        {hideButton ? (
+          <Tooltip title="Hide rows">
+            <Button onClick={hideRows}>
+              <MinusSquareOutlined />
+            </Button>
+          </Tooltip>
+        ) : null}
+        {hiddenData.length === 0 ? null : (
+          <Tooltip title="Show hidden rows">
+            <Button onClick={unHideRows}>
+              <UndoOutlined />
+            </Button>
+          </Tooltip>
+        )}
+      </div>
+      <Text type="secondary">Double click on a table row to bring up detailed information</Text>
+      <MentorFilters
+        data={data}
+        filterFlag={filerFlags}
+        setFilterFlags={setFilterFlags}
+        setDates={setDates}
+        tagRender={tagRender}
+        defaultColumns={defaultColumns}
+        optionsKeyOfEvents={optionsKeyOfEvents}
+        changeColumnsSelect={changeColumnsSelect}
+        isMentorStatus={isMentorStatus}
+      />
+      <Table
+        loading={isLoading}
+        size="small"
+        components={{
+          body: {
+            cell: EditableCell,
+          },
+        }}
+        bordered
+        dataSource={visibleData}
+        columns={mergedColumns}
+        rowClassName="editable-row"
+        scroll={{ x: widthScreen < 700 ? 1500 : 2300, y: 600 }}
+        pagination={{
+          onChange: cancel,
+          showSizeChanger: true,
+          defaultPageSize: 20,
+          defaultCurrent: 1,
+          showTotal: (total: number) => `Total ${total} items`,
+        }}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              handleClickRow(record, rowIndex, event);
+            },
+            onDoubleClick: (event) => {
+              handleDoubleClickRow(record, rowIndex, event);
+            },
+          };
+        }}
+      />
+      {clickingRow ? (
+        <Modal
+          key={clickingRow.id}
+          title={clickingRow.course}
+          centered
+          visible={visibleModal}
+          footer={[
+            <Button key={clickingRow.id} id="back" onClick={() => setVisibleModal(false)}>
+              Back
+            </Button>,
+          ]}
+          onCancel={() => setVisibleModal(false)}
+          width={1000}
+        >
+          <TaskPageContainer eventData={clickingRow} />
+        </Modal>
+      ) : null}
+    </Form>
+  );
 });
-
-export { TableSchedule };
-
