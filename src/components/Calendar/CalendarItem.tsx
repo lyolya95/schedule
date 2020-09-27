@@ -20,16 +20,20 @@ export const CalendarItem: FC<CalendarItemProps> = React.memo(
     const getListData = useCallback(
       (value: moment.Moment) => {
         let listData: { type: string; content: string; id: string | undefined }[] = [];
+
         data.map((i: EventOfInterface) => {
-          switch (value.date()) {
-            case +i?.dateTime?.slice(8, 10):
-              listData.push({
-                type: i.type,
-                content: i.name,
-                id: i.id,
-              });
-              break;
-            default:
+          if (+i?.dateTime?.slice(5, 7) - 1 === value.month()) {
+            switch (value.date()) {
+              case +i?.dateTime?.slice(8, 10):
+                listData.push({
+                  type: i.type,
+                  content: i.name,
+                  id: i.id,
+                });
+
+                break;
+              default:
+            }
           }
           return null;
         });

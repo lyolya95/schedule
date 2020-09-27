@@ -1,24 +1,25 @@
 import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  ExclamationOutlined,
-  HighlightTwoTone,
-  PlusCircleTwoTone,
-  SaveOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    DeleteOutlined,
+    ExclamationOutlined,
+    HighlightTwoTone,
+    PlusCircleTwoTone,
+    SaveOutlined,
 } from '@ant-design/icons';
-import { MinusSquareOutlined, UndoOutlined } from '@ant-design/icons/lib';
-import { Button, Form, Modal, Rate, Table, Tag, Tooltip } from 'antd';
+import {MinusSquareOutlined, UndoOutlined} from '@ant-design/icons/lib';
+import {Button, Form, Modal, Rate, Table, Tag, Tooltip} from 'antd';
 import 'antd/dist/antd.css';
 import Text from 'antd/lib/typography/Text';
 import moment from 'moment';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Filters } from '../Filters/Filters';
-import { SaveToFile } from '../SaveToFile/SaveToFile';
-import { TaskPageContainer } from '../TaskPage/TaskPage.container';
-import { dateAndTimeFormat } from '../utilities';
-import { EditableCell } from './EditableCell';
-import { IAgeMap } from './TableSchedule.model';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import {Filters} from '../Filters/Filters';
+import {SaveToFile} from '../SaveToFile/SaveToFile';
+import {TaskPageContainer} from '../TaskPage/TaskPage.container';
+import {dateAndTimeFormat} from '../utilities';
+import {EditableCell} from './EditableCell';
+import {IAgeMap} from './TableSchedule.model';
+import {useStickyState} from "../Filters/hooks/useStickyState";
 
 export const TableSchedule: FC<any> = React.memo((props) => {
     const {
@@ -48,20 +49,17 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     const course = JSON.parse(localStorage['course'] || null);
     const place = JSON.parse(localStorage['place'] || null);
     const type = JSON.parse(localStorage['tags'] || null);
-    const rating = JSON.parse(localStorage['rating' || null]);
     const datesLocalStorage = JSON.parse(localStorage['dates'] || null);
     const [visibleModal, setVisibleModal] = useState(false);
     const [clickingRow, setClickingRow] = useState<any | null>();
-    const [eventRating, setEventRating] = useState<any>(rating);
+    const [eventRating, setEventRating] = useState<any>();
     const [hiddenData, setHiddenData] = useState<Array<string>>([]);
     const [filerFlags, setFilterFlags] = useState({ course, place, type });
     const [dates, setDates] = useState<Array<string>>(datesLocalStorage);
     const [hideButton, setHideButton] = useState<boolean>(false);
     const [hiddenRowKeys, setHiddenRowKeys] = useState<Array<string>>([]);
-
-    useEffect(() => {
-        localStorage.setItem('rating', JSON.stringify(eventRating))
-    }, [eventRating]);
+    const [eventMain, setEventMain] = useStickyState([], 'main')
+    const [mainKeys, setMainKeys] = useState<Array<any>>(eventMain.length > 0 ? eventMain : []);
 
     const hasFilterFlag = useCallback((data: any, flags: any): boolean => {
         const keys = Object.keys(flags);
@@ -204,7 +202,21 @@ export const TableSchedule: FC<any> = React.memo((props) => {
     },
   };
 
-  const changeRowClass = useCallback((key: React.Key, className: string) => {
+  const changeRowClass = (key: React.Key, className: string) => {
+   if (className === 'ant-table-row-main') {
+       if (mainKeys.includes(key)){
+            setMainKeys((prev) => {
+                const idx = prev.indexOf((item:any) => item === key);
+                return prev.splice(idx, 1);
+            });
+           setEventMain(mainKeys);
+        } else {
+            setMainKeys((prev) => {
+                return [...prev, key];
+            });
+           setEventMain(mainKeys);
+        }
+    }
     const selRow = document.querySelector(`[data-row-key=${key}]`);
     if (selRow) {
       const rowClassName = selRow.getAttribute('class');
@@ -217,7 +229,13 @@ export const TableSchedule: FC<any> = React.memo((props) => {
       }
       selRow.setAttribute('class', newRowClassName);
     }
-  }, []);
+  };
+
+    useEffect(() => {
+        if (mainKeys.length > 0) {
+            mainKeys.forEach((item: any) => changeRowClass(item, 'ant-table-row-main'))
+        }
+      }, []);
 
   const changeRating = useCallback(
     (value: number, key: React.Key) => {
@@ -262,33 +280,34 @@ export const TableSchedule: FC<any> = React.memo((props) => {
         </span>
       );
     },
-    };
-    const allColumns: IAgeMap[] = columnsName.map((item: any) => {
-        switch (item.dataIndex) {
-            case 'type':
-                return {
-                    title: 'Type',
-                    dataIndex: 'type',
-                    editable: true,
-                    render: (_: any, record: any) => {
-                        return (
-                            <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
-                                {record.type}
-                            </Tag>
-                        );
-                    },
-                };
-            case 'combineScore':
-                return {
-                    title: 'Score/maxScore',
-                    dataIndex: 'combineScore',
-                    editable: true,
-                    width: '10%',
-                };
-            default:
-                return item;
-        }
-    });
+  };
+  const allColumns: IAgeMap[] = columnsName.map((item: any) => {
+    switch (item.dataIndex) {
+      case 'type':
+        return {
+          title: 'Type',
+          dataIndex: 'type',
+          editable: true,
+          width: '10%',
+          render: (_: any, record: any) => {
+            return (
+              <Tag key={record.type} color={types?.filter((i: any) => i.type === record.type)[0]?.color}>
+                {record.type}
+              </Tag>
+            );
+          },
+        };
+      case 'combineScore':
+        return {
+          title: 'Score/maxScore',
+          dataIndex: 'combineScore',
+          editable: true,
+          width: '9%',
+        };
+      default:
+        return item;
+    }
+  });
 
     const columns: IAgeMap[] = isMentorStatus ? [...allColumns, mentorOperationData] : [...allColumns, studentOperationData];
 
