@@ -187,7 +187,7 @@ const setWidthScreen = (value: number) => (dispatch: Dispatch) => {
   dispatch(setwidthScreenAC(value));
 };
 
-export const setTimeZone = (value: any) => (dispatch: any) => {
+export const setTimeZone = (value: any) => (dispatch: Dispatch) => {
   dispatch(setTimeZones(value));
 };
 
